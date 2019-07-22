@@ -2,76 +2,83 @@ from __future__ import print_function
 import loadconfig
 import configparser
 import utilities_func as uf
-from librosa.feature import mfcc
 import numpy as np
 import utilities_func as uf
 import os, sys
 import matplotlib.pyplot as plt
-import feat_analysis_toydata as fa
+import feat_analysis as fa
 import essentia.standard as ess
 import math
+import pandas
 
 config = loadconfig.load()
 cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
-WINDOW_SIZE = cfg.getint('stft_toydata', 'window_size')
-FFT_SIZE = cfg.getint('stft_toydata', 'fft_size')
-HOP_SIZE = cfg.getint('stft_toydata', 'hop_size')
-WINDOW_TYPE = cfg.get('stft_toydata', 'window_type')
-NUM_CLASSES = cfg.getint('preprocessing_toydata', 'num_classes')
-SR = cfg.getint('sampling_toydata', 'sr_ryerson')
-SEGMENTATION = eval(cfg.get('preprocessing_toydata', 'segmentation'))
-SEQUENCE_LENGTH = cfg.getfloat('preprocessing_toydata', 'seq_length')
-SEQUENCE_OVERLAP = cfg.getfloat('preprocessing_toydata', 'seq_overlap')
-
-print ('Segmentation: ' + str(SEGMENTATION))
-
+WINDOW_SIZE = cfg.getint('stft', 'window_size')
+FFT_SIZE = cfg.getint('stft', 'fft_size')
+HOP_SIZE = cfg.getint('stft', 'hop_size')
+WINDOW_TYPE = cfg.get('stft', 'window_type')
+SR = cfg.getint('sampling', 'sr_target')
+SEQUENCE_LENGTH = cfg.getfloat('preprocessing', 'sequence_length')
+SEQUENCE_OVERLAP = cfg.getfloat('preprocessing', 'sequence_overlap')
 #in
-INPUT_RAVDESS_FOLDER =  cfg.get('preprocessing_toydata', 'input_ravdess_folder_merged')
-#predictors out
-OUTPUT_PREDICTORS_RAVDESS_TR = cfg.get('preprocessing_toydata', 'output_predictors_ravdess_tr')
-OUTPUT_PREDICTORS_RAVDESS_V = cfg.get('preprocessing_toydata', 'output_predictors_ravdess_v')
-OUTPUT_PREDICTORS_RAVDESS_TS = cfg.get('preprocessing_toydata', 'output_predictors_ravdess_ts')
-#target out
-OUTPUT_TARGET_RAVDESS_TR = cfg.get('preprocessing_toydata', 'output_target_ravdess_tr')
-OUTPUT_TARGET_RAVDESS_V = cfg.get('preprocessing_toydata', 'output_target_ravdess_v')
-OUTPUT_TARGET_RAVDESS_TS = cfg.get('preprocessing_toydata', 'output_target_ravdess_ts')
+INPUT_AUDIO_FOLDER =  cfg.get('preprocessing', 'input_audio_folder')
+INPUT_LABELS_FOLDER =  cfg.get('preprocessing', 'input_labels_folder')
+INPUT_TRANSCRIPTS_FOLDER =  cfg.get('preprocessing', 'input_transcripts_folder')
+
+def build_labels_dict(labels_folder):
+    #build dict: Participant_ID: label
+    dict = {}
+    target_column = 'PHQ8_Score'  #target column to get the classification label
+    contents = os.listdir(labels_folder)
+    for i in contents:
+        temp_path = os.path.join(labels_folder, i)
+        temp_data = pandas.read_csv(temp_path)
+        for index, row in temp_data.iterrows():
+            ID = int(row['Participant_ID'])
+            label = row[target_column]
+            dict[ID] = label
+    return dict
+
+def split_train_test_val(input_dict):
+    #
+    train_perc = 0.7
+    val_perc = 0.2
+    test_perc = 0.1
+    tot_subj = len(input_dict.items())
+    train_tot = int(np.floor(tot_subj * train_perc))
+    val_tot = int(np.floor(tot_subj * val_perc))
+    test_tot = int(train_tot - val_tot)
+    labels = []
+    for i in input_dict:
+        labels.append(input_dict[i])
+    #splict maintaining same amount af datapoints in n_bands
+    n_bands = 4
+    min_label = np.min(labels)
+    max_label = np.max(labels) + 1
+    n_elsxband = max_label/n_bands
+    bands = np.arange(n_elsxband, max_label, n_elsxband)
+    bands = np.append(min_label, bands)
+    print (bands)
+    bands_dict = {}
+    for i in range(n_bands):
+        start = bands[i]
+        end = bands[i] + (n_elsxband-1)
+        filt = lambda x: x >= start and x<=end
+        print ('')
+        temp_band_items = list(filter(filt, labels))
+        print (temp_band_items)
+
+        pass
 
 
-SEQUENCE_LENGTH = int((SEQUENCE_LENGTH * SR) / HOP_SIZE)  #from seconds to stft frames
 
-num_classes_ravdess = 8
-max_file_length = uf.find_longer_audio(INPUT_RAVDESS_FOLDER)
+dict = build_labels_dict(INPUT_LABELS_FOLDER)
+split_train_test_val(dict)
 
-def filter_data(contents, criterion, train_list, val_list, test_list):
-    '''
-    split train, val and test data accodring to criterion
-    '''
-    actor = lambda x: int(x.split('/')[-1].split('.')[0].split('-')[-1])
-    statement = lambda x: int(x.split('/')[-1].split('.')[0].split('-')[-3])
-    intensity = lambda x: int(x.split('/')[-1].split('.')[0].split('-')[-4])
-    gender = lambda x: 1 if int(x.split('/')[-1].split('.')[0].split('-')[-1]) % 2. == 0 else 0
-
-    if criterion == 'actor':
-        filtered_train = list(filter(lambda x: actor(x) in train_list, contents))
-        filtered_val = list(filter(lambda x: actor(x) in val_list, contents))
-        filtered_test = list(filter(lambda x: actor(x) in test_list, contents))
-    elif criterion == 'statement':
-        filtered_train = list(filter(lambda x: statement(x) in train_list, contents))
-        filtered_val = list(filter(lambda x: statement(x) in val_list, contents))
-        filtered_test = list(filter(lambda x: statement(x) in test_list, contents))
-    elif criterion == 'intensity':
-        filtered_train = list(filter(lambda x: intensity(x) in train_list, contents))
-        filtered_val = list(filter(lambda x: intensity(x) in val_list, contents))
-        filtered_test = list(filter(lambda x: intensity(x) in test_list, contents))
-    elif criterion == 'gender':
-        filtered_train = list(filter(lambda x: gender(x) in train_list, contents))
-        filtered_val = list(filter(lambda x: gender(x) in val_list, contents))
-        filtered_test = list(filter(lambda x: gender(x) in test_list, contents))
-
-    return filtered_train, filtered_val, filtered_test
+sys.exit(0)
 
 def preprocess_datapoint(input_sound):
     '''

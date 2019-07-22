@@ -1,7 +1,6 @@
 import numpy as np
 import essentia.standard as ess
 import essentia
-import essentia
 import configparser
 import loadconfig
 import utilities_func as uf
@@ -11,14 +10,11 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
-WINDOW_SIZE = cfg.getint('stft_toydata', 'window_size')
-FFT_SIZE = cfg.getint('stft_toydata', 'fft_size')
-HOP_SIZE = cfg.getint('stft_toydata', 'hop_size')
-WINDOW_TYPE = str(cfg.get('stft_toydata', 'window_type'))
-SR = cfg.getint('sampling_toydata', 'sr_tess')
-fps = 25  #annotations per second
-hop_annotation = SR /fps
-frames_per_annotation = hop_annotation/float(HOP_SIZE)
+WINDOW_SIZE = cfg.getint('stft', 'window_size')
+FFT_SIZE = cfg.getint('stft', 'fft_size')
+HOP_SIZE = cfg.getint('stft', 'hop_size')
+WINDOW_TYPE = str(cfg.get('stft', 'window_type'))
+SR = cfg.getint('sampling', 'sr_target')
 
 def extract_features(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE, fs=SR, window_type=WINDOW_TYPE):
     '''
@@ -41,6 +37,6 @@ def extract_features(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE, fs=SR, window_typ
 
     SP = essentia.array(SP)
     SP = np.power(SP, 2./3.)  #power law compression
-    SP = SP[:,:int(FFT_SIZE/4x+1)]
+    SP = SP[:,:int(FFT_SIZE/4+1)]
 
     return SP
