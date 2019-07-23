@@ -1,15 +1,13 @@
 from __future__ import print_function
-import loadconfig
-import configparser
-import utilities_func as uf
-import numpy as np
-import utilities_func as uf
-import os, sys
-import matplotlib.pyplot as plt
-import feat_analysis as fa
+from scipy.signal import iirfilter, butter, filtfilt, lfilter
 import essentia.standard as ess
-import math
+import essentia
+import configparser
+import librosa
+import numpy as np
+import os, sys
 import pandas
+import loadconfig
 
 config = loadconfig.load()
 cfg = configparser.ConfigParser()
@@ -27,6 +25,52 @@ SEQUENCE_OVERLAP = cfg.getfloat('preprocessing', 'sequence_overlap')
 INPUT_AUDIO_FOLDER =  cfg.get('preprocessing', 'input_audio_folder')
 INPUT_LABELS_FOLDER =  cfg.get('preprocessing', 'input_labels_folder')
 INPUT_TRANSCRIPTS_FOLDER =  cfg.get('preprocessing', 'input_transcripts_folder')
+#out
+OUTPUT_PREDICTORS_PATH = cfg.get('preprocessing', 'output_predictors')
+OUTPUT_TARGET_PATH = cfg.get('preprocessing', 'output_target')
+
+def preemphasis(input_vector, fs):
+    '''
+    2 simple high pass FIR filters in cascade to emphasize high frequencies
+    and cut unwanted low-frequencies
+    '''
+    #first gentle high pass
+    alpha=0.5
+    present = input_vector
+    zero = [0]
+    past = input_vector[:-1]
+    past = np.concatenate([zero,past])
+    past = np.multiply(past, alpha)
+    filtered1 = np.subtract(present,past)
+    #second 30 hz high pass
+    fc = 100.  # Cut-off frequency of the filter
+    w = fc / (fs / 2.) # Normalize the frequency
+    b, a = butter(8, w, 'high')
+    output = filtfilt(b, a, filtered1)
+
+    return output
+
+def extract_features(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE, fs=SR, window_type=WINDOW_TYPE):
+    '''
+    extract magnitudes spectra from input vector and apply power-law compression
+    '''
+    #init functions and vectors
+    x = essentia.array(x)
+    spectrum = ess.Spectrum(size=N)
+    window = ess.Windowing(size=M, type=WINDOW_TYPE)
+    SP = []
+
+    #compute STFT
+    for frame in ess.FrameGenerator(x, frameSize=M, hopSize=H, startFromZero=True): #generate frames
+        wX = window(frame)  #window frame
+        mX = spectrum(wX)  #compute fft
+        SP.append(mX)
+
+    SP = essentia.array(SP)
+    SP = np.power(SP, 2./3.)  #power law compression
+    SP = SP[:,:int(FFT_SIZE/2+1)]  #cut upper spectrum (above 8 khz)
+
+    return SP
 
 def build_labels_dict(labels_folder):
     #build dict: Participant_ID: label
@@ -42,213 +86,196 @@ def build_labels_dict(labels_folder):
             dict[ID] = label
     return dict
 
-def split_train_test_val(input_dict):
-    #
+def build_bands_dict(labels_dict,n_bands=4):
+    #n_bands must be sottomultiplo of label range (24)
     train_perc = 0.7
     val_perc = 0.2
     test_perc = 0.1
-    tot_subj = len(input_dict.items())
-    train_tot = int(np.floor(tot_subj * train_perc))
-    val_tot = int(np.floor(tot_subj * val_perc))
-    test_tot = int(train_tot - val_tot)
     labels = []
-    for i in input_dict:
-        labels.append(input_dict[i])
-    #splict maintaining same amount af datapoints in n_bands
-    n_bands = 4
+    for i in labels_dict:
+        labels.append(labels_dict[i])
+    #splict maintaining the same amount af datapoints in n_bands
     min_label = np.min(labels)
     max_label = np.max(labels) + 1
     n_elsxband = max_label/n_bands
     bands = np.arange(n_elsxband, max_label, n_elsxband)
     bands = np.append(min_label, bands)
-    print (bands)
     bands_dict = {}
+    output_dict = {'train': [], 'val': [], 'test': []}
+    #create dict with items split by band divided in train, val, test
     for i in range(n_bands):
         start = bands[i]
+        bands_dict[i] = {}
         end = bands[i] + (n_elsxband-1)
         filt = lambda x: x >= start and x<=end
-        print ('')
-        temp_band_items = list(filter(filt, labels))
-        print (temp_band_items)
+        tot_band_items = len(list(filter(filt, labels)))
+        train_band_items = int(np.floor(tot_band_items*train_perc))
+        val_band_items = int(np.ceil(tot_band_items*val_perc))
+        test_band_items = int(tot_band_items-(train_band_items+val_band_items))
+        bands_dict[i]['tot'] = tot_band_items
+        bands_dict[i]['bounds'] = [start, end]
+        bands_dict[i]['train'] = train_band_items
+        bands_dict[i]['val'] = val_band_items
+        bands_dict[i]['test'] = test_band_items
+        #print (bands_dict)
 
-        pass
+    return bands_dict
+
+def build_split_dict(labels_dict, bands_dict, sequence):
+    train_dict = {}
+    val_dict = {}
+    test_dict = {}
+    #for every band
+    for band in bands_dict:
+        tr_count = 0
+        val_count = 0
+        ts_count = 0
+        bounds = bands_dict[band]['bounds']
+        tr_n = bands_dict[band]['train']
+        val_n = bands_dict[band]['val']
+        ts_n = bands_dict[band]['test']
+        #for every sample
+        for i in sequence:
+            label =  labels_dict[i]
+            #if sample is within band's bounds
+            if label >= bounds[0] and label <= bounds[1]:
+                #fill tr, val and ts dicts with correct
+                if tr_count < tr_n:
+                    train_dict[i] = labels_dict[i]
+                    tr_count += 1
+                elif val_count < val_n:
+                    val_dict[i] = labels_dict[i]
+                    val_count += 1
+                elif ts_count < ts_n:
+                    test_dict[i] = labels_dict[i]
+                    ts_count += 1
+
+    print ('Sanity checks...')
+    print ('Means:')
+    print ('train:' + str(np.mean(list(test_dict.values()))))
+    print ('val:' + str(np.mean(list(val_dict.values()))))
+    print ('test:' + str(np.mean(list(test_dict.values()))))
+    print ('Stds:')
+    print ('train:' + str(np.std(list(test_dict.values()))))
+    print ('val:' + str(np.std(list(val_dict.values()))))
+    print ('test:' + str(np.std(list(test_dict.values()))))
+
+    tot_split = list(train_dict.keys()) + list(val_dict.keys()) + list(test_dict.keys())
+    tot_orig = list(labels_dict.keys())
+    tot_split = sorted(tot_split)
+    tot_orig = sorted(tot_orig)
+    equal = tot_split == tot_orig
+
+    print('Is split dataset coherent with original? ' + str(equal))
+
+    return train_dict, val_dict, test_dict
 
 
+def build_transcripts_dict(transcripts_folder):
+    dict = {}
+    start_c = 'start_time'  #target column to get the classification label
+    end_c = 'stop_time'
+    speaker_c = 'speaker'
+    text_c = 'value'
+    contents = os.listdir(transcripts_folder)
+    #contents = contents[:1]
+    #for every file get the list of bounds
+    for i in contents:
+        bounds_participant = []
+        text_participant = []
+        temp_ID = int(i.split('_')[0])
+        dict[temp_ID] = {}
+        temp_path = os.path.join(transcripts_folder, i)
+        temp_data = pandas.read_csv(temp_path, sep='\t')
+        for index, row in temp_data.iterrows():
+            speaker = row[speaker_c]
+            temp_bounds = [row[start_c], row[end_c]]
+            text = row[text_c]
+            if speaker == 'Participant':
+                bounds_participant.append(temp_bounds)
+                text_participant.append(text)
+        dict[temp_ID]['bounds'] = bounds_participant
+        dict[temp_ID]['text'] = text_participant
 
-dict = build_labels_dict(INPUT_LABELS_FOLDER)
-split_train_test_val(dict)
+    return dict
 
-sys.exit(0)
 
-def preprocess_datapoint(input_sound):
-    '''
-    generate predictors (stft) and target (valence sequence)
-    of one sound file from the OMG dataset
-    '''
-    sr, raw_samples = uf.wavread(input_sound)  #read audio
-    if SEGMENTATION:
-        # if segment cut initial and final silence if present
-        samples = uf.strip_silence(raw_samples)
+def cut_sound_file(sound_file, bounds_list, sequence_length, sequence_overlap):
+    cuts = []
+    sec2samps = lambda x: int(np.round(float(x) * SR))
+    dur = sec2samps(sequence_length)
+    overlap = sec2samps(sequence_overlap)
+    librosa_SR = SR
+    if SR == 16000:
+        librosa_SR = None
+    samples, sr = librosa.core.load(sound_file, sr=librosa_SR)
+    for i in bounds_list:
+        bounds = [sec2samps(i[0]), sec2samps(i[1])]
+        curr_cut = samples[bounds[0]:bounds[1]]
+        #zeropad if cut is shorter than sequence length
+        if len(curr_cut) < dur:
+            pad = np.zeros(dur)
+            pad[:len(curr_cut)] = curr_cut
+            curr_cut = pad
+            cuts.append(curr_cut)
+        #segment if cut is longer than dur + overlap
+        elif len(curr_cut) > (dur + overlap):
+            pointer = np.arange(0, len(curr_cut)-dur, overlap, dtype='int')  #initail positions of segments
+            for start in pointer:
+                stop = int(start + dur)
+                if stop <= len(curr_cut):
+                    curr_segment = curr_cut[start:stop]
+                    cuts.append(curr_segment)
+                else:  #last datapoint has a different overlap
+                    curr_segment = features[dur:]
+                    cuts.append(curr_segment)
+    cuts = np.array(cuts)
 
-    else:
-        #if not, zero pad all sounds to the same length
-        samples = np.zeros(max_file_length)
-        samples[:len(raw_samples)] = raw_samples  #zero padding
-    e_samples = uf.preemphasis(samples, sr)  #apply preemphasis
-    feats = fa.extract_features(e_samples, fs=sr)  #extract features
-    #compute one hot label
-    label = input_sound.split('/')[-1].split('.')[0].split('-')[2]
-    one_hot_label = (uf.onehot(int(label)-1, num_classes_ravdess))
-    return feats, one_hot_label
+    return cuts
 
-def segment_datapoint(features, label):
-    '''
-    segment features and annotations of one long audio file
-    into smaller matrices of length "sequence_length"
-    and overlapped by "sequence_overlap"
-    '''
-    num_frames = features.shape[0]
-    step = SEQUENCE_LENGTH*SEQUENCE_OVERLAP  #segmentation overlap step
-    pointer = np.arange(0, num_frames, step, dtype='int')  #initail positions of segments
-    predictors = []
-    target = []
-    #slice arrays and append datapoints to vectors
-    if SEGMENTATION:
-        for start in pointer:
-            stop = int(start + SEQUENCE_LENGTH)
-            #print start_annotation, stop_annotation, start_features, stop_features
-            if stop <= num_frames:
-                temp_predictors = features[start:stop]
 
-                predictors.append(temp_predictors)
-                target.append(label)
-            else:  #last datapoint has a different overlap
-                temp_predictors = features[-int(SEQUENCE_LENGTH):]
-                predictors.append(temp_predictors)
-                target.append(label)
-    else:
-        predictors.append(features)
-        target.append(label)
-    predictors = np.array(predictors)
-    target = np.array(target)
+def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
+    predictors = {}
+    target = {}
+    sounds_list = os.listdir(audio_folder)
+    #sounds_list = sounds_list[:3]
+    num_sounds = len(sounds_list)
+    index = 0
+    for datapoint in sounds_list:
+        participant_ID = int(datapoint.split('_')[0])
+        label = labels_dict[participant_ID]
+        predictors[participant_ID] = []
+        target[participant_ID] = []
+        sound_file = os.path.join(audio_folder, datapoint)
+        bounds_list = transcripts_dict[participant_ID]['bounds']
+        segments = cut_sound_file(sound_file, bounds_list, SEQUENCE_LENGTH, SEQUENCE_OVERLAP)
+        for cut in segments:
+            feats = preemphasis(cut, SR) #apply preemphasis
+            feats = extract_features(feats)  #extract features
+            predictors[participant_ID].append(feats)
+            target[participant_ID].append(label)
+        index += 1
+
+        perc = int(index / num_sounds * 20)
+        perc_progress = int(np.round((float(index)/num_sounds) * 100))
+        inv_perc = int(20 - perc - 1)
+        strings = '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' Progress: ' + str(perc_progress) + '%'
+        print ('\r', strings, end='')
 
     return predictors, target
 
-def preprocess_dataset(sounds_list):
 
-    predictors = np.array([])
-    target = np.array([])
-    num_sounds = len(sounds_list)
+def main():
+    labels_dict = build_labels_dict(INPUT_LABELS_FOLDER)
+    transcripts_dict = build_transcripts_dict(INPUT_TRANSCRIPTS_FOLDER)
+    #bands_dict = build_bands_dict(labels_dict, n_bands=4)
+    #sequence = labels_dict.keys()  #ROTATE THIS TO OBTAIN XVALIDATION
+    #train_dict, val_dict, test_dict = build_split_dict(labels_dict, bands_dict, sequence)
+    predictors, target = build_preprocessing_dicts(INPUT_AUDIO_FOLDER, labels_dict, transcripts_dict)
+    np.save(OUTPUT_PREDICTORS_PATH, predictors)
+    np.save(OUTPUT_TARGET_PATH, target)
+    print ('\n Succesfully saved matrices')
 
-    #process all files in folders
-    index = 0
-    for datapoint in sounds_list:
-        sound_file = INPUT_RAVDESS_FOLDER + '/' + datapoint  #get correspective sound
-        try:
-            long_predictors, long_target = preprocess_datapoint(sound_file)  #compute features
-            cut_predictors, cut_target = segment_datapoint(long_predictors, long_target)   #slice feature maps
-            if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
-                if predictors.shape == (0,):
-                    predictors = cut_predictors
-                    target = cut_target
-                else:
-                    predictors = np.append(predictors, cut_predictors, axis=0)
-                    target = np.append(target, cut_target, axis=0)
-        except ValueError as e:
-            if str(e) == 'File format b\'FORM\'... not understood.':
-                pass
-
-        perc_progress = int((index * 100) / num_sounds)
-        index += 1
-        progress_string = "processed files: " + str(index) + " over " + str(num_sounds) + "  |  progress: " + str(perc_progress) + "%"
-        print ('\r', progress_string, end= ' ')
-    print ('\n')
-    predictors = np.array(predictors)
-    target = np.array(target)
-    #predictors = np.concatenate(predictors, axis=0)  #reshape arrays
-    #target = np.concatenate(target, axis=0)
-
-    #scramble datapoints order
-    shuffled_predictors = []
-    shuffled_target = []
-    num_datapoints = target.shape[0]
-    random_indices = np.arange(num_datapoints)
-    np.random.shuffle(random_indices)
-    for i in random_indices:
-        shuffled_predictors.append(predictors[i])
-        shuffled_target.append(target[i])
-    shuffled_predictors = np.array(shuffled_predictors)
-    shuffled_target = np.array(shuffled_target)
-
-    return shuffled_predictors, shuffled_target
-
-def build_matrices(output_predictors_matrix, output_target_matrix, sound_list):
-    '''
-    build matrices and save numpy files
-    '''
-    print ('\n')
-    predictors, target = preprocess_dataset(sound_list)
-    np.save(output_predictors_matrix, predictors)
-    np.save(output_target_matrix, target)
-    print("Matrices saved succesfully")
-    print('predictors shape: ' + str(predictors.shape))
-    print('target shape: ' + str(target.shape))
-
-def crossval_preprocessing(criterion, train_list, val_list, test_list):
-    ''' build matrices for one defined crossvalidation instalce'''
-    #set output matrices as default temp crossvalidation ones
-    OUTPUT_PREDICTORS_XVAL_TR = '../dataset/matrices/crossval_ravdess_predictors_tr.npy'
-    OUTPUT_TARGET_XVAL_TR = '../dataset/matrices/crossval_ravdess_target_tr.npy'
-    OUTPUT_PREDICTORS_XVAL_V = '../dataset/matrices/crossval_ravdess_predictors_v.npy'
-    OUTPUT_TARGET_XVAL_V = '../dataset/matrices/crossval_ravdess_target_v.npy'
-    OUTPUT_PREDICTORS_XVAL_TS = '../dataset/matrices/crossval_ravdess_predictors_ts.npy'
-    OUTPUT_TARGET_XVAL_TS = '../dataset/matrices/crossval_ravdess_target_ts.npy'
-    #substitute config target subject and stories with the ones of the experiment
-    contents = os.listdir(INPUT_RAVDESS_FOLDER)
-    filt_train, filt_val, filt_test = filter_data(contents, 'actor', train_list, val_list, test_list)
-    build_matrices(OUTPUT_PREDICTORS_XVAL_TR, OUTPUT_TARGET_XVAL_TR, filt_train)
-    build_matrices(OUTPUT_PREDICTORS_XVAL_V, OUTPUT_TARGET_XVAL_V, filt_val)
-    build_matrices(OUTPUT_PREDICTORS_XVAL_TS, OUTPUT_TARGET_XVAL_TS, filt_test)
-
-def merged_preprocessing():
-    criterion = 'actor'
-    ac_list = list(range(25))
-    contents = os.listdir(INPUT_RAVDESS_FOLDER)
-    predictors = {}
-    target = {}
-    predictors_save_path = '../dataset/matrices/merged_crossval_predictors.npy'
-    target_save_path = '../dataset/matrices/merged_crossval_target.npy'
-    for i in ac_list:
-        curr_list, dummy, dummy2 = filter_data(contents, criterion, [i+1], [i+1], [i+1])
-        curr_predictors, curr_target = preprocess_dataset(curr_list)
-        predictors[i] = curr_predictors
-        target[i] = curr_target
-    np.save(predictors_save_path, predictors)
-    np.save(target_save_path, target)
 
 if __name__ == '__main__':
-    merged_preprocessing()
-    '''
-    build training, validation and test matrices (no crossvalidation)
-    '''
-    '''
-    if len(sys.argv) == 1:
-        ac_list = list(range(1, 25))
-        n_train = 18
-        n_val = 4
-        n_test = 2
-        tr_ac = ac_list[:n_train]
-        val_ac = ac_list[n_train:n_train + n_val]
-        ts_ac = ac_list[n_train + n_val:]
-        contents = os.listdir(INPUT_RAVDESS_FOLDER)
-        filt_train, filt_val, filt_test = filter_data(contents, 'actor', tr_ac, val_ac, ts_ac)
-        build_matrices(OUTPUT_PREDICTORS_RAVDESS_TR, OUTPUT_TARGET_RAVDESS_TR, filt_train)
-        build_matrices(OUTPUT_PREDICTORS_RAVDESS_V, OUTPUT_TARGET_RAVDESS_V, filt_val)
-        build_matrices(OUTPUT_PREDICTORS_RAVDESS_TS, OUTPUT_TARGET_RAVDESS_TS, filt_test)
-    else:
-        criterion = sys.argv[1]
-        tr_list = eval(sys.argv[2])
-        v_list = eval(sys.argv[3])
-        ts_list = eval(sys.argv[4])
-        crossval_preprocessing(criterion, tr_list, v_list, ts_list)
-    '''
+    main()
