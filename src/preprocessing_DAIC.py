@@ -84,6 +84,7 @@ def build_labels_dict(labels_folder):
             ID = int(row['Participant_ID'])
             label = row[target_column]
             dict[ID] = label
+
     return dict
 
 def build_bands_dict(labels_dict,n_bands=4):
@@ -239,22 +240,25 @@ def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
     target = {}
     sounds_list = os.listdir(audio_folder)
     #sounds_list = sounds_list[:3]
-    num_sounds = len(sounds_list)
+    num_sounds = len(labels_dict.keys())
     index = 0
     for datapoint in sounds_list:
         participant_ID = int(datapoint.split('_')[0])
-        label = labels_dict[participant_ID]
-        predictors[participant_ID] = []
-        target[participant_ID] = []
-        sound_file = os.path.join(audio_folder, datapoint)
-        bounds_list = transcripts_dict[participant_ID]['bounds']
-        segments = cut_sound_file(sound_file, bounds_list, SEQUENCE_LENGTH, SEQUENCE_OVERLAP)
-        for cut in segments:
-            feats = preemphasis(cut, SR) #apply preemphasis
-            feats = extract_features(feats)  #extract features
-            predictors[participant_ID].append(feats)
-            target[participant_ID].append(label)
-        index += 1
+        #IF because the csv with labels has less datapoints
+        #than the the sound folder!!!!
+        if participant_ID in labels_dict.keys():
+            label = labels_dict[participant_ID]
+            predictors[participant_ID] = []
+            target[participant_ID] = []
+            sound_file = os.path.join(audio_folder, datapoint)
+            bounds_list = transcripts_dict[participant_ID]['bounds']
+            segments = cut_sound_file(sound_file, bounds_list, SEQUENCE_LENGTH, SEQUENCE_OVERLAP)
+            for cut in segments:
+                feats = preemphasis(cut, SR) #apply preemphasis
+                feats = extract_features(feats)  #extract features
+                predictors[participant_ID].append(feats)
+                target[participant_ID].append(label)
+            index += 1
 
         perc = int(index / num_sounds * 20)
         perc_progress = int(np.round((float(index)/num_sounds) * 100))

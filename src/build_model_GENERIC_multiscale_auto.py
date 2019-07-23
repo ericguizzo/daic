@@ -21,7 +21,7 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #load parameters from config file
-TORCH_SAVE_MODEL = cfg.get('model_toydata', 'save_model_speechCmd')
+MODEL_SAVE_PATH = cfg.get('model', 'model_save_path')
 
 #NUM_CLASSES = cfg.getint('preprocessing_toydata', 'num_classes')
 
