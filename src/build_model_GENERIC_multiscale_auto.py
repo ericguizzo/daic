@@ -25,7 +25,10 @@ cfg.read(config)
 TRAINING_PREDICTORS = cfg.get('model', 'predictors_load')
 TRAINING_TARGET = cfg.get('model', 'target_load')
 TORCH_SAVE_MODEL = cfg.get('model', 'save_model')
-#NUM_CLASSES = cfg.getint('preprocessing_toydata', 'num_classes')
+
+#defaults
+dataset = 'daic'
+
 
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
 #are given from crossvalidation script, otherwise are normally taken from config.ini
