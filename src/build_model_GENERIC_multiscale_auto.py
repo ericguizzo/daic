@@ -214,7 +214,7 @@ def accuracy(data_x, data_y):
   return acc.item()  # percentage based
 
 def split_dataset(dataset_dict, xval_):
-
+    '''
         elif dataset == 'mnist':
             predictors = np.array([])
             target = np.array([])
@@ -229,6 +229,8 @@ def split_dataset(dataset_dict, xval_):
                     predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
                     target = np.concatenate((target, merged_target[i]), axis=0)
 
+
+    '''
 def main():
 
     #CREATE DATASET
