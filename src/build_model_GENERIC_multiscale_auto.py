@@ -294,9 +294,9 @@ def main():
     test_dataset = utils.TensorDataset(test_predictors, test_target) # create your datset
 
     #build data loader from dataset
-    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=True)
-    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False, pin_memory=True)
-    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory=True)  #no batch here!!
+    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=False)
+    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False, pin_memory=False)
+    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory=False)  #no batch here!!
     #DNN input shape
     time_dim = training_predictors.shape[1]
     features_dim = training_predictors.shape[2]
