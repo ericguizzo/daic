@@ -21,8 +21,9 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #load parameters from config file
-MODEL_SAVE_PATH = cfg.get('model', 'model_save_path')
-
+TRAINING_PREDICTORS = cfg.get('model', 'predictors_load')
+TRAINING_TARGET = cfg.get('model', 'target_load')
+TORCH_SAVE_MODEL = cfg.get('model', 'save_model')
 #NUM_CLASSES = cfg.getint('preprocessing_toydata', 'num_classes')
 
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
@@ -39,15 +40,8 @@ try:
         output_temp_data_path = sys.argv[8]
         dataset = sys.argv[9]
         gpu_ID = int(sys.argv[10])
+        fold_sequence = sys.argv[11]
         TORCH_SAVE_MODEL = model_path
-
-        #set dataset paths
-        TRAINING_PREDICTORS_P = output_temp_data_path + '/xval_' + dataset + '_predictors_tr_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        TRAINING_TARGET_P = output_temp_data_path + '/xval_' + dataset + '_target_tr_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        VALIDATION_PREDICTORS_P = output_temp_data_path + '/xval_' + dataset + '_predictors_v_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        VALIDATION_TARGET_P = output_temp_data_path + '/xval_' + dataset + '_target_v_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        TEST_PREDICTORS_P = output_temp_data_path + '/xval_' + dataset + '_predictors_ts_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        TEST_TARGET_P = output_temp_data_path + '/xval_' + dataset + '_target_ts_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
 
         print('crossvalidation mode: I/O from crossvalidation script')
         print('')
@@ -67,19 +61,8 @@ BVL_model_path = TORCH_SAVE_MODEL + '_BVL'
 BVA_model_path = TORCH_SAVE_MODEL + '_BVA'
 
 #set correct output classes
-if dataset == 'ravdess':
-    num_classes = 8
-elif dataset == 'speechCmd':
-    num_classes = 35
-elif dataset == 'tess':
-    num_classes = 7
-elif dataset == 'digits':
-    num_classes = 10
-elif dataset == 'cifar':
-    num_classes = 10
-elif dataset == 'mnist':
-    num_classes = 10
-
+if dataset == 'daic':
+    num_classes = 1
 
 #global parameters
 #gpu_ID = 1
@@ -94,7 +77,7 @@ kernel_size_3 = (3,3)
 pool_size = [2,2]
 hidden_size = 100
 regularization_lambda = 0.001
-learning_rate = 0.0000001
+learning_rate = 0.001
 
 '''
 str to useetch_factors = [(0.8, 1.),(1.25,1.)]  #multiscale stretch
@@ -229,45 +212,31 @@ def accuracy(data_x, data_y):
   acc = (num_correct * 100.0 / float(len(data_y)))
   return acc.item()  # percentage based
 
+def split_dataset(dataset_dict, xval_):
+
+        elif dataset == 'mnist':
+            predictors = np.array([])
+            target = np.array([])
+            for i in actors_list:
+                print (i, predictors.shape)
+                if i == actors_list[0]:
+                    predictors = merged_predictors[i]
+                    target = merged_target[i]
+                    print (i, predictors.shape)
+
+                else:
+                    predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
+                    target = np.concatenate((target, merged_target[i]), axis=0)
+
 def main():
 
     #CREATE DATASET
-    if dataset == 'tess':
 
-        #load numpy data for tess dataset
-        SPEAKER1_PREDICTORS = cfg.get('model_toydata', 'training_predictors_tess')
-        SPEAKER1_TARGET = cfg.get('model_toydata', 'training_target_tess')
-        SPEAKER2_PREDICTORS = cfg.get('model_toydata', 'validation_predictors_tess')
-        SPEAKER2_TARGET = cfg.get('model_toydata', 'validation_target_tess')
+    #load numpy data for other datasets
+    training_predictors = np.load(TRAINING_PREDICTORS)
+    training_target_onehot = np.load(TRAINING_TARGET)
 
-        if num_fold == '0':
-            validation_predictors_temp = np.load(SPEAKER1_PREDICTORS)
-            validation_target_onehot_temp = np.load(SPEAKER1_TARGET)
-            tsval_split = int(validation_predictors_temp.shape[0] * 0.6)
-            validation_predictors = validation_predictors_temp[tsval_split:]
-            validation_target_onehot = validation_target_onehot_temp[tsval_split:]
-            test_predictors = validation_predictors_temp[:tsval_split]
-            test_target_onehot = validation_target_onehot_temp[:tsval_split]
-            training_predictors = np.load(SPEAKER2_PREDICTORS)
-            training_target_onehot = np.load(SPEAKER2_TARGET)
-        if num_fold == '1':
-            validation_predictors_temp = np.load(SPEAKER2_PREDICTORS)
-            validation_target_onehot_temp = np.load(SPEAKER2_TARGET)
-            tsval_split = int(validation_predictors_temp.shape[0] * 0.6)
-            validation_predictors = validation_predictors_temp[tsval_split:]
-            validation_target_onehot = validation_target_onehot_temp[tsval_split:]
-            test_predictors = validation_predictors_temp[:tsval_split]
-            test_target_onehot = validation_target_onehot_temp[:tsval_split]
-            training_predictors = np.load(SPEAKER1_PREDICTORS)
-            training_target_onehot = np.load(SPEAKER1_TARGET)
-    else:
-        #load numpy data for other datasets
-        training_predictors = np.load(TRAINING_PREDICTORS_P)
-        training_target_onehot = np.load(TRAINING_TARGET_P)
-        validation_predictors = np.load(VALIDATION_PREDICTORS_P)
-        validation_target_onehot = np.load(VALIDATION_TARGET_P)
-        test_predictors = np.load(TEST_PREDICTORS_P)
-        test_target_onehot = np.load(TEST_TARGET_P)
+    sys.exit(0)
 
     #normalize to 0 mean and unity std (according to training set mean and std)
     tr_mean = np.mean(training_predictors)

@@ -280,7 +280,7 @@ def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
     predictors = {}
     target = {}
     sounds_list = os.listdir(audio_folder)
-    #sounds_list = sounds_list[:3]
+    sounds_list = sounds_list[:20]
     num_sounds = len(labels_dict.keys())  #use labels dict as list, not the list of audio files!!!
     index = 0
     #iterate every sound
@@ -315,9 +315,9 @@ def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
 def main():
     labels_dict = build_labels_dict(INPUT_LABELS_FOLDER)
     transcripts_dict = build_transcripts_dict(INPUT_TRANSCRIPTS_FOLDER)
-    #bands_dict = build_bands_dict(labels_dict, n_bands=4)
-    #sequence = labels_dict.keys()  #ROTATE THIS TO OBTAIN XVALIDATION
-    #train_dict, val_dict, test_dict = build_split_dict(labels_dict, bands_dict, sequence)
+    bands_dict = build_bands_dict(labels_dict, n_bands=4)
+    sequence = labels_dict.keys()  #ROTATE THIS TO OBTAIN XVALIDATION
+    train_dict, val_dict, test_dict = build_split_dict(labels_dict, bands_dict, sequence)
     predictors, target = build_preprocessing_dicts(INPUT_AUDIO_FOLDER, labels_dict, transcripts_dict)
     np.save(OUTPUT_PREDICTORS_PATH, predictors)
     np.save(OUTPUT_TARGET_PATH, target)
