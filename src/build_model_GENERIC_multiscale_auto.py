@@ -123,17 +123,17 @@ class EmoModel3layer(nn.Module):
     def __init__(self):
         super(EmoModel3layer, self).__init__()
         self.inner_state = True
-        self.conv1 = nn.DataParallel(nn.Conv2d(1, channels1, kernel_size=kernel_size_1))
-        self.conv2 = nn.DataParallel(nn.Conv2d(channels1, channels2, kernel_size=kernel_size_2))
-        self.conv3 = nn.DataParallel(nn.Conv2d(channels2, channels3, kernel_size=kernel_size_3))
-        self.multiscale1 = nn.DataParallel(MultiscaleConv2d(1, channels, kernel_size=kernel_size_1, scale_factors=stretch_factors,
-                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda))
-        self.multiscale2 = nn.DataParallel(MultiscaleConv2d(channels, channels2, kernel_size=kernel_size_2, scale_factors=stretch_factors,
-                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda))
-        self.multiscale3 = nn.DataParallel(MultiscaleConv2d(channels2, channels3, kernel_size=kernel_size_3, scale_factors=stretch_factors,
-                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda))
+        self.conv1 = nn.Conv2d(1, channels1, kernel_size=kernel_size_1)
+        self.conv2 = nn.Conv2d(channels1, channels2, kernel_size=kernel_size_2)
+        self.conv3 = nn.Conv2d(channels2, channels3, kernel_size=kernel_size_3)
+        self.multiscale1 = MultiscaleConv2d(1, channels, kernel_size=kernel_size_1, scale_factors=stretch_factors,
+                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
+        self.multiscale2 = MultiscaleConv2d(channels, channels2, kernel_size=kernel_size_2, scale_factors=stretch_factors,
+                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
+        self.multiscale3 = MultiscaleConv2d(channels2, channels3, kernel_size=kernel_size_3, scale_factors=stretch_factors,
+                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
         self.pool = nn.MaxPool2d(pool_size[0], pool_size[1])
-        self.hidden = nn.DataParallel(nn.Linear(fc_insize, hidden_size))
+        self.hidden = nn.Linear(fc_insize, hidden_size)
         self.out = nn.Linear(hidden_size, num_classes)
 
     def forward(self, X):
@@ -163,14 +163,14 @@ class EmoModel2layer(nn.Module):
     def __init__(self):
         super(EmoModel2layer, self).__init__()
         self.inner_state = True
-        self.conv1 = nn.DataParallel(nn.Conv2d(1, channels1, kernel_size=kernel_size_1))
-        self.conv2 = nn.DataParallel(nn.Conv2d(channels1, channels1, kernel_size=kernel_size_1))
-        self.multiscale1 = nn.DataParallel(MultiscaleConv2d(1, channels, kernel_size=kernel_size_1, scale_factors=stretch_factors,
-                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda))
-        self.multiscale2 = nn.DataParallel(MultiscaleConv2d(channels1, channels1, kernel_size=kernel_size_1, scale_factors=stretch_factors,
-                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda))
+        self.conv1 = nn.Conv2d(1, channels1, kernel_size=kernel_size_1)
+        self.conv2 = nn.Conv2d(channels1, channels1, kernel_size=kernel_size_1)
+        self.multiscale1 = MultiscaleConv2d(1, channels, kernel_size=kernel_size_1, scale_factors=stretch_factors,
+                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
+        self.multiscale2 = MultiscaleConv2d(channels1, channels1, kernel_size=kernel_size_1, scale_factors=stretch_factors,
+                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
         self.pool = nn.MaxPool2d(pool_size[0], pool_size[1])
-        self.hidden = nn.DataParallel(nn.Linear(fc_insize, hidden_size))
+        self.hidden = nn.Linear(fc_insize, hidden_size)
         self.out = nn.Linear(hidden_size, num_classes)
 
     def forward(self, X):
@@ -294,9 +294,9 @@ def main():
     test_dataset = utils.TensorDataset(test_predictors, test_target) # create your datset
 
     #build data loader from dataset
-    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=True)
-    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False, pin_memory=True)
-    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False), pin_memory=True  #no batch here!!
+    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True)
+    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False)
+    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False)  #no batch here!!
     #DNN input shape
     time_dim = training_predictors.shape[1]
     features_dim = training_predictors.shape[2]
