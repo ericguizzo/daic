@@ -59,6 +59,8 @@ try:
         dataset = sys.argv[9]
         gpu_ID = int(sys.argv[10])
         folds_list = eval(sys.argv[11])
+        print ('cazzo')
+        print (folds_list[0])
         TORCH_SAVE_MODEL = model_path
 
         print('crossvalidation mode: I/O from crossvalidation script')
