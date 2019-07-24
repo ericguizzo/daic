@@ -18,7 +18,7 @@ experiments = {}
 
 experiments[1] = ['layer_type="conv"', 'channels=1',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=6831',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=30360',
              'training_mode="train_and_eval"', 'network_type= "1_layer"',
              'kernel_size_1=(5,5)']
 
