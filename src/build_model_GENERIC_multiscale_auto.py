@@ -26,10 +26,25 @@ TRAINING_PREDICTORS = cfg.get('model', 'predictors_load')
 TRAINING_TARGET = cfg.get('model', 'target_load')
 TORCH_SAVE_MODEL = cfg.get('model', 'save_model')
 
-#defaults
+#default parameters
 dataset = 'daic'
+#set correct last-layer dimension
+if dataset == 'daic':
+    num_classes = 1
 channels = 60
 gpu_ID = 1
+save_best_only = True
+early_stopping = False
+patience = 10
+batch_size = 120
+num_epochs = 250
+kernel_size_1 = (10,5)
+kernel_size_2 = (5, 7)
+kernel_size_3 = (3,3)
+pool_size = [2,2]
+hidden_size = 100
+regularization_lambda = 0.001
+learning_rate = 0.001
 
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
 #are given from crossvalidation script, otherwise are normally taken from config.ini
@@ -65,38 +80,8 @@ except IndexError:
 BVL_model_path = TORCH_SAVE_MODEL + '_BVL'
 BVA_model_path = TORCH_SAVE_MODEL + '_BVA'
 
-#set correct output classes
-if dataset == 'daic':
-    num_classes = 1
 
-#global parameters
-#gpu_ID = 1
-save_best_only = True
-early_stopping = False
-patience = 10
-batch_size = 120
-num_epochs = 250
-kernel_size_1 = (10,5)
-kernel_size_2 = (5, 7)
-kernel_size_3 = (3,3)
-pool_size = [2,2]
-hidden_size = 100
-regularization_lambda = 0.001
-learning_rate = 0.001
-
-'''
-str to useetch_factors = [(0.8, 1.),(1.25,1.)]  #multiscale stretch
-output_type = 'pooled_map'
-stretch_penality_lambda = 0.
-layer_type = 'conv'
-training_mode = 'only_eval'
-network_type = "1_layer"
-channels1 = 20
-channels2 = 28
-channels3 = 40
-'''
-
-#OVERWRITE PARAMETERS IF IN XVAL MODE
+#OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
     a = sys.argv[5]
     parameters = parameters.split('/')
