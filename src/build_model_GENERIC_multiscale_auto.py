@@ -200,7 +200,7 @@ def accuracy(data_x, data_y):
   acc = (num_correct * 100.0 / float(len(data_y)))
   return acc.item()  # percentage based
 
-def split_dataset(predictors, target, actors_list, dataset):
+def split_dataset(merged_predictors, merged_target, actors_list, dataset):
 
     if dataset == 'daic':
         predictors = np.array([])
