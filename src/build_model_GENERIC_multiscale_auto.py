@@ -201,19 +201,20 @@ def accuracy(data_x, data_y):
   return acc.item()  # percentage based
 
 def split_dataset(merged_predictors, merged_target, actors_list, dataset):
-
+    print ('va in figa')
+    print (np.array(merged_predictors[302]).shape)
     if dataset == 'daic':
         predictors = np.array([])
         target = np.array([])
         for i in actors_list:
             print (i, predictors.shape)
             if i == actors_list[0]:  #if is first item
-                predictors = np.array(merged_predictors)[i]
-                target = np.array(merged_target)[i]
+                predictors = np.array(merged_predictors[i])
+                target = np.array(merged_target[i])
                 print (i, predictors.shape)
             else:
-                predictors = np.concatenate((predictors, np.array(merged_predictors)[i]), axis=0)
-                target = np.concatenate((target, np.array(merged_target)[i]), axis=0)
+                predictors = np.concatenate((predictors, np.array(merged_predictors[i])), axis=0)
+                target = np.concatenate((target, np.array(merged_target[i])), axis=0)
 
     return predictors, target
 
