@@ -15,8 +15,6 @@ import configparser
 #np.random.seed(0)
 #torch.manual_seed(0)
 print('')
-print("loading dataset...")
-print('')
 config = loadconfig.load()
 cfg = configparser.ConfigParser()
 cfg.read(config)
@@ -204,7 +202,7 @@ def accuracy(data_x, data_y):
 
 def split_dataset(predictors, target, folds_list, num_fold):
 
-
+    print (folds_list[num_fold])
     '''
     if dataset == 'daic':
         predictors = np.array([])
@@ -219,7 +217,6 @@ def split_dataset(predictors, target, folds_list, num_fold):
                 predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
                 target = np.concatenate((target, merged_target[i]), axis=0)
     '''
-    #return tr_predictors, val_predictors, ts_predictors, tr_target, val_target, test_target
 
 
 def main():
@@ -230,10 +227,11 @@ def main():
     print('loading dataset...')
     training_predictors_merged = np.load(TRAINING_PREDICTORS)
     training_target_onehot_merged = np.load(TRAINING_TARGET)
-
-    training_predictors, validation_predictors, test_predictors,
-    training_target, validation_target, test_target = split_dataset(training_predictors_merged,
-                                                                    training_target_merged,folds_list,num_fold)
+    '''
+    tr_p, v_p, ts_p, tr_t, v_t, ts_t = split_dataset(training_predictors_merged,
+                                        training_target_merged,folds_list,num_fold)
+    '''
+    split_dataset(training_predictors_merged, training_target_merged,folds_list,num_fold)
     #split dataset into train, val and test_sets
     print ('culo')
     sys.exit(0)
