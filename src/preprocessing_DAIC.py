@@ -283,7 +283,7 @@ def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
     predictors = {}
     target = {}
     sounds_list = os.listdir(audio_folder)
-    sounds_list = sounds_list[:20]
+    #sounds_list = sounds_list[:20]
     num_sounds = len(labels_dict.keys())  #use labels dict as list, not the list of audio files!!!
     index = 0
     #iterate every sound
