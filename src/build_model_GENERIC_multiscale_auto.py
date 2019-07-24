@@ -538,10 +538,6 @@ def main():
     temp_results['train_stretch_percs_BVL'] = train_stretch_percs_BVL
     temp_results['val_stretch_percs_BVL'] = val_stretch_percs_BVL
     temp_results['test_stretch_percs_BVL'] = test_stretch_percs_BVL
-    temp_results['train_stretch_percs_BVA'] = train_stretch_percs_BVA
-    temp_results['val_stretch_percs_BVA'] = val_stretch_percs_BVA
-    temp_results['test_stretch_percs_BVA'] = test_stretch_percs_BVA
-
 
     np.save(results_path, temp_results)
 
