@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import torch.utils.data as utils
 import matplotlib.pyplot as plt
 from multiscale_convlayer2 import MultiscaleConv2d
+import preprocessing_DAIC as pre
 import sys, os
 import utilities_func as uf
 import loadconfig
@@ -231,12 +232,12 @@ def split_dataset(dataset_dict, xval_):
 def main():
 
     #CREATE DATASET
-
+    print ('culo')
+    sys.exit(0)
     #load numpy data for other datasets
     training_predictors = np.load(TRAINING_PREDICTORS)
     training_target_onehot = np.load(TRAINING_TARGET)
 
-    sys.exit(0)
 
     #normalize to 0 mean and unity std (according to training set mean and std)
     tr_mean = np.mean(training_predictors)
