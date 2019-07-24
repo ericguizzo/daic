@@ -28,7 +28,7 @@ TORCH_SAVE_MODEL = cfg.get('model', 'save_model')
 
 #defaults
 dataset = 'daic'
-
+channels = 60
 
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
 #are given from crossvalidation script, otherwise are normally taken from config.ini
