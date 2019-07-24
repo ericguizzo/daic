@@ -200,10 +200,8 @@ def accuracy(data_x, data_y):
   acc = (num_correct * 100.0 / float(len(data_y)))
   return acc.item()  # percentage based
 
-def split_dataset(predictors, target, folds_list, num_fold):
+def split_dataset(predictors, target, actors_list, dataset):
 
-    print (folds_list[num_fold])
-    '''
     if dataset == 'daic':
         predictors = np.array([])
         target = np.array([])
@@ -216,7 +214,8 @@ def split_dataset(predictors, target, folds_list, num_fold):
             else:
                 predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
                 target = np.concatenate((target, merged_target[i]), axis=0)
-    '''
+
+    return predictors, target
 
 
 def main():
@@ -225,15 +224,29 @@ def main():
 
     #load numpy data
     print('loading dataset...')
-    training_predictors_merged = np.load(TRAINING_PREDICTORS)
-    training_target_onehot_merged = np.load(TRAINING_TARGET)
-    '''
-    tr_p, v_p, ts_p, tr_t, v_t, ts_t = split_dataset(training_predictors_merged,
-                                        training_target_merged,folds_list,num_fold)
-    '''
-    split_dataset(training_predictors_merged, training_target_merged,folds_list,num_fold)
+    predictors_merged = np.load(TRAINING_PREDICTORS)
+    target_merged = np.load(TRAINING_TARGET)
+
     #split dataset into train, val and test_sets
+    train_list = folds_list[num_fold]['train']
+    val_list = folds_list[num_fold]['val']
+    test_list = folds_list[num_fold]['test']
+
+    training_predictors, training_target = split_dataset(predictors_merged,
+                                                        target_merged, train_list, dataset)
+    validation_predictors, validation_target = split_dataset(predictors_merged,
+                                                        target_merged, val_list, dataset)
+    test_predictors, test_target = split_dataset(predictors_merged,
+                                                        target_merged, test_list, dataset)
+
+
     print ('culo')
+    print (training_predictors.shape)
+    print (validation_predictors.shape)
+    print (test_predictors.shape)
+    print (training_target.shape)
+    print (validation_target.shape)
+    print (test_target.shape)
     sys.exit(0)
 
 
