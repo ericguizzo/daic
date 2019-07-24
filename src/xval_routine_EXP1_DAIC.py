@@ -28,23 +28,11 @@ experiments[2] = ['layer_type="conv"', 'channels=1',
              'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.003',
              'kernel_size_1=(5,5)']
 
-experiments[3] = ['layer_type="conv"', 'channels=1',
-             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=6831',
-             'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.01',
-             'kernel_size_1=(5,5)']
-
-experiments[4] = ['layer_type="multi"', 'channels=1',
-             'stretch_factors=[(0.95, 1.),(1.053,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=6831',
-             'training_mode="train_and_eval"', 'network_type= "1_layer"',
-             'kernel_size_1=(5,5)']
-
 
 #run experiments
-short_description = 'same as exp1, but kernel size = (5x5)'
+short_description = 'initial test'
 dataset = 'daic'
-num_experiment = 2
+num_experiment = 1
 num_folds = 4
 experiment_folder = '../../../copy/daic'
 

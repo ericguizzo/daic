@@ -174,13 +174,14 @@ def build_split_dict(labels_dict, bands_dict, sequence):
                     ts_count += 1
 
     #print mean, std and bool ==
-    print ('Sanity checks...')
+    print ('')
+    print ('Dataset split sanity check...')
     print ('Means:')
-    print ('train:' + str(np.mean(list(test_dict.values()))))
+    print ('train:' + str(np.mean(list(train_dict.values()))))
     print ('val:' + str(np.mean(list(val_dict.values()))))
     print ('test:' + str(np.mean(list(test_dict.values()))))
     print ('Stds:')
-    print ('train:' + str(np.std(list(test_dict.values()))))
+    print ('train:' + str(np.std(list(train_dict.values()))))
     print ('val:' + str(np.std(list(val_dict.values()))))
     print ('test:' + str(np.std(list(test_dict.values()))))
 
@@ -191,6 +192,8 @@ def build_split_dict(labels_dict, bands_dict, sequence):
     equal = tot_split == tot_orig
 
     print('Is split dataset coherent with original? ' + str(equal))
+    if equal == False:
+        raise ValueError('Dataset split not coherent')
 
     return train_dict, val_dict, test_dict
 
@@ -311,13 +314,30 @@ def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
 
     return predictors, target
 
+def get_sequence():
+    labels_dict = build_labels_dict(INPUT_LABELS_FOLDER)
+    sequence = list(labels_dict.keys())
+
+    return sequence
+
+
+def gen_split_lists(sequence):
+    labels_dict = build_labels_dict(INPUT_LABELS_FOLDER)
+    transcripts_dict = build_transcripts_dict(INPUT_TRANSCRIPTS_FOLDER)
+    bands_dict = build_bands_dict(labels_dict, n_bands=4)
+    train_dict, val_dict, test_dict = build_split_dict(labels_dict, bands_dict, sequence)
+    train = list(train_dict.keys())
+    val = list(val_dict.keys())
+    test = list(test_dict.keys())
+
+    return train, val, test
+
 
 def main():
     labels_dict = build_labels_dict(INPUT_LABELS_FOLDER)
     transcripts_dict = build_transcripts_dict(INPUT_TRANSCRIPTS_FOLDER)
-    bands_dict = build_bands_dict(labels_dict, n_bands=4)
-    sequence = labels_dict.keys()  #ROTATE THIS TO OBTAIN XVALIDATION
-    train_dict, val_dict, test_dict = build_split_dict(labels_dict, bands_dict, sequence)
+    #bands_dict = build_bands_dict(labels_dict, n_bands=4)
+    #train_dict, val_dict, test_dict = build_split_dict(labels_dict, bands_dict, sequence)
     predictors, target = build_preprocessing_dicts(INPUT_AUDIO_FOLDER, labels_dict, transcripts_dict)
     np.save(OUTPUT_PREDICTORS_PATH, predictors)
     np.save(OUTPUT_TARGET_PATH, target)

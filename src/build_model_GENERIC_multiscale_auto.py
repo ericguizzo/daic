@@ -60,7 +60,7 @@ try:
         output_temp_data_path = sys.argv[8]
         dataset = sys.argv[9]
         gpu_ID = int(sys.argv[10])
-        fold_sequence = sys.argv[11]
+        folds_list = eval(sys.argv[11])
         TORCH_SAVE_MODEL = model_path
 
         print('crossvalidation mode: I/O from crossvalidation script')
@@ -202,32 +202,40 @@ def accuracy(data_x, data_y):
   acc = (num_correct * 100.0 / float(len(data_y)))
   return acc.item()  # percentage based
 
-def split_dataset(dataset_dict, xval_):
-    '''
-        elif dataset == 'mnist':
-            predictors = np.array([])
-            target = np.array([])
-            for i in actors_list:
+def split_dataset(predictors, target, folds_list):
+
+
+
+    if dataset == 'daic':
+        predictors = np.array([])
+        target = np.array([])
+        for i in actors_list:
+            print (i, predictors.shape)
+            if i == actors_list[0]:
+                predictors = merged_predictors[i]
+                target = merged_target[i]
                 print (i, predictors.shape)
-                if i == actors_list[0]:
-                    predictors = merged_predictors[i]
-                    target = merged_target[i]
-                    print (i, predictors.shape)
-
-                else:
-                    predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
-                    target = np.concatenate((target, merged_target[i]), axis=0)
+            else:
+                predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
+                target = np.concatenate((target, merged_target[i]), axis=0)
 
 
-    '''
+
 def main():
 
     #CREATE DATASET
-    print ('culo')
-    sys.exit(0)
-    #load numpy data for other datasets
+
+    #load numpy data
     training_predictors = np.load(TRAINING_PREDICTORS)
     training_target_onehot = np.load(TRAINING_TARGET)
+
+    #split dataset into train, val and test_sets
+    print ('culo')
+    sys.exit(0)
+
+
+
+
 
 
     #normalize to 0 mean and unity std (according to training set mean and std)
@@ -241,6 +249,7 @@ def main():
     test_predictors = np.divide(test_predictors, tr_std)
 
     #from onehot to float (CrossEntropyLoss requires this)
+    '''
     training_target = []
     validation_target = []
     test_target = []
@@ -253,6 +262,7 @@ def main():
     training_target = np.array(training_target)
     validation_target = np.array(validation_target)
     test_target = np.array(test_target)
+    '''
 
     #select a subdataset for testing (to be commented when normally trained)
     '''

@@ -1,127 +1,28 @@
 import numpy as np
 import os, sys
 import subprocess
+import preprocessing_DAIC as pre
 import time
 import shutil
 
-tr_perc = 0.7
-val_perc = 0.2
 
-def folds_generator(num_folds, num_actors, dataset):
-    ac_list = list(range(num_actors)) * num_folds
-    n_train = int(num_actors * tr_perc)
-    n_val = int(num_actors * val_perc)
-    n_test = int(num_actors - (n_train + n_val))
-    if dataset == 'digits':
-        n_train = 2
-        n_val = 1
-        n_test = 1
-    if dataset == 'cifar':
-        n_train = 7
-        n_val = 2
-        n_test = 1
-    if dataset == 'mnist':
-        n_train = 7
-        n_val = 2
-        n_test = 1
-    shift = num_actors / num_folds
-    fold_actors_list = {}
+def folds_generator_daic(num_folds):
+
+    sequence = pre.get_sequence()
+    dup_sequence = sequence * (num_folds+1)
+    shift = len(sequence) / num_folds
+    fold_list = {}
     for i in range(num_folds):
         curr_shift = int(shift * i)
-        tr_ac = ac_list[curr_shift:curr_shift+n_train]
-        val_ac = ac_list[curr_shift+n_train:curr_shift+n_train+n_val]
-        test_ac = ac_list[curr_shift+n_train+n_val:curr_shift+n_train+n_val+n_test]
-        fold_actors_list[i] = {'train': tr_ac,
-                          'val': val_ac,
-                          'test': test_ac}
+        #print (curr_shift)
+        curr_sequence = dup_sequence[curr_shift:curr_shift+len(sequence)]
+        tr, val, test = pre.gen_split_lists(curr_sequence)
 
-    return fold_actors_list
+        fold_list[i] = {'train': tr,
+                          'val': val,
+                          'test': test}
 
-def get_fold_dataset(actors_list, merged_predictors, merged_target, dataset):
-    if dataset == 'speechCmd':
-        predictors = np.array([])
-        target = np.array([])
-        for i in actors_list:
-            print (i, predictors.shape)
-            if i == actors_list[0]:
-                predictors = merged_predictors[i]
-                target = merged_target[i]
-                print (i, predictors.shape)
-
-            else:
-                predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
-                target = np.concatenate((target, merged_target[i]), axis=0)
-    elif dataset == 'ravdess':
-        predictors = []
-        target = []
-        for i in actors_list:
-            predictors.append(merged_predictors[i])
-            target.append(merged_target[i])
-        predictors = np.array(predictors)
-        target = np.array(target)
-        predictors = predictors.reshape(predictors.shape[0]*predictors.shape[1],
-                                        predictors.shape[2], predictors.shape[3])
-        target = target.reshape(target.shape[0]*target.shape[1], target.shape[2])
-
-    elif dataset == 'digits':
-        predictors = np.array([])
-        target = np.array([])
-        for i in actors_list:
-            print (i, predictors.shape)
-            if i == actors_list[0]:
-                predictors = merged_predictors[i]
-                target = merged_target[i]
-                print (i, predictors.shape)
-
-            else:
-                predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
-                target = np.concatenate((target, merged_target[i]), axis=0)
-
-    elif dataset == 'cifar':
-        predictors = np.array([])
-        target = np.array([])
-        for i in actors_list:
-            print (i, predictors.shape)
-            if i == actors_list[0]:
-                predictors = merged_predictors[i]
-                target = merged_target[i]
-                print (i, predictors.shape)
-
-            else:
-                predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
-                target = np.concatenate((target, merged_target[i]), axis=0)
-
-    elif dataset == 'mnist':
-        predictors = np.array([])
-        target = np.array([])
-        for i in actors_list:
-            print (i, predictors.shape)
-            if i == actors_list[0]:
-                predictors = merged_predictors[i]
-                target = merged_target[i]
-                print (i, predictors.shape)
-
-            else:
-                predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
-                target = np.concatenate((target, merged_target[i]), axis=0)
-
-
-    print ('predictors shape:' + str(predictors.shape))
-    print ('target shape:' + str(target.shape))
-
-    return predictors, target
-
-def save_fold_datasets(tr_list, val_list, test_list, merged_predictors, merged_target, dataset, num_experiment, num_run, num_fold):
-    tr_pred, tr_tg = get_fold_dataset(tr_list, merged_predictors, merged_target, dataset)
-    val_pred, val_tg = get_fold_dataset(val_list, merged_predictors, merged_target, dataset)
-    test_pred, test_tg = get_fold_dataset(test_list, merged_predictors, merged_target, dataset)
-    np.save(TRAINING_PREDICTORS_P, tr_pred)
-    np.save(TRAINING_TARGET_P, tr_tg)
-    np.save(VALIDATION_PREDICTORS_P, val_pred)
-    np.save(VALIDATION_TARGET_P, val_tg)
-    np.save(TEST_PREDICTORS_P, test_pred)
-    np.save(TEST_TARGET_P, test_tg)
-
+    return fold_list
 
 def save_code(output_code_path):
     curr_src_path = './'
@@ -149,7 +50,9 @@ def init_experiment_dict(num_folds):
 
 def build_experiment_dict(n_folds, n_actors, dataset):
     '''fill dict with values for a desired experiment'''
-    ac_list = folds_generator(n_folds, n_actors, dataset)
+    #ac_list = folds_generator(n_folds, n_actors, dataset)
+    if dataset == 'daic':
+        ac_list = folds_generator_daic(n_folds)
     folds = init_experiment_dict(n_folds)
 
     for i in range(n_folds):
@@ -166,18 +69,9 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     print("NEW EXPERIMENT: exp: " + str(num_experiment) + ' run: ' + str(num_run))
     print('Dataset: ' + dataset)
 
-    if dataset == 'ravdess':
-        num_actors = 24
-    elif dataset == 'speechCmd':
-        num_actors = 400
-    elif dataset == 'tess':
-        num_actors = 2
-    elif dataset == 'digits':
-        num_actors = 2
-    elif dataset == 'cifar':
-        num_actors = 10
-    elif dataset == 'mnist':
-        num_actors = 10
+    if dataset == 'daic':
+        num_actors = 142
+
     else:
         raise ValueError('Invalid dataset name')
 
@@ -219,93 +113,36 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     if not os.path.exists(output_config_path):
         os.makedirs(output_config_path)
 
-    #load dataset
-    if dataset == 'ravdess':
-        merged_predictors = np.load('../dataset/matrices/merged_crossval_predictors.npy')
-        merged_target = np.load('../dataset/matrices/merged_crossval_target.npy')
-        merged_predictors = merged_predictors.item()
-        merged_target = merged_target.item()
-    elif dataset == 'digits':
-        merged_predictors = np.load('../dataset/matrices/merged_digits_predictors.npy')
-        merged_target = np.load('../dataset/matrices/merged_digits_target.npy')
-        merged_predictors = merged_predictors.item()
-        merged_target = merged_target.item()
-    elif dataset == 'cifar':
-        merged_predictors = np.load('../dataset/matrices/merged_cifar_predictors.npy')
-        merged_target = np.load('../dataset/matrices/merged_cifar_target.npy')
-        merged_predictors = merged_predictors.item()
-        merged_target = merged_target.item()
-    elif dataset == 'speechCmd':
-        merged_predictors = np.load('../dataset/matrices/merged_speechCmd_predictors.npy')
-        merged_target = np.load('../dataset/matrices/merged_speechCmd_target.npy')
-        merged_predictors = merged_predictors.item()
-        merged_target = merged_target.item()
-    elif dataset == 'mnist':
-        merged_predictors = np.load('../dataset/matrices/merged_mnist_predictors.npy')
-        merged_target = np.load('../dataset/matrices/merged_mnist_target.npy')
-        merged_predictors = merged_predictors.item()
-        merged_target = merged_target.item()
-    elif dataset == 'tess':
-        pass
-    else:
-        raise ValueError('Invalid dataset selected')
-
 
     #create dict wit actors distributed per every fold
     folds = build_experiment_dict(num_folds, num_actors, dataset)
+
 
     #iterate folds
     for i in range(num_folds):
         #create paths
         num_fold = i
-        # set temp dataset save path
-        TRAINING_PREDICTORS_P = output_temp_data_path + '/xval_' + dataset + '_predictors_tr_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        TRAINING_TARGET_P = output_temp_data_path + '/xval_' + dataset + '_target_tr_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        VALIDATION_PREDICTORS_P = output_temp_data_path + '/xval_' + dataset + '_predictors_v_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        VALIDATION_TARGET_P = output_temp_data_path + '/xval_' + dataset + '_target_v_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        TEST_PREDICTORS_P = output_temp_data_path + '/xval_' + dataset + '_predictors_ts_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
-        TEST_TARGET_P = output_temp_data_path + '/xval_' + dataset + '_target_ts_' + str(num_experiment) + str(num_run) + str(num_fold) + '.npy'
 
         #init paths to give to build model script
         model_name = output_models_path + '/model_xval_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_fold' + str(num_fold)
         results_name = output_temp_results_path + '/temp_results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_fold' + str(num_fold) + '.npy'
-        #delete existing datasets (to be sure that the training gets the newest one)
-        np.save(TRAINING_PREDICTORS_P, np.array(['ERROR']))
-        np.save(TRAINING_TARGET_P, np.array(['ERROR']))
-        np.save(VALIDATION_PREDICTORS_P, np.array(['ERROR']))
-        np.save(VALIDATION_TARGET_P, np.array(['ERROR']))
-        np.save(TEST_PREDICTORS_P, np.array(['ERROR']))
-        np.save(TEST_TARGET_P, np.array(['ERROR']))
+
+        #init results as ERROR
         np.save(results_name, np.array(['ERROR']))
 
-
-        #compute and save dataset
-        if dataset == 'tess':
-            pass
-        else:
-            tr_actors = folds[i]['training']['actors']
-            val_actors = folds[i]['validation']['actors']
-            test_actors = folds[i]['test']['actors']
-            tr_pred, tr_tg = get_fold_dataset(tr_actors, merged_predictors, merged_target, dataset)
-            val_pred, val_tg = get_fold_dataset(val_actors, merged_predictors, merged_target, dataset)
-            test_pred, test_tg = get_fold_dataset(test_actors, merged_predictors, merged_target, dataset)
-            np.save(TRAINING_PREDICTORS_P, tr_pred)
-            np.save(TRAINING_TARGET_P, tr_tg)
-            np.save(VALIDATION_PREDICTORS_P, val_pred)
-            np.save(VALIDATION_TARGET_P, val_tg)
-            np.save(TEST_PREDICTORS_P, test_pred)
-            np.save(TEST_TARGET_P, test_tg)
-
-        #save_fold_datasets(tr_actors, val_actors, test_actors, merged_predictors, merged_target, dataset,
-        #                    num_experiment, num_run, num_fold)
+        #re-compute folds list
+        folds_list = folds_generator_daic(num_folds)
+        folds_list = str(folds_list)
 
         #run training
         training = subprocess.Popen(['python3', 'build_model_GENERIC_multiscale_auto.py',
                                      'crossvalidation', str(num_experiment), str(num_run),
                                       str(num_fold), parameters, model_name, results_name,
-                                      output_temp_data_path, dataset, str(gpu_ID)])
+                                      output_temp_data_path, dataset, str(gpu_ID), folds_list])
         training.communicate()
         training.wait()
+
+        sys.exit(0)
 
         #wait for file to be created
         flag = 'ERROR'
