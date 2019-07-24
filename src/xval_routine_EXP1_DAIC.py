@@ -16,18 +16,68 @@ penalization
 
 experiments = {}
 
-experiments[1] = ['layer_type="conv"', 'channels=1',
-             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=30360',
-             'training_mode="train_and_eval"', 'network_type= "1_layer"',
-             'kernel_size_1=(5,5)']
 
-experiments[2] = ['layer_type="conv"', 'channels=1',
-             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=6831',
-             'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.003',
-             'kernel_size_1=(5,5)']
+#10 CHANNELS, 1LAYER
 
+experiments[1] = ['layer_type="conv"', 'channels=10',
+             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[2] = ['layer_type="conv"', 'channels=10',
+             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.003']
+
+experiments[3] = ['layer_type="conv"', 'channels=10',
+             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.01']
+
+experiments[4] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.95, 1.),(1.053,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[5] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.9, 1.),(1.111,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[6] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[7] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.7, 1.),(1.428,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[8] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.5, 1.),(2.,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[9] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.8, 1.),(0.9, 1.),(1.111, 1.),(1.25, 1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[10] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.25, 1.),(0.5, 1.),(2.,1.),(4.,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[11] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.7, 1.),(0.8, 1.),(0.9, 1.),(1.111, 1.),(1.25, 1.),(1.428, 1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
+
+experiments[12] = ['layer_type="multi"', 'channels=10',
+             'stretch_factors=[(0.25, 1.),(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.),(4., 1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=303600',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
 #run experiments
 short_description = 'initial test'
@@ -51,7 +101,7 @@ try:
 
 except IndexError:
     begin = 1
-    end = 34
+    end = 12
     gpu_ID = 1
 
 

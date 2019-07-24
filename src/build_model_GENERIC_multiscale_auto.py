@@ -42,7 +42,7 @@ kernel_size_3 = (3,3)
 pool_size = [2,2]
 hidden_size = 100
 regularization_lambda = 0.001
-learning_rate = 0.001
+learning_rate = 0.0001
 
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
 #are given from crossvalidation script, otherwise are normally taken from config.ini
@@ -506,9 +506,9 @@ def main():
 
     #print results COMPUTED ON THE BEST SAVED MODEL
     print('')
-    print ('BVL train acc: ' + str(train_acc_BVL))
-    print ('BVL val acc: ' + str(val_acc_BVL))
-    print ('BVL test acc: ' + str(test_acc_BVL))
+    print ('BVL train LOSS: ' + str(train_loss_BVL))
+    print ('BVL val LOSS: ' + str(val_loss_BVL))
+    print ('BVL test LOSS: ' + str(test_loss_BVL))
 
     if not os.path.exists(results_path):
         os.makedirs(results_path)
