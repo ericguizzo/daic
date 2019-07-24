@@ -211,7 +211,7 @@ def split_dataset(merged_predictors, merged_target, actors_list, dataset):
                 print (i, predictors.shape)
             else:
                 predictors = np.concatenate((predictors, np.array(merged_predictors[i])), axis=0)
-                target = np.concatenate((target, np.array(merged_target[i]),dtype='float32'), axis=0)
+                target = np.concatenate((target, np.array(merged_target[i],dtype='float32')), axis=0)
 
     return predictors, target
 
