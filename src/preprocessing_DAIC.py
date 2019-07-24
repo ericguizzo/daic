@@ -70,7 +70,7 @@ def extract_features(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE, fs=SR, window_typ
 
     SP = essentia.array(SP)
     SP = np.power(SP, 2./3.)  #power law compression
-    SP = SP[:,:int(FFT_SIZE/2+1)]  #cut upper spectrum (above 8 khz)
+    SP = SP[:,:int(FFT_SIZE/4+1)]  #cut upper spectrum (above 8 khz)
 
     return SP
 
