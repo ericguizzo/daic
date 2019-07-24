@@ -209,11 +209,11 @@ def split_dataset(merged_predictors, merged_target, actors_list, dataset):
             print (i, predictors.shape)
             if i == actors_list[0]:  #if is first item
                 predictors = np.array(merged_predictors[i])
-                target = np.array(merged_target[i])
+                target = np.array(float(merged_target[i]))
                 print (i, predictors.shape)
             else:
                 predictors = np.concatenate((predictors, np.array(merged_predictors[i])), axis=0)
-                target = np.concatenate((target, np.array(merged_target[i])), axis=0)
+                target = np.concatenate((target, np.array(float(merged_target[i]))), axis=0)
 
     return predictors, target
 
@@ -221,7 +221,6 @@ def split_dataset(merged_predictors, merged_target, actors_list, dataset):
 def main():
 
     #CREATE DATASET
-
     #load numpy data
     print('loading dataset...')
     predictors_merged = np.load(PREDICTORS_LOAD)
@@ -240,19 +239,6 @@ def main():
                                                         target_merged, val_list, dataset)
     test_predictors, test_target = split_dataset(predictors_merged,
                                                         target_merged, test_list, dataset)
-
-
-    print ('culo')
-    print (training_predictors.shape)
-    print (validation_predictors.shape)
-    print (test_predictors.shape)
-    print (training_target.shape)
-    print (validation_target.shape)
-    print (test_target.shape)
-    sys.exit(0)
-
-
-
 
 
 
@@ -336,7 +322,7 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=learning_rate,
                            weight_decay=regularization_lambda)
     model.train()
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.MSELoss()
 
     total_step = len(tr_data)
     loss_list = []
