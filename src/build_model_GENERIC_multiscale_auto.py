@@ -20,8 +20,8 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #load parameters from config file
-TRAINING_PREDICTORS = cfg.get('model', 'predictors_load')
-TRAINING_TARGET = cfg.get('model', 'target_load')
+PREDICTORS_LOAD = cfg.get('model', 'predictors_load')
+TARGET_LOAD = cfg.get('model', 'target_load')
 TORCH_SAVE_MODEL = cfg.get('model', 'save_model')
 
 #default parameters
@@ -201,8 +201,7 @@ def accuracy(data_x, data_y):
   return acc.item()  # percentage based
 
 def split_dataset(merged_predictors, merged_target, actors_list, dataset):
-    print ('va in figa')
-    print (np.array(merged_predictors[302]).shape)
+
     if dataset == 'daic':
         predictors = np.array([])
         target = np.array([])
@@ -225,8 +224,10 @@ def main():
 
     #load numpy data
     print('loading dataset...')
-    predictors_merged = np.load(TRAINING_PREDICTORS)
-    target_merged = np.load(TRAINING_TARGET)
+    predictors_merged = np.load(PREDICTORS_LOAD)
+    target_merged = np.load(TARGET_LOAD)
+    predictors_merged = predictors_merged.item()
+    target_merged = target_merged.item()
 
     #split dataset into train, val and test_sets
     train_list = folds_list[int(num_fold)]['train']
