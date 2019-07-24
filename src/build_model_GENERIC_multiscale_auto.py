@@ -59,8 +59,6 @@ try:
         dataset = sys.argv[9]
         gpu_ID = int(sys.argv[10])
         folds_list = eval(sys.argv[11])
-        print ('cazzo')
-        print (folds_list[0])
         TORCH_SAVE_MODEL = model_path
 
         print('crossvalidation mode: I/O from crossvalidation script')
@@ -230,9 +228,9 @@ def main():
     target_merged = np.load(TRAINING_TARGET)
 
     #split dataset into train, val and test_sets
-    train_list = folds_list[num_fold]['train']
-    val_list = folds_list[num_fold]['val']
-    test_list = folds_list[num_fold]['test']
+    train_list = folds_list[int(num_fold)]['train']
+    val_list = folds_list[int(num_fold)]['val']
+    test_list = folds_list[int(num_fold)]['test']
 
     training_predictors, training_target = split_dataset(predictors_merged,
                                                         target_merged, train_list, dataset)
