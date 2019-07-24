@@ -132,6 +132,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
         #re-compute folds list
         folds_list = folds_generator_daic(num_folds)
+        print ('cazzo')
+        print (folds_list[0])
         folds_list = str(folds_list)
 
         #run training
