@@ -231,6 +231,8 @@ def main():
     train_list = folds_list[int(num_fold)]['train']
     val_list = folds_list[int(num_fold)]['val']
     test_list = folds_list[int(num_fold)]['test']
+    print ('merda')
+    print (test_list)
 
     training_predictors, training_target = split_dataset(predictors_merged,
                                                         target_merged, train_list, dataset)
