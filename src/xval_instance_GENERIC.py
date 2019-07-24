@@ -60,7 +60,7 @@ def build_experiment_dict(n_folds, n_actors, dataset):
         folds[i]['validation']['actors'] = ac_list[i]['val']
         folds[i]['test']['actors'] = ac_list[i]['test']
 
-    return folds
+    return folds, ac_list
 
 def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folder, parameters, gpu_ID):
     '''
@@ -115,7 +115,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
 
     #create dict wit actors distributed per every fold
-    folds = build_experiment_dict(num_folds, num_actors, dataset)
+    folds, folds_list = build_experiment_dict(num_folds, num_actors, dataset)
 
 
     #iterate folds
@@ -130,9 +130,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         #init results as ERROR
         np.save(results_name, np.array(['ERROR']))
 
-        #re-compute folds list
-        folds_list = folds_generator_daic(num_folds)
-        folds_list = str(folds_list)
+        folds_list = str(folds_list)  #convert to string to pass it as argument
 
         #run training
         training = subprocess.Popen(['python3', 'build_model_GENERIC_multiscale_auto.py',
