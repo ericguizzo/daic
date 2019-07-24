@@ -76,8 +76,6 @@ except IndexError:
 
 #path for saving best val loss and best val acc models
 BVL_model_path = TORCH_SAVE_MODEL + '_BVL'
-BVA_model_path = TORCH_SAVE_MODEL + '_BVA'
-
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
@@ -328,8 +326,6 @@ def main():
     loss_list = []
     train_loss_hist = []
     val_loss_hist = []
-    train_acc_hist = []
-    val_acc_hist = []
     patience_vec = []
 
     #TRAINING LOOP
@@ -357,67 +353,47 @@ def main():
         #after current epoch training
         model.eval()
         train_batch_losses = []
-        train_batch_accs = []
         val_batch_losses = []
-        val_batch_accs = []
         with torch.no_grad():
-            #compute training accuracy and loss
+            #compute training loss
             for i, (sounds, truth) in enumerate(tr_data):
                 optimizer.zero_grad()
                 tr_outputs = model(sounds)
                 temp_tr_loss = criterion(tr_outputs, truth)
                 train_batch_losses.append(temp_tr_loss.item())
-                temp_tr_acc = accuracy(tr_outputs, truth)
-                train_batch_accs.append(temp_tr_acc)
-            #compute validation accuracy and loss
+            #compute validation loss
             for i, (sounds, truth) in enumerate(val_data):
                 optimizer.zero_grad()
                 val_outputs = model(sounds)
                 temp_val_loss = criterion(val_outputs, truth)
                 val_batch_losses.append(temp_val_loss.item())
-                temp_val_acc = accuracy(val_outputs, truth)
-                val_batch_accs.append(temp_val_acc)
             #end of epoch loop
 
-        #compute train and val mean accuracy and loss of current epoch
+        #compute train and val mean loss of current epoch
         train_epoch_loss = np.mean(train_batch_losses)
-        train_epoch_acc = np.mean(train_batch_accs)
         val_epoch_loss = np.mean(val_batch_losses)
-        val_epoch_acc = np.mean(val_batch_accs)
 
         #append values to histories
         train_loss_hist.append(train_epoch_loss)
-        train_acc_hist.append(train_epoch_acc)
         val_loss_hist.append(val_epoch_loss)
-        val_acc_hist.append(val_epoch_acc)
-
 
         #print loss and accuracy of the current epoch
-        print ('\n', 'train_acc: ' + str(train_epoch_acc) + ' | val_acc: ' + str(val_epoch_acc))
         print ('\r', 'train_loss: ' + str(train_epoch_loss) + '| val_loss: ' + str(val_epoch_loss))
 
         #save best model (metrics = loss)
         if save_best_only == True:
             if epoch == 0:
                 torch.save(model.state_dict(), BVL_model_path)
-                torch.save(model.state_dict(), BVA_model_path)
                 print ('saved_BVL')
-                print ('saved_BVA')
                 saved_epoch = epoch + 1
             else:
                 best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
-                best_acc = max(val_acc_hist[:-1])  #not looking at curr_loss
                 curr_loss = val_loss_hist[-1]
-                curr_acc = val_acc_hist[-1]
                 if curr_loss < best_loss:
                     torch.save(model.state_dict(), BVL_model_path)
                     print ('saved_BVL')  #SUBSTITUTE WITH SAVE MODEL FUNC
                     saved_epoch = epoch + 1
 
-                if curr_acc > best_acc:
-                    torch.save(model.state_dict(), BVA_model_path)
-                    print ('saved_BVA')  #SUBSTITUTE WITH SAVE MODEL FUNC
-                    saved_epoch = epoch + 1
         utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
         print (utilstring)
 
@@ -450,12 +426,9 @@ def main():
 
         #END OF EPOCH
 
-    #compute train, val and test accuracy LOADING the best saved model
+    #compute train, val and test loss LOADING the best saved model
     #best validation loss
     #init batch results
-    train_batch_accs_BVL = []
-    val_batch_accs_BVL =[]
-    test_batch_accs_BVL = []
 
     train_batch_losses_BVL = []
     val_batch_losses_BVL = []
@@ -480,9 +453,7 @@ def main():
         for i, (sounds, truth) in enumerate(tr_data):
             optimizer.zero_grad()
             temp_pred = model(sounds)
-            temp_acc = accuracy(temp_pred, truth)
             temp_loss = criterion(temp_pred, truth)
-            train_batch_accs_BVL.append(temp_acc)
             train_batch_losses_BVL.append(temp_loss)
             train_batch_preds_BVL = torch.cat((train_batch_preds_BVL, temp_pred))
             train_batch_truths_BVL = torch.cat((train_batch_truths_BVL, truth.float()))
@@ -492,9 +463,7 @@ def main():
         for i, (sounds, truth) in enumerate(val_data):
             optimizer.zero_grad()
             temp_pred = model(sounds)
-            temp_acc = accuracy(temp_pred, truth)
             temp_loss = criterion(temp_pred, truth)
-            val_batch_accs_BVL.append(temp_acc)
             val_batch_losses_BVL.append(temp_loss)
             val_batch_preds_BVL = torch.cat((val_batch_preds_BVL, temp_pred))
             val_batch_truths_BVL = torch.cat((val_batch_truths_BVL, truth.float()))
@@ -504,92 +473,18 @@ def main():
         for i, (sounds, truth) in enumerate(test_data):
             optimizer.zero_grad()
             temp_pred = model(sounds)
-            temp_acc = accuracy(temp_pred, truth)
             temp_loss = criterion(temp_pred, truth)
-            test_batch_accs_BVL.append(temp_acc)
             test_batch_losses_BVL.append(temp_loss)
             test_batch_preds_BVL = torch.cat((test_batch_preds_BVL, temp_pred))
             test_batch_truths_BVL = torch.cat((test_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 test_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
-    #best_validation_accuracy
-    #init batch results
-    train_batch_accs_BVA = []
-    val_batch_accs_BVA =[]
-    test_batch_accs_BVA = []
 
-    train_batch_losses_BVA = []
-    val_batch_losses_BVA = []
-    test_batch_losses_BVA = []
-
-    train_batch_preds_BVA = torch.empty(0).float().to(device)
-    val_batch_preds_BVA = torch.empty(0).float().to(device)
-    test_batch_preds_BVA = torch.empty(0).float().to(device)
-
-    train_batch_truths_BVA = torch.empty(0).float().to(device)
-    val_batch_truths_BVA = torch.empty(0).float().to(device)
-    test_batch_truths_BVA = torch.empty(0).float().to(device)
-
-    train_stretch_percs_BVA = []
-    val_stretch_percs_BVA = []
-    test_stretch_percs_BVA = []
-
-    model.load_state_dict(torch.load(BVA_model_path), strict=False)
-    model.eval()
-    with torch.no_grad():
-        #train acc
-        for i, (sounds, truth) in enumerate(tr_data):
-            optimizer.zero_grad()
-            temp_pred = model(sounds)
-            temp_acc = accuracy(temp_pred, truth)
-            temp_loss = criterion(temp_pred, truth)
-            train_batch_accs_BVA.append(temp_acc)
-            train_batch_losses_BVA.append(temp_loss)
-
-            train_batch_preds_BVA = torch.cat((train_batch_preds_BVA, temp_pred))
-            train_batch_truths_BVA = torch.cat((train_batch_truths_BVA, truth.float()))
-            if layer_type == 'multi':
-                train_stretch_percs_BVA.append(model.multiscale1.get_stretch_percs())
-        #val acc
-        for i, (sounds, truth) in enumerate(val_data):
-            optimizer.zero_grad()
-            temp_pred = model(sounds)
-            temp_acc = accuracy(temp_pred, truth)
-            temp_loss = criterion(temp_pred, truth)
-            val_batch_accs_BVA.append(temp_acc)
-            val_batch_losses_BVA.append(temp_loss)
-            val_batch_preds_BVA = torch.cat((val_batch_preds_BVA, temp_pred))
-            val_batch_truths_BVA = torch.cat((val_batch_truths_BVA, truth.float()))
-            if layer_type == 'multi':
-                val_stretch_percs_BVA.append(model.multiscale1.get_stretch_percs())
-        #test acc
-        for i, (sounds, truth) in enumerate(test_data):
-            optimizer.zero_grad()
-            temp_pred = model(sounds)
-            temp_acc = accuracy(temp_pred, truth)
-            temp_loss = criterion(temp_pred, truth)
-            test_batch_accs_BVA.append(temp_acc)
-            test_batch_losses_BVA.append(temp_loss)
-            test_batch_preds_BVA = torch.cat((test_batch_preds_BVA, temp_pred))
-            test_batch_truths_BVA = torch.cat((test_batch_truths_BVA, truth.float()))
-            if layer_type == 'multi':
-                test_stretch_percs_BVA.append(model.multiscale1.get_stretch_percs())
     #compute rounded mean of accuracies
-    train_acc_BVL = np.mean(train_batch_accs_BVL)
-    val_acc_BVL = np.mean(val_batch_accs_BVL)
-    test_acc_BVL = np.mean(test_batch_accs_BVL)
-
-    train_acc_BVA = np.mean(train_batch_accs_BVA)
-    val_acc_BVA = np.mean(val_batch_accs_BVA)
-    test_acc_BVA = np.mean(test_batch_accs_BVA)
 
     train_loss_BVL = torch.mean(torch.tensor(train_batch_losses_BVL)).cpu().numpy()
     val_loss_BVL = torch.mean(torch.tensor(val_batch_losses_BVL)).cpu().numpy()
     test_loss_BVL = torch.mean(torch.tensor(test_batch_losses_BVL)).cpu().numpy()
-
-    train_loss_BVA = torch.mean(torch.tensor(train_batch_losses_BVA)).cpu().numpy()
-    val_loss_BVA = torch.mean(torch.tensor(val_batch_losses_BVA)).cpu().numpy()
-    test_loss_BVA = torch.mean(torch.tensor(test_batch_losses_BVA)).cpu().numpy()
 
     #transfer preds and truths to CPU
     train_batch_preds_BVL = train_batch_preds_BVL.cpu().numpy()
@@ -599,14 +494,6 @@ def main():
     train_batch_truths_BVL = train_batch_truths_BVL.cpu().numpy()
     val_batch_truths_BVL = val_batch_truths_BVL.cpu().numpy()
     test_batch_truths_BVL = test_batch_truths_BVL.cpu().numpy()
-
-    train_batch_preds_BVA = train_batch_preds_BVA.cpu().numpy()
-    val_batch_preds_BVA = val_batch_preds_BVA.cpu().numpy()
-    test_batch_preds_BVA = test_batch_preds_BVA.cpu().numpy()
-
-    train_batch_truths_BVA = train_batch_truths_BVA.cpu().numpy()
-    val_batch_truths_BVA = val_batch_truths_BVA.cpu().numpy()
-    test_batch_truths_BVA = test_batch_truths_BVA.cpu().numpy()
 
     #process stretch percs
     num_stretches = len(stretch_factors) + 1
@@ -618,13 +505,6 @@ def main():
     test_stretch_percs_BVL = np.array(test_stretch_percs_BVL)
     test_stretch_percs_BVL = np.mean(test_stretch_percs_BVL, axis=0)
 
-    train_stretch_percs_BVA = np.array(train_stretch_percs_BVA)
-    train_stretch_percs_BVA = np.mean(train_stretch_percs_BVA, axis=0)
-    val_stretch_percs_BVA = np.array(val_stretch_percs_BVA)
-    val_stretch_percs_BVA = np.mean(val_stretch_percs_BVA, axis=0)
-    test_stretch_percs_BVA = np.array(test_stretch_percs_BVA)
-    test_stretch_percs_BVA = np.mean(test_stretch_percs_BVA, axis=0)
-
 
     #print results COMPUTED ON THE BEST SAVED MODEL
     print('')
@@ -632,48 +512,30 @@ def main():
     print ('BVL val acc: ' + str(val_acc_BVL))
     print ('BVL test acc: ' + str(test_acc_BVL))
 
-    print ('BVA train acc: ' + str(train_acc_BVA))
-    print ('BVA val acc: ' + str(val_acc_BVA))
-    print ('BVA test acc: ' + str(test_acc_BVA))
-
     if not os.path.exists(results_path):
         os.makedirs(results_path)
 
     #save results in temp dict file
     temp_results = {}
-    #save accuracy
-    temp_results['train_acc_BVL'] = train_acc_BVL
-    temp_results['val_acc_BVL'] = val_acc_BVL
-    temp_results['test_acc_BVL'] = test_acc_BVL
-    temp_results['train_acc_BVA'] = train_acc_BVA
-    temp_results['val_acc_BVA'] = val_acc_BVA
-    temp_results['test_acc_BVA'] = test_acc_BVA
+
     #save loss
     temp_results['train_loss_BVL'] = train_loss_BVL
     temp_results['val_loss_BVL'] = val_loss_BVL
     temp_results['test_loss_BVL'] = test_loss_BVL
-    temp_results['train_loss_BVA'] = train_loss_BVA
-    temp_results['val_loss_BVA'] = val_loss_BVA
-    temp_results['test_loss_BVA'] = test_loss_BVA
+
     #save preds
     temp_results['train_pred_BVL'] = train_batch_preds_BVL
     temp_results['val_pred_BVL'] = val_batch_preds_BVL
     temp_results['test_pred_BVL'] = test_batch_preds_BVL
-    temp_results['train_pred_BVA'] = train_batch_preds_BVA
-    temp_results['val_pred_BVA'] = val_batch_preds_BVA
-    temp_results['test_pred_BVA'] = test_batch_preds_BVA
+
     #save truth
     temp_results['train_truth_BVL'] = train_batch_truths_BVL
     temp_results['val_truth_BVL'] = val_batch_truths_BVL
     temp_results['test_truth_BVL'] = test_batch_truths_BVL
-    temp_results['train_truth_BVA'] = train_batch_truths_BVA
-    temp_results['val_truth_BVA'] = val_batch_truths_BVA
-    temp_results['test_truth_BVA'] = test_batch_truths_BVA
+
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
     temp_results['val_loss_hist'] = val_loss_hist
-    temp_results['train_acc_hist'] = train_acc_hist
-    temp_results['val_acc_hist'] = val_acc_hist
     #save stretch percs
     temp_results['train_stretch_percs_BVL'] = train_stretch_percs_BVL
     temp_results['val_stretch_percs_BVL'] = val_stretch_percs_BVL
