@@ -202,10 +202,10 @@ def accuracy(data_x, data_y):
   acc = (num_correct * 100.0 / float(len(data_y)))
   return acc.item()  # percentage based
 
-def split_dataset(predictors, target, folds_list):
+def split_dataset(predictors, target, folds_list, num_fold):
 
 
-
+    '''
     if dataset == 'daic':
         predictors = np.array([])
         target = np.array([])
@@ -218,7 +218,8 @@ def split_dataset(predictors, target, folds_list):
             else:
                 predictors = np.concatenate((predictors, merged_predictors[i]), axis=0)
                 target = np.concatenate((target, merged_target[i]), axis=0)
-
+    '''
+    #return tr_predictors, val_predictors, ts_predictors, tr_target, val_target, test_target
 
 
 def main():
@@ -226,9 +227,13 @@ def main():
     #CREATE DATASET
 
     #load numpy data
-    training_predictors = np.load(TRAINING_PREDICTORS)
-    training_target_onehot = np.load(TRAINING_TARGET)
+    print('loading dataset...')
+    training_predictors_merged = np.load(TRAINING_PREDICTORS)
+    training_target_onehot_merged = np.load(TRAINING_TARGET)
 
+    training_predictors, validation_predictors, test_predictors,
+    training_target, validation_target, test_target = split_dataset(training_predictors_merged,
+                                                                    training_target_merged,folds_list,num_fold)
     #split dataset into train, val and test_sets
     print ('culo')
     sys.exit(0)
