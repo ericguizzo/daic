@@ -168,9 +168,9 @@ class EmoModel2layer(nn.Module):
         self.multiscale1 = MultiscaleConv2d(1, channels1_daic, kernel_size=kernel_size_1_daic, scale_factors=stretch_factors,
                                            output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
         self.pool = nn.MaxPool2d(pool_size[0], pool_size[1])
-        self.hidden2 = nn.Linear(fc_insize, 10000)
-        self.hidden3 = nn.Linear(10000, 1000)
-        self.hidden4 = nn.Linear(1000, 100)
+        #self.hidden2 = nn.Linear(fc_insize, 10000)
+        #self.hidden3 = nn.Linear(10000, 1000)
+        self.hidden4 = nn.Linear(fc_insize, 100)
         self.out = nn.Linear(100, num_classes)
 
     def forward(self, X):
@@ -189,8 +189,7 @@ class EmoModel2layer(nn.Module):
         print (X_time.shape)
         print (X_freq.shape)
         X = torch.cat((X_time, X_freq))
-        X = F.relu(self.hidden2(X))
-        X = F.relu(self.hidden3(X))
+
         X = F.relu(self.hidden4(X))
         X = self.out(X)
 
@@ -228,22 +227,54 @@ def main():
     #CREATE DATASET
     #load numpy data
     print('loading dataset...')
-    predictors_merged = np.load(PREDICTORS_LOAD)
-    target_merged = np.load(TARGET_LOAD)
-    predictors_merged = predictors_merged.item()
-    target_merged = target_merged.item()
 
-    #split dataset into train, val and test_sets
-    train_list = folds_list[int(num_fold)]['train']
-    val_list = folds_list[int(num_fold)]['val']
-    test_list = folds_list[int(num_fold)]['test']
+    folds_dataset_path = '../dataset/matrices'
+    curr_fold_string = 'daic_test_target_fold_' + str(num_fold) + '.npy'
+    curr_fold_path = os.path.join(folds_dataset_path, curr_fold_string)
 
-    training_predictors, training_target = split_dataset(predictors_merged,
-                                                        target_merged, train_list, dataset)
-    validation_predictors, validation_target = split_dataset(predictors_merged,
-                                                        target_merged, val_list, dataset)
-    test_predictors, test_target = split_dataset(predictors_merged,
-                                                        target_merged, test_list, dataset)
+    train_pred_path = 'daic_training_predictors_fold_' + str(num_fold) + '.npy'
+    train_target_path = 'daic_training_target_fold_' + str(num_fold) + '.npy'
+
+    val_pred_path = 'daic_validation_predictors_fold_' + str(num_fold) + '.npy'
+    val_target_path = 'daic_validation_target_fold_' + str(num_fold) + '.npy'
+
+    test_pred_path = 'daic_test_predictors_fold_' + str(num_fold) + '.npy'
+    test_target_path = 'daic_test_target_fold_' + str(num_fold) + '.npy'
+
+    if not os.path.exists(output_temp_data_path):
+
+        predictors_merged = np.load(PREDICTORS_LOAD)
+        target_merged = np.load(TARGET_LOAD)
+        predictors_merged = predictors_merged.item()
+        target_merged = target_merged.item()
+
+        #split dataset into train, val and test_sets
+        train_list = folds_list[int(num_fold)]['train']
+        val_list = folds_list[int(num_fold)]['val']
+        test_list = folds_list[int(num_fold)]['test']
+
+        training_predictors, training_target = split_dataset(predictors_merged,
+                                                            target_merged, train_list, dataset)
+        validation_predictors, validation_target = split_dataset(predictors_merged,
+                                                            target_merged, val_list, dataset)
+        test_predictors, test_target = split_dataset(predictors_merged,
+                                                            target_merged, test_list, dataset)
+
+
+        np.save(train_pred_path, training_predictors)
+        np.save(train_target_path, training_target)
+        np.save(val_pred_path, validation_predictors)
+        np.save(val_target_path, validation_target)
+        np.save(test_pred_path, test_predictors)
+        np.save(test_target_path, test_target)
+
+    else:
+        training_predictors = np.load(train_pred_path)
+        training_target = np.load(train_target_path)
+        validation_predictors = np.load(val_pred_path)
+        validation_target = np.load(val_target_path)
+        test_predictors = np.load(test_pred_path)
+        test_target = np.load(test_target_path)
 
     #normalize to 0 mean and unity std (according to training set mean and std)
     tr_mean = np.mean(training_predictors)
