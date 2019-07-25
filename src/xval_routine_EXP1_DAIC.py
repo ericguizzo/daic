@@ -19,62 +19,62 @@ experiments = {}
 
 #10 CHANNELS, 1LAYER
 
-experiments[1] = ['layer_type="conv"', 'channels=10',
+experiments[1] = ['layer_type="conv"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[2] = ['layer_type="conv"', 'channels=10',
+experiments[2] = ['layer_type="conv"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.003']
 
-experiments[3] = ['layer_type="conv"', 'channels=10',
+experiments[3] = ['layer_type="conv"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"','regularization_lambda = 0.01']
 
-experiments[4] = ['layer_type="multi"', 'channels=10',
+experiments[4] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.95, 1.),(1.053,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[5] = ['layer_type="multi"', 'channels=10',
+experiments[5] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.9, 1.),(1.111,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[6] = ['layer_type="multi"', 'channels=10',
+experiments[6] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[7] = ['layer_type="multi"', 'channels=10',
+experiments[7] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.7, 1.),(1.428,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[8] = ['layer_type="multi"', 'channels=10',
+experiments[8] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.5, 1.),(2.,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[9] = ['layer_type="multi"', 'channels=10',
+experiments[9] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.8, 1.),(0.9, 1.),(1.111, 1.),(1.25, 1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[10] = ['layer_type="multi"', 'channels=10',
+experiments[10] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.25, 1.),(0.5, 1.),(2.,1.),(4.,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[11] = ['layer_type="multi"', 'channels=10',
+experiments[11] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.7, 1.),(0.8, 1.),(0.9, 1.),(1.111, 1.),(1.25, 1.),(1.428, 1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']
 
-experiments[12] = ['layer_type="multi"', 'channels=10',
+experiments[12] = ['layer_type="multi"', 'channels1_daic=30', 'channels2_daic=30',
              'stretch_factors=[(0.25, 1.),(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.),(4., 1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=290950',
              'training_mode="train_and_eval"', 'network_type= "1_layer"']

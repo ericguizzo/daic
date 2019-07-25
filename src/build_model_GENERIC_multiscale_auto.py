@@ -42,7 +42,7 @@ kernel_size_3 = (3,3)
 pool_size = [2,2]
 hidden_size = 100
 regularization_lambda = 0.001
-learning_rate = 0.00001
+learning_rate = 0.000001
 
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
 #are given from crossvalidation script, otherwise are normally taken from config.ini
@@ -163,11 +163,9 @@ class EmoModel2layer(nn.Module):
     def __init__(self):
         super(EmoModel2layer, self).__init__()
         self.inner_state = True
-        self.conv1 = nn.Conv2d(1, channels1, kernel_size=kernel_size_1)
-        self.conv2 = nn.Conv2d(channels1, channels1, kernel_size=kernel_size_1)
-        self.multiscale1 = MultiscaleConv2d(1, channels, kernel_size=kernel_size_1, scale_factors=stretch_factors,
-                                           output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
-        self.multiscale2 = MultiscaleConv2d(channels1, channels1, kernel_size=kernel_size_1, scale_factors=stretch_factors,
+        self.conv1 = nn.Conv2d(1, channels1_daic, kernel_size=kernel_size_1_daic)
+        self.conv2 = nn.Conv2d(1, channels2_daic, kernel_size=kernel_size_2_daic)
+        self.multiscale1 = MultiscaleConv2d(1, channels1_daic, kernel_size=kernel_size_1_daic, scale_factors=stretch_factors,
                                            output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
         self.pool = nn.MaxPool2d(pool_size[0], pool_size[1])
         self.hidden = nn.Linear(fc_insize, hidden_size)
@@ -176,13 +174,14 @@ class EmoModel2layer(nn.Module):
     def forward(self, X):
         training_state = self.training
         if layer_type == 'conv':
-            X = F.relu(self.conv1(X))
-            X = self.pool(X)
-            X = F.relu(self.conv2(X))
+            X_time = F.relu(self.conv1(X))
+            X_freq = F.relu(self.conv2(X))
         if layer_type == 'multi':
-            X = F.relu(self.multiscale1(X, training_state))
-            X = self.pool(X)
-            X = F.relu(self.multiscale2(X, training_state))
+            X_time = F.relu(self.multiscale1(X, training_state))
+            X_freq = F.relu(self.multiscale2(X, training_state))
+        X_time = self.pool(X_time)
+        X_freq = self.pool(X_freq)
+        X = torch.cat(X_time, X_freq)
         X = X.reshape(X.size(0), -1)
         X = F.relu(self.hidden(X))
         X = self.out(X)

@@ -257,7 +257,7 @@ def cut_sound_file(sound_file, bounds_list, sequence_length, sequence_overlap):
             pad = np.zeros(dur)
             pad[:len(curr_cut)] = curr_cut
             curr_cut = pad
-            cuts.append(curr_cut)
+            #cuts.append(curr_cut)  #RICORDARE!!!!!!!!!!!!  HO LEVATO I PAD!!
         #segment if frame is longer than dur + overlap
         elif len(curr_cut) > (dur + overlap):
             pointer = np.arange(0, len(curr_cut)-dur, overlap, dtype='int')  #initail positions of segments
