@@ -171,36 +171,14 @@ for end in explist:
 for begin,end in highlight_bounds:
     print(v_offset_BVL+begin,v_offset_BVL+end)
 
-    worksheet.conditional_format(v_offset_BVL+begin, train_acc_c, v_offset_BVL+end, train_acc_c,
-                                {'type': 'top','value': '1','format': bestvalue_format})
-    worksheet.conditional_format(v_offset_BVA+begin, train_acc_c, v_offset_BVA+end, train_acc_c,
-                                {'type': 'top','value': '1','format': bestvalue_format})
-
-    worksheet.conditional_format(v_offset_BVL+begin, val_acc_c, v_offset_BVL+end, val_acc_c,
-                                {'type': 'top','value': '1','format': bestvalue_format})
-
-    worksheet.conditional_format(v_offset_BVA+begin, val_acc_c, v_offset_BVA+end, val_acc_c,
-                                {'type': 'top','value': '1','format': bestvalue_format})
-
-    worksheet.conditional_format(v_offset_BVL+begin, test_acc_c, v_offset_BVL+end, test_acc_c,
-                                {'type': 'top','value': '1','format': bestvalue_format})
-    worksheet.conditional_format(v_offset_BVA+begin, test_acc_c, v_offset_BVA+end, test_acc_c,
-                                {'type': 'top','value': '1','format': bestvalue_format})
-
     #highlight best losses
     worksheet.conditional_format(v_offset_BVL+begin, train_loss_c, v_offset_BVL+end, train_loss_c,
-                                {'type': 'bottom','value': '1','format': bestvalue_format})
-    worksheet.conditional_format(v_offset_BVA+begin, train_loss_c, v_offset_BVA+end, train_loss_c,
                                 {'type': 'bottom','value': '1','format': bestvalue_format})
 
     worksheet.conditional_format(v_offset_BVL+begin, val_loss_c, v_offset_BVL+end, val_loss_c,
                                 {'type': 'bottom','value': '1','format': bestvalue_format})
-    worksheet.conditional_format(v_offset_BVA+begin, val_loss_c, v_offset_BVA+end, val_loss_c,
-                                {'type': 'bottom','value': '1','format': bestvalue_format})
 
     worksheet.conditional_format(v_offset_BVL+begin, test_loss_c, v_offset_BVL+end, test_loss_c,
-                                {'type': 'bottom','value': '1','format': bestvalue_format})
-    worksheet.conditional_format(v_offset_BVA+begin, test_loss_c, v_offset_BVA+end, test_loss_c,
                                 {'type': 'bottom','value': '1','format': bestvalue_format})
 
 
