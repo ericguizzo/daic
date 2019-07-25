@@ -144,10 +144,6 @@ for i in contents:
                         pass
 
         #print results to file
-        worksheet.write(curr_row_BVL, train_acc_c, train_acc_BVL_mean,values_format)
-        worksheet.write(curr_row_BVL, val_acc_c, val_acc_BVL_mean,values_format)
-        worksheet.write(curr_row_BVL, test_acc_c, test_acc_BVL_mean,values_format)
-
         worksheet.write(curr_row_BVL, train_loss_c, train_loss_BVL_mean,values_format)
         worksheet.write(curr_row_BVL, val_loss_c, val_loss_BVL_mean,values_format)
         worksheet.write(curr_row_BVL, test_loss_c, test_loss_BVL_mean,values_format)
