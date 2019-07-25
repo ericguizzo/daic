@@ -168,8 +168,7 @@ class EmoModel2layer(nn.Module):
         self.multiscale1 = MultiscaleConv2d(1, channels1_daic, kernel_size=kernel_size_1_daic, scale_factors=stretch_factors,
                                            output_type=output_type, stretch_penality_lambda= stretch_penality_lambda)
         self.pool = nn.MaxPool2d(pool_size[0], pool_size[1])
-        self.hidden1 = nn.Linear(fc_insize, 100000)
-        self.hidden2 = nn.Linear(100000, 10000)
+        self.hidden2 = nn.Linear(fc_insize, 10000)
         self.hidden3 = nn.Linear(10000, 1000)
         self.hidden4 = nn.Linear(1000, 100)
         self.out = nn.Linear(100, num_classes)
@@ -190,7 +189,6 @@ class EmoModel2layer(nn.Module):
         print (X_time.shape)
         print (X_freq.shape)
         X = torch.cat((X_time, X_freq))
-        X = F.relu(self.hidden1(X))
         X = F.relu(self.hidden2(X))
         X = F.relu(self.hidden3(X))
         X = F.relu(self.hidden4(X))
