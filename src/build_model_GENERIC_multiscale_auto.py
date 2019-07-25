@@ -241,7 +241,7 @@ def main():
     test_pred_path = 'daic_test_predictors_fold_' + str(num_fold) + '.npy'
     test_target_path = 'daic_test_target_fold_' + str(num_fold) + '.npy'
 
-    if not os.path.exists(output_temp_data_path):
+    if not os.path.exists(curr_fold_path):
 
         predictors_merged = np.load(PREDICTORS_LOAD)
         target_merged = np.load(TARGET_LOAD)
