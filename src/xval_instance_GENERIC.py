@@ -140,8 +140,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         training.communicate()
         training.wait()
 
-        sys.exit(0)
-
         #wait for file to be created
         flag = 'ERROR'
         while flag == 'ERROR':
@@ -154,46 +152,26 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds[i] = temp_results
 
     #compute summary
-    tr_acc = []
-    val_acc = []
-    test_acc = []
+    tr_loss = []
+    val_loss = []
+    test_loss = []
     for i in range(num_folds):
-        tr_acc.append(folds[i]['train_acc_BVL'])
-        val_acc.append(folds[i]['val_acc_BVL'])
-        test_acc.append(folds[i]['test_acc_BVL'])
-    tr_mean = np.mean(tr_acc)
-    val_mean = np.mean(val_acc)
-    test_mean = np.mean(test_acc)
-    tr_dev = np.std(tr_acc)
-    val_dev = np.std(val_acc)
-    test_dev = np.std(test_acc)
-    folds['summary'] = {'training_BVL':{'mean_accuracy': tr_mean,
-                                    'acc_std': tr_dev},
-                        'validation_BVL':{'mean_accuracy': val_mean,
-                                    'acc_std': val_dev},
-                        'test_BVL':{'mean_accuracy': test_mean,
-                                    'acc_cd std': test_dev}}
+        tr_loss.append(folds[i]['train_loss_BVL'])
+        val_loss.append(folds[i]['val_loss_BVL'])
+        test_loss.append(folds[i]['test_loss_BVL'])
+    tr_mean = np.mean(tr_loss)
+    val_mean = np.mean(val_loss)
+    test_mean = np.mean(test_loss)
+    tr_dev = np.std(tr_loss)
+    val_dev = np.std(val_loss)
+    test_dev = np.std(test_loss)
+    folds['summary'] = {'training_BVL':{'mean_loss': tr_mean,
+                                    'loss_std': tr_dev},
+                        'validation_BVL':{'mean_loss': val_mean,
+                                    'loss_std': val_dev},
+                        'test_BVL':{'mean_loss': test_mean,
+                                    'loss_std': test_dev}}
     folds['summary']['parameters'] = parameters
-
-    tr_acc = []
-    val_acc = []
-    test_acc = []
-    for i in range(num_folds):
-        tr_acc.append(folds[i]['train_acc_BVA'])
-        val_acc.append(folds[i]['val_acc_BVA'])
-        test_acc.append(folds[i]['test_acc_BVA'])
-    tr_mean = np.mean(tr_acc)
-    val_mean = np.mean(val_acc)
-    test_mean = np.mean(test_acc)
-    tr_dev = np.std(tr_acc)
-    val_dev = np.std(val_acc)
-    test_dev = np.std(test_acc)
-    folds['summary']['training_BVA'] = {'mean_accuracy': tr_mean,
-                                        'acc_std': tr_dev}
-    folds['summary']['validation_BVA'] = {'mean_accuracy': val_mean,
-                                          'acc_Std': val_dev}
-    folds['summary']['test_BVA'] = {'mean_accuracy': test_mean,
-                                    'acc_std': test_dev}
 
     print (folds)
 

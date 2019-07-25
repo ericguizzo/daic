@@ -83,7 +83,7 @@ experiments[12] = ['layer_type="multi"', 'channels=10',
 short_description = 'initial test'
 dataset = 'daic'
 num_experiment = 1
-num_folds = 4
+num_folds = 1
 experiment_folder = '../../../copy/daic'
 
 output_path = experiment_folder + '/experiment_' + str(num_experiment)
