@@ -183,13 +183,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     #save current code
     save_code(output_code_path)
 
-    #remove big temp files
-    os.remove(TRAINING_PREDICTORS_P)
-    os.remove(TRAINING_TARGET_P)
-    os.remove(VALIDATION_PREDICTORS_P)
-    os.remove(VALIDATION_TARGET_P)
-    os.remove(TEST_PREDICTORS_P)
-    os.remove(TEST_TARGET_P)
 
 if __name__ == '__main__':
     run_experiment()
