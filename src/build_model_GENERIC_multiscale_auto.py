@@ -35,7 +35,7 @@ save_best_only = True
 early_stopping = False
 patience = 10
 batch_size = 120
-num_epochs = 2
+num_epochs = 250
 kernel_size_1 = (10,5)
 kernel_size_2 = (5, 7)
 kernel_size_3 = (3,3)
@@ -247,6 +247,15 @@ def main():
     validation_predictors = np.divide(validation_predictors, tr_std)
     test_predictors = np.subtract(test_predictors, tr_mean)
     test_predictors = np.divide(test_predictors, tr_std)
+
+    #normalize labels between 0 and 1
+    '''
+    max_labels = [np.max(training_target), np.max(validation_target), np.max(test_target)]
+    max_val = float(np.max(max_labels))
+    training_target = np.divide(training_target, max_val)
+    validation_target = np.divide(validation_target, max_val)
+    test_target = np.divide(test_target, max_val)
+    '''
 
     #from onehot to float (CrossEntropyLoss requires this)
     '''
