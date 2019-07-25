@@ -181,8 +181,9 @@ class EmoModel2layer(nn.Module):
             X_freq = F.relu(self.multiscale2(X, training_state))
         X_time = self.pool(X_time)
         X_freq = self.pool(X_freq)
-        X = torch.cat(X_time, X_freq)
-        X = X.reshape(X.size(0), -1)
+        X_time = X_time.reshape(X_time.size(0), -1)
+        X_freq = X_freq.reshape(X_freq.size(0), -1)
+        X = torch.cat((X_time, X_freq))
         X = F.relu(self.hidden(X))
         X = self.out(X)
 
