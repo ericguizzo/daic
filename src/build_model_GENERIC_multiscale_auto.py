@@ -234,14 +234,20 @@ def main():
 
     train_pred_path = 'daic_training_predictors_fold_' + str(num_fold) + '.npy'
     train_target_path = 'daic_training_target_fold_' + str(num_fold) + '.npy'
+    train_pred_path = os.path.join(folds_dataset_path, train_pred_path)
+    train_target_path = os.path.join(folds_dataset_path, train_target_path)
 
     val_pred_path = 'daic_validation_predictors_fold_' + str(num_fold) + '.npy'
     val_target_path = 'daic_validation_target_fold_' + str(num_fold) + '.npy'
+    val_pred_path = os.path.join(folds_dataset_path, val_pred_path)
+    val_target_path = os.path.join(folds_dataset_path, val_target_path)
 
     test_pred_path = 'daic_test_predictors_fold_' + str(num_fold) + '.npy'
     test_target_path = 'daic_test_target_fold_' + str(num_fold) + '.npy'
+    test_pred_path = os.path.join(folds_dataset_path, test_pred_path)
+    test_target_path = os.path.join(folds_dataset_path, test_target_path)
 
-    if not os.path.exists(curr_fold_path):
+    if not os.path.exists(test_target_path):
 
         predictors_merged = np.load(PREDICTORS_LOAD)
         target_merged = np.load(TARGET_LOAD)
