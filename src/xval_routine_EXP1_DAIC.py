@@ -23,79 +23,15 @@ experiments[1] = ['layer_type="conv"', 'channels1_daic=10', 'channels2_daic=10',
              'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
+             'training_mode="train_and_eval"', 'network_type= "1_layer"', 'learning_rate=0.1',
+             'epochs=100']
 
-experiments[2] = ['layer_type="conv"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"','regularization_lambda = 0.003']
-
-experiments[3] = ['layer_type="conv"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"','regularization_lambda = 0.01']
-
-experiments[4] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.95, 1.),(1.053,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[5] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.9, 1.),(1.111,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[6] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.8, 1.),(1.25,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[7] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.7, 1.),(1.428,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[8] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.5, 1.),(2.,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[9] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.8, 1.),(0.9, 1.),(1.111, 1.),(1.25, 1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[10] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.25, 1.),(0.5, 1.),(2.,1.),(4.,1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[11] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.7, 1.),(0.8, 1.),(0.9, 1.),(1.111, 1.),(1.25, 1.),(1.428, 1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
-
-experiments[12] = ['layer_type="multi"', 'channels1_daic=10', 'channels2_daic=10',
-             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
-             'stretch_factors=[(0.25, 1.),(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.),(4., 1.)]',
-             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=16779600',
-             'training_mode="train_and_eval"', 'network_type= "2_layer"']
 
 #run experiments
-short_description = 'initial test'
+short_description = 'overfitting test, val=train set, added lines ~296-297  in build model'
 dataset = 'daic'
 num_experiment = 1
-num_folds = 4
+num_folds = 1
 experiment_folder = '../../../copy/daic'
 
 output_path = experiment_folder + '/experiment_' + str(num_experiment)

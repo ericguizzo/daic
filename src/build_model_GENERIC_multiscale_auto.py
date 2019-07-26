@@ -292,6 +292,10 @@ def main():
     test_predictors = np.subtract(test_predictors, tr_mean)
     test_predictors = np.divide(test_predictors, tr_std)
 
+    #OVERFITTING TEST!!! REMOVE THESE LISES FOR PROPER TRAINING
+    validation_predictors = training_predictors.copy()
+    validation_target = training_target.copy()
+
     #normalize labels between 0 and 1
     '''
     max_labels = [np.max(training_target), np.max(validation_target), np.max(test_target)]
