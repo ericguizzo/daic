@@ -19,7 +19,7 @@ experiments = {}
 
 #10 CHANNELS, 1LAYER
 
-experiments[1] = ['layer_type="conv"', 'channels1_daic=10', 'channels2_daic=10',
+experiments[1] = ['layer_type="conv"', 'channels=10','channels1_daic=10', 'channels2_daic=10',
              'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=3643200',
