@@ -92,7 +92,7 @@ channels2 = channels * 2
 channels3 = channels * 3
 
 device = torch.device('cuda:' + str(gpu_ID))
-device = torch.device('cpu')
+#device = torch.device('cpu')
 
 class EmoModel1layer(nn.Module):
 
