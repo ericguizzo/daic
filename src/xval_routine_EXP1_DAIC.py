@@ -23,10 +23,10 @@ experiments[1] = ['layer_type="conv"', 'channels=10','channels1_daic=10', 'chann
              'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=607200',
-             'training_mode="train_and_eval"', 'network_type= "1_layer"', 'learning_rate=0.000001',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"', 'learning_rate=0.0000001',
              'epochs=100']
 
-experiments[1] = ['layer_type="conv"', 'channels=10','channels1_daic=10', 'channels2_daic=10',
+experiments[2] = ['layer_type="conv"', 'channels=10','channels1_daic=10', 'channels2_daic=10',
              'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
              'stretch_factors=[(0.8, 1.),(1.25,1.)]',
              'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=607200',
