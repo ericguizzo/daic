@@ -294,8 +294,8 @@ def main():
     test_predictors = np.divide(test_predictors, tr_std)
 
     #OVERFITTING TEST!!! REMOVE THESE LISES FOR PROPER TRAINING
-    validation_predictors = training_predictors.copy()
-    validation_target = training_target.copy()
+    training_predictors = validation_predictors.copy()
+    training_target = validation_target.copy()
 
     #normalize labels between 0 and 1
     '''
