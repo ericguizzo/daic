@@ -432,9 +432,9 @@ def main():
                 val_batch_losses.append(temp_val_loss.item())
 
             #end of epoch loop
-        v_min = np.min(val_outputs.detach().cpu().flatten())
-        v_max = np.max(val_outputs.detach().cpu().flatten())
-        v_mean = np.mean(val_outputs.detach().cpu().flatten())
+        v_min = torch.min(val_outputs)
+        v_max = torch.max(val_outputs)
+        v_mean = torch.mean(val_outputs)
         #compute train and val mean loss of current epoch
         train_epoch_loss = np.mean(train_batch_losses)
         val_epoch_loss = np.mean(val_batch_losses)
