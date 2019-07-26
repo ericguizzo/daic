@@ -294,8 +294,8 @@ def main():
     test_predictors = np.divide(test_predictors, tr_std)
 
     #OVERFITTING TEST!!! REMOVE THESE LISES FOR PROPER TRAINING
-    training_predictors = validation_predictors.copy()
-    training_target = validation_target.copy()
+    validation_predictors = training_predictors.copy()
+    validation_target = training_target.copy()
 
     #normalize labels between 0 and 1
     '''
@@ -421,8 +421,7 @@ def main():
                 tr_outputs = model(sounds)
                 temp_tr_loss = criterion(tr_outputs, truth)
                 train_batch_losses.append(temp_tr_loss.item())
-                sounds.cpu()
-                truth.cpu()
+
             #compute validation loss
             for i, (sounds, truth) in enumerate(val_data):
                 sounds = sounds.to(device)
@@ -431,8 +430,7 @@ def main():
                 val_outputs = model(sounds)
                 temp_val_loss = criterion(val_outputs, truth)
                 val_batch_losses.append(temp_val_loss.item())
-                sounds.cpu()
-                truth.cpu()
+
             #end of epoch loop
 
         #compute train and val mean loss of current epoch
