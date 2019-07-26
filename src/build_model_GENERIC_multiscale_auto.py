@@ -338,12 +338,12 @@ def main():
     test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
 
     #convert to tensor
-    train_predictors = torch.tensor(training_predictors).float().to(device)
-    val_predictors = torch.tensor(validation_predictors).float().to(device)
-    test_predictors = torch.tensor(test_predictors).float().to(device)
-    train_target = torch.tensor(training_target).float().to(device)
-    val_target = torch.tensor(validation_target).float().to(device)
-    test_target = torch.tensor(test_target).float().to(device)
+    train_predictors = torch.tensor(training_predictors).float()
+    val_predictors = torch.tensor(validation_predictors).float()
+    test_predictors = torch.tensor(test_predictors).float()
+    train_target = torch.tensor(training_target).float()
+    val_target = torch.tensor(validation_target).float()
+    test_target = torch.tensor(test_target).float()
 
     #build dataset from tensors
     tr_dataset = utils.TensorDataset(train_predictors,train_target) # create your datset
@@ -351,9 +351,9 @@ def main():
     test_dataset = utils.TensorDataset(test_predictors, test_target) # create your datset
 
     #build data loader from dataset
-    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=False)
-    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False, pin_memory=False)
-    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory=False)  #no batch here!!
+    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=True)
+    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False, pin_memory=True)
+    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory=True)  #no batch here!!
     #DNN input shape
     time_dim = training_predictors.shape[1]
     features_dim = training_predictors.shape[2]
@@ -391,6 +391,8 @@ def main():
         string = 'Epoch: ' + str(epoch+1) + ' '
         #iterate batches
         for i, (sounds, truth) in enumerate(tr_data):
+            sounds.to(device)
+            truth.to(device)
             optimizer.zero_grad()
             outputs = model(sounds)
             loss = criterion(outputs, truth)
@@ -402,6 +404,8 @@ def main():
             string2 = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
             print ('\r', string2, end='')
             optimizer.step()
+            sounds.cpu()
+            truth.cpu()
             #end of batch loop
 
         #validation loss, training and val accuracy computation
@@ -412,16 +416,24 @@ def main():
         with torch.no_grad():
             #compute training loss
             for i, (sounds, truth) in enumerate(tr_data):
+                sounds.to(device)
+                truth.to(device)
                 optimizer.zero_grad()
                 tr_outputs = model(sounds)
                 temp_tr_loss = criterion(tr_outputs, truth)
                 train_batch_losses.append(temp_tr_loss.item())
+                sounds.cpu()
+                truth.cpu()
             #compute validation loss
             for i, (sounds, truth) in enumerate(val_data):
+                sounds.to(device)
+                truth.to(device)
                 optimizer.zero_grad()
                 val_outputs = model(sounds)
                 temp_val_loss = criterion(val_outputs, truth)
                 val_batch_losses.append(temp_val_loss.item())
+                sounds.cpu()
+                truth.cpu()
             #end of epoch loop
 
         #compute train and val mean loss of current epoch
@@ -506,6 +518,8 @@ def main():
     with torch.no_grad():
         #train acc
         for i, (sounds, truth) in enumerate(tr_data):
+            sounds.to(device)
+            truth.to(device)
             optimizer.zero_grad()
             temp_pred = model(sounds)
             temp_loss = criterion(temp_pred, truth)
@@ -514,8 +528,13 @@ def main():
             train_batch_truths_BVL = torch.cat((train_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 train_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
+            sounds.cpu()
+            truth.cpu()
+
         #val acc
         for i, (sounds, truth) in enumerate(val_data):
+            sounds.to(device)
+            truth.to(device)
             optimizer.zero_grad()
             temp_pred = model(sounds)
             temp_loss = criterion(temp_pred, truth)
@@ -524,8 +543,12 @@ def main():
             val_batch_truths_BVL = torch.cat((val_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 val_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
+            sounds.cpu()
+            truth.cpu()
         #test acc
         for i, (sounds, truth) in enumerate(test_data):
+            sounds.to(device)
+            truth.to(device)
             optimizer.zero_grad()
             temp_pred = model(sounds)
             temp_loss = criterion(temp_pred, truth)
@@ -534,7 +557,8 @@ def main():
             test_batch_truths_BVL = torch.cat((test_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 test_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
-
+            sounds.cpu()
+            truth.cpu()
     #compute rounded mean of accuracies
 
     train_loss_BVL = torch.mean(torch.tensor(train_batch_losses_BVL)).cpu().numpy()
