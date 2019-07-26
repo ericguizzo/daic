@@ -29,7 +29,7 @@ dataset = 'daic'
 #set correct last-layer dimension
 if dataset == 'daic':
     num_classes = 1
-channels = 60
+channels = 10
 gpu_ID = 1
 save_best_only = True
 early_stopping = False
