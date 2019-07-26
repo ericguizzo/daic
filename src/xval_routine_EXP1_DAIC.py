@@ -47,6 +47,13 @@ experiments[4] = ['layer_type="multi"', 'channels=10','channels1_daic=10', 'chan
              'training_mode="train_and_eval"', 'network_type= "1_layer"', 'learning_rate=0.000001',
              'epochs=100']
 
+experiments[5] = ['layer_type="multi"', 'channels=10','channels1_daic=10', 'channels2_daic=10',
+             'kernel_size_1_daic = [30,5]', 'kernel_size_2_daic = [3,257]',
+             'stretch_factors=[(0.7, 1.),(1.428,1.)]',
+             'output_type="pooled_map"', 'stretch_penality_lambda=0.', 'fc_insize=607200',
+             'training_mode="train_and_eval"', 'network_type= "1_layer"', 'learning_rate=0.000001',
+             'epochs=100']
+
 #run experiments
 short_description = 'overfitting test, val=train set, added lines ~296-297  in build model'
 dataset = 'daic'

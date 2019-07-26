@@ -432,7 +432,9 @@ def main():
                 val_batch_losses.append(temp_val_loss.item())
 
             #end of epoch loop
-
+        v_min = np.min(val_outputs.detach().cpu())
+        v_max = np.max(val_outputs.detach().cpu())
+        v_mean = np.mean(val_outputs.detach().cpu())
         #compute train and val mean loss of current epoch
         train_epoch_loss = np.mean(train_batch_losses)
         val_epoch_loss = np.mean(val_batch_losses)
@@ -460,6 +462,7 @@ def main():
 
         utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
         print (utilstring)
+        print ('Val pred stats: min=' + str(v_min) + ' mean=' + str(v_mean) + ' max=' + str(v_max))
 
 
         #early stopping
