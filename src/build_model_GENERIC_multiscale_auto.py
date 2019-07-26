@@ -392,8 +392,8 @@ def main():
         string = 'Epoch: ' + str(epoch+1) + ' '
         #iterate batches
         for i, (sounds, truth) in enumerate(tr_data):
-            sounds.to(device)
-            truth.to(device)
+            sounds = sounds.to(device)
+            truth = truth.to(device)
             optimizer.zero_grad()
             outputs = model(sounds)
             loss = criterion(outputs, truth)
@@ -405,8 +405,6 @@ def main():
             string2 = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
             print ('\r', string2, end='')
             optimizer.step()
-            sounds.cpu()
-            truth.cpu()
             #end of batch loop
 
         #validation loss, training and val accuracy computation
@@ -417,8 +415,8 @@ def main():
         with torch.no_grad():
             #compute training loss
             for i, (sounds, truth) in enumerate(tr_data):
-                sounds.to(device)
-                truth.to(device)
+                sounds = sounds.to(device)
+                truth = truth.to(device)
                 optimizer.zero_grad()
                 tr_outputs = model(sounds)
                 temp_tr_loss = criterion(tr_outputs, truth)
@@ -427,8 +425,8 @@ def main():
                 truth.cpu()
             #compute validation loss
             for i, (sounds, truth) in enumerate(val_data):
-                sounds.to(device)
-                truth.to(device)
+                sounds = sounds.to(device)
+                truth = truth.to(device)
                 optimizer.zero_grad()
                 val_outputs = model(sounds)
                 temp_val_loss = criterion(val_outputs, truth)
@@ -519,8 +517,8 @@ def main():
     with torch.no_grad():
         #train acc
         for i, (sounds, truth) in enumerate(tr_data):
-            sounds.to(device)
-            truth.to(device)
+            sounds = sounds.to(device)
+            truth = truth.to(device)
             optimizer.zero_grad()
             temp_pred = model(sounds)
             temp_loss = criterion(temp_pred, truth)
@@ -529,13 +527,12 @@ def main():
             train_batch_truths_BVL = torch.cat((train_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 train_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
-            sounds.cpu()
-            truth.cpu()
+
 
         #val acc
         for i, (sounds, truth) in enumerate(val_data):
-            sounds.to(device)
-            truth.to(device)
+            sounds = sounds.to(device)
+            truth = truth.to(device)
             optimizer.zero_grad()
             temp_pred = model(sounds)
             temp_loss = criterion(temp_pred, truth)
@@ -544,12 +541,11 @@ def main():
             val_batch_truths_BVL = torch.cat((val_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 val_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
-            sounds.cpu()
-            truth.cpu()
+
         #test acc
         for i, (sounds, truth) in enumerate(test_data):
-            sounds.to(device)
-            truth.to(device)
+            sounds = sounds.to(device)
+            truth = truth.to(device)
             optimizer.zero_grad()
             temp_pred = model(sounds)
             temp_loss = criterion(temp_pred, truth)
@@ -558,8 +554,7 @@ def main():
             test_batch_truths_BVL = torch.cat((test_batch_truths_BVL, truth.float()))
             if layer_type == 'multi':
                 test_stretch_percs_BVL.append(model.multiscale1.get_stretch_percs())
-            sounds.cpu()
-            truth.cpu()
+
     #compute rounded mean of accuracies
 
     train_loss_BVL = torch.mean(torch.tensor(train_batch_losses_BVL)).cpu().numpy()
