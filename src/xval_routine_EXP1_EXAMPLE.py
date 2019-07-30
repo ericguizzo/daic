@@ -42,7 +42,7 @@ except IndexError:
     keys = list(experiment.keys())
     begin = keys[0]
     end = keys[-1]
-    #gpu_ID = 1
+    gpu_ID = 1
 
 for num_run in range(begin,end+1):
     temp_params = '/'.join(experiment[num_run])
