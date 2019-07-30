@@ -8,6 +8,14 @@ from scipy.signal import iirfilter, butter, filtfilt, lfilter
 from shutil import copyfile
 from librosa.effects import split
 import librosa
+import configparser
+import loadconfig
+
+config = loadconfig.load()
+cfg = configparser.ConfigParser()
+cfg.read(config)
+
+SR = cfg.getint('sampling', 'sr_target')
 
 def print_bar(index, total):
     perc = int(index / total * 20)
