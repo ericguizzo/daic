@@ -36,17 +36,17 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
     #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL AS KEYS OF A DICT
     #default parameters
     p = {
-    'regularization_lambda' = 0.01,
-    'reg' = regularizers.l2(regularization_lambda),
-    'kernel_size_1' = [16, 12],
-    'kernel_size_2' = [8, 12],
-    'kernel_size_3' = [5,7],
-    'pool_size' = [2,2],
-    'conv1_depth' = 20,
-    'conv2_depth' = 28,
-    'conv3_depth' = 40,
-    'drop_prob' = 0.3,
-    'hidden_size' = 200}
+    'regularization_lambda': 0.01,
+    'reg': regularizers.l2(regularization_lambda),
+    'kernel_size_1': [16, 12],
+    'kernel_size_2': [8, 12],
+    'kernel_size_3': [5,7],
+    'pool_size': [2,2],
+    'conv1_depth': 20,
+    'conv2_depth': 28,
+    'conv3_depth': 40,
+    'drop_prob': 0.3,
+    'hidden_size': 200}
 
     #THEN CALL THIS FUNCTION TO OVERWRITE DEFAULT PARAMETERS
     #WITH PARAMETERS DEFINED IN THE UI SCRIPT
