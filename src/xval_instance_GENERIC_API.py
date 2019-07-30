@@ -1,28 +1,9 @@
 import numpy as np
 import os, sys
 import subprocess
-import preprocessing_DAIC as pre
 import time
 import shutil
 
-
-def folds_generator_daic(num_folds):
-
-    sequence = pre.get_sequence()
-    dup_sequence = sequence * (num_folds+1)
-    shift = len(sequence) / num_folds
-    fold_list = {}
-    for i in range(num_folds):
-        curr_shift = int(shift * i)
-        #print (curr_shift)
-        curr_sequence = dup_sequence[curr_shift:curr_shift+len(sequence)]
-        tr, val, test = pre.gen_split_lists(curr_sequence)
-
-        fold_list[i] = {'train': tr,
-                          'val': val,
-                          'test': test}
-
-    return fold_list
 
 def save_code(output_code_path):
     curr_src_path = './'
