@@ -254,6 +254,9 @@ def main():
     #run training
     if not os.path.exists(results_path):
         os.makedirs(results_path)
+    model_folder = os.path.dirname(SAVE_MODEL)
+    if not os.path.exists(model_folder):
+        os.makedirs(model_folder)
 
     locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
