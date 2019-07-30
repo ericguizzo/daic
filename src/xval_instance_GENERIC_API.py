@@ -150,8 +150,10 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                             'test':{'mean_acc': test_mean,
                                         'loss_std': test_std}}
 
+
     print ('\n Results summary:')
     print (folds['summary'])
+    print ('\n CROSSVALIDATION COMPLETED')
 
     #save results dict
     dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
