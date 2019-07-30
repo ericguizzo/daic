@@ -126,7 +126,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
     #unroll parameters to find task_type:
     unrolled = parameters.split('/')
-    for param in parameters:
+    for param in unrolled:
         print (param)
         if 'task_type' in param:
             print (param)
