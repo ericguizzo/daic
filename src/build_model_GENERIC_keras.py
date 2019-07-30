@@ -250,7 +250,7 @@ def main():
         callbacks_list = [early_stopping_monitor, best_model]
     else:
         callbacks_list = [best_model]
-    callbacks_list = [best_model]
+    callbacks_list = [early_stopping_monitor]
 
     #run training
     if not os.path.exists(results_path):
