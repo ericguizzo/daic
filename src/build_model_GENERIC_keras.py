@@ -244,13 +244,12 @@ def main():
     print (locals()['model'].summary())
 
     #callbacks
-    best_model = ModelCheckpoint(locals()['model'], monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
+    best_model = ModelCheckpoint(SAVE_MODEL, monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
     early_stopping_monitor = EarlyStopping(patience=patience)  #stops training when the model is not improving
     if early_stopping:
         callbacks_list = [early_stopping_monitor, best_model]
     else:
         callbacks_list = [best_model]
-    callbacks_list = [early_stopping_monitor]
 
     #run training
     if not os.path.exists(results_path):
