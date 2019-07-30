@@ -123,7 +123,13 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                     'loss_std': test_std}}
 
     #compute mean acc and acc std if task_type is classification
-    if task_type != 'regresion':
+
+    #unroll parameters to find task_type:
+    unrolled = parameters.split('/')
+    for param in parameters:
+        if 'task_type' in param:
+            exec(param)
+    if task_type != 'regression':
         tr_acc = []
         val_acc = []
         test_acc = []
