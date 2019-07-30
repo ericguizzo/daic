@@ -258,7 +258,7 @@ def main():
 
     #model = choose_model
     history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
-                                validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
+                                validation_split=0.7, callbacks=callbacks_list, batch_size=batch_size)
 
 
     sys.exit(0)
