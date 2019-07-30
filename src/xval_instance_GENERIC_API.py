@@ -151,7 +151,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                         'loss_std': test_std}}
 
 
-    print (folds)
+    print (folds['summary'])
 
     #save results dict
     dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
