@@ -11,11 +11,11 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
-WINDOW_SIZE = cfg.getint('stft_toydata', 'window_size')
-FFT_SIZE = cfg.getint('stft_toydata', 'fft_size')
-HOP_SIZE = cfg.getint('stft_toydata', 'hop_size')
-WINDOW_TYPE = str(cfg.get('stft_toydata', 'window_type'))
-SR = cfg.getint('sampling_toydata', 'sr_tess')
+WINDOW_SIZE = cfg.getint('stft', 'window_size')
+FFT_SIZE = cfg.getint('stft', 'fft_size')
+HOP_SIZE = cfg.getint('stft', 'hop_size')
+WINDOW_TYPE = str(cfg.get('stft', 'window_type'))
+SR = cfg.getint('sampling', 'sr_target')
 fps = 25  #annotations per second
 hop_annotation = SR /fps
 frames_per_annotation = hop_annotation/float(HOP_SIZE)
