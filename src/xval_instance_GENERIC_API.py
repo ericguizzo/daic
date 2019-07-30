@@ -98,9 +98,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds[i] = temp_results
 
     #compute summary
-    folds['summary'] = {'parameters': parameters}
-
-
     #compute mean loss and loss std
     tr_loss = []
     val_loss = []
@@ -143,14 +140,14 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         tr_std = np.std(tr_acc)
         val_std = np.std(val_acc)
         test_std = np.std(test_acc)
-        folds['summary'] = {'training':{'mean_acc': tr_mean,
-                                        'acc_std': tr_std},
-                            'validation':{'mean_acc': val_mean,
-                                        'acc_std': val_std},
-                            'test':{'mean_acc': test_mean,
-                                        'loss_std': test_std}}
+        folds['summary']['training']['mean_acc'] =  tr_mean
+        folds['summary']['training']['acc_std'] = tr_std
+        folds['summary']['validation']['mean_acc'] =  val_mean
+        folds['summary']['validation']['acc_std'] = val_std
+        folds['summary']['test']['mean_acc'] =  test_mean
+        folds['summary']['test']['acc_std'] = test_std
 
-
+    folds['summary']['parameters'] = parameters
     print ('\n Results summary:')
     print (folds['summary'])
     print ('\n CROSSVALIDATION COMPLETED')
