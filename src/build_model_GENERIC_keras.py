@@ -7,12 +7,11 @@ from keras.layers.advanced_activations import ELU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, History
 from keras.utils import np_utils
 from keras.backend import int_shape
+from keras.models import load_model
 from keras import regularizers
 from keras import optimizers
 import utility_functions as uf
 import models_API as choose_model
-
-
 import matplotlib.pyplot as plt
 #import preprocessing_DAIC as pre
 import sys, os
@@ -280,6 +279,10 @@ def main():
         train_acc_hist = history.history['acc']
         val_acc_hist = history.history['val_acc']
 
+
+    #compute results on the best saved model
+    del locals()['model']  #delete model
+    gc.collect()
 
     #save results in temp dict file
     temp_results = {}
