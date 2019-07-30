@@ -47,7 +47,33 @@ depth = 1  #DUMMY
 
 #modes
 
-def OMG_model(model_parameters='0'):
+def PROVA_model(model_parameters='0'):
+
+    parse_parameters(model_parameters)
+
+    input_data = Input(shape=(time_dim, features_dim, depth)) #in tensorflow depth is the 3rd arg
+
+    conv_1 = Convolution2D(conv1_depth, (kernel_size_1[0],kernel_size_1[1]), padding='same', activation='tanh')(input_data)
+    pool_1 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_1)
+
+    conv_2 = Convolution2D(conv2_depth, (kernel_size_2[0],kernel_size_2[1]), padding='same', activation='tanh')(pool_1)
+    pool_2 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_2)
+
+    conv_3 = Convolution2D(conv3_depth, (kernel_size_3[0],kernel_size_3[1]), padding='same', activation='tanh')(pool_2)
+    pool_3 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_3)
+
+    flat = Flatten()(pool_3)
+
+    drop_1 = Dropout(drop_prob)(flat)
+    hidden = Dense(hidden_size, activation='tanh', kernel_regularizer=reg)(drop_1)
+
+    out = Dense(8, activation='linear')(hidden)
+
+    model = Model(inputs=input_data, outputs=out)
+
+    return model
+
+def OMG_model(time_dim, features_dim, model_parameters='0'):
 
     parse_parameters(model_parameters)
 
@@ -74,24 +100,6 @@ def OMG_model(model_parameters='0'):
     return model
 
 
-'''
-def main():
-    #model creation, compilation, training
-      #model creation
-    valence_model.compile(loss='mse', optimizer=opt)
-
-    print valence_model.summary()
-
-    history = valence_model.fit(training_predictors, training_target, epochs = num_epochs, validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
-
-    #plot and print results
-    print "Train loss = " + str(min(history.history['loss']))
-    print "Validation loss = " + str(min(history.history['val_loss']))
-    print "Used random seed: " + str(used_seed)
-
-
-'''
-    #plt.show()
 
 
 if __name__ == '__main__':

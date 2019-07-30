@@ -117,15 +117,6 @@ except IndexError:
 #define optimizer
 opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 
-
-#load and model
-#for some reason the dynamic exec does not work inside the main function
-print('\n loading model...')
-model_string = 'model = choose_model.' + architecture + '(parameters)'
-exec(model_string)
-model.compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
-
-
 def main():
 
     #CREATE DATASET
@@ -239,12 +230,21 @@ def main():
     training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
     validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
     test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
+    time_dim = training_predictors.shape[1]
+    features_dim = training_predictors.shape[2]
 
 
-    print (model.summary())
+    #load and compile model (model is in locals()['model'])
+    print('\n loading model...')
+    model_string = 'model = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
+    exec(model_string)
+    locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
+
+
+    print (locals()['model'].summary())
 
     #callbacks
-    best_model = ModelCheckpoint(model, monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
+    best_model = ModelCheckpoint(locals()['model'], monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
     early_stopping_monitor = EarlyStopping(patience=patience)  #stops training when the model is not improving
     if early_stopping:
         callbacks_list = [early_stopping_monitor, best_model]
@@ -257,7 +257,7 @@ def main():
         os.makedirs(results_path)
 
     #model = choose_model
-    history = model.fit(training_predictors,training_target, epochs=num_epochs,
+    history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
 
 
