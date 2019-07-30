@@ -150,7 +150,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                             'test':{'mean_acc': test_mean,
                                         'loss_std': test_std}}
 
-
+    print ('\n Results summary:')
     print (folds['summary'])
 
     #save results dict
