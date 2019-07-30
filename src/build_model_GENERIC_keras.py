@@ -283,17 +283,20 @@ def main():
 
     #compute results on the best saved model
     K.clear_session()  #free GPU
-    eval_model = load_model(SAVE_MODEL)  #load best saved model
+    best_model = load_model(SAVE_MODEL)  #load best saved model
 
+    train_score = best_model.evaluate(training_predictors, training_target)
+    val_score = best_model.evaluate(validation_predictors, validation_target)
+    test_score = best_model.evaluate(test_predictors, test_target)
+    print (train_score)
     #save results in temp dict file
     temp_results = {}
 
     #save loss
-    '''
-    temp_results['train_loss'] = train_loss_BVL
-    temp_results['val_loss'] = val_loss_BVL
-    temp_results['test_loss'] = test_loss_BVL
-    '''
+    temp_results['train_loss'] = train_score[0]
+    temp_results['val_loss'] = val_score[0]
+    temp_results['test_loss'] = test_score[0]
+
 
 
     #save history
