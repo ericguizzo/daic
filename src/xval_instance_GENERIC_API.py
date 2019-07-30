@@ -82,7 +82,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         training = subprocess.Popen(['python3', 'build_model_GENERIC_keras.py',
                                      'crossvalidation', str(num_experiment), str(num_run),
                                       str(num_fold), parameters, model_name, results_name,
-                                      output_temp_data_path, dataset, str(gpu_ID)])
+                                      output_temp_data_path, dataset, str(gpu_ID)], str(num_folds))
         training.communicate()
         training.wait()
 

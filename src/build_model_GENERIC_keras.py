@@ -45,6 +45,7 @@ try:
         output_temp_data_path = sys.argv[8]
         dataset = sys.argv[9]
         gpu_ID = int(sys.argv[10])
+        num_folds = int(sys.argv[11])
         SAVE_MODEL = model_path
 
         print('crossvalidation mode: I/O from crossvalidation script')
