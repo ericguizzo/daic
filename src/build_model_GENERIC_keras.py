@@ -285,9 +285,11 @@ def main():
     temp_results = {}
 
     #save loss
+    '''
     temp_results['train_loss'] = train_loss_BVL
     temp_results['val_loss'] = val_loss_BVL
     temp_results['test_loss'] = test_loss_BVL
+    '''
 
 
     #save history
