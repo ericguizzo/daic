@@ -91,8 +91,6 @@ percs = [train_split, validation_split, test_split]
 save_best_model_metric = 'val_loss'
 save_best_model_mode = 'min'
 gpu_ID = 1
-loss_function = 'categorical_crossentropy'
-metrics_list = ['accuracy']
 early_stopping = True
 patience = 10
 batch_size = 120
@@ -100,6 +98,21 @@ num_epochs = 2
 learning_rate = 0.0005
 regularization_lambda = 0.07
 conv_regularization_lambda = 0.01
+task_type = 'classification'
+
+if task_type == 'multilabel_classification':
+    loss_function = 'categorical_crossentropy'
+    metrics_list = ['accuracy']
+elif task_type = 'binary_classification':
+    loss_function = 'binary_crossentropy'
+    metrics_list = ['accuracy']
+elif task_type = 'regression':
+    loss_function = 'MSE'
+    metrics_list = []
+
+else:
+    raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
+
 
 #path for saving best val loss and best val acc models
 BVL_model_path = SAVE_MODEL + '.hdf5'
@@ -261,8 +274,12 @@ def main():
     history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
 
+    train_loss_hist = history.history['loss']
+    val_loss_hist = history.history.['val_loss']
+    if task_type != 'regression':
+        train_acc_hist = history.history['acc']
+        val_acc_hist = history.history['val_acc']
 
-    #sys.exit(0)
 
     #save results in temp dict file
     temp_results = {}
@@ -272,23 +289,13 @@ def main():
     temp_results['val_loss'] = val_loss_BVL
     temp_results['test_loss'] = test_loss_BVL
 
-    #save preds
-    temp_results['train_pred'] = train_batch_preds_BVL
-    temp_results['val_pred'] = val_batch_preds_BVL
-    temp_results['test_pred'] = test_batch_preds_BVL
-
-    #save truth
-    temp_results['train_truth'] = train_batch_truths_BVL
-    temp_results['val_truth'] = val_batch_truths_BVL
-    temp_results['test_truth'] = test_batch_truths_BVL
 
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
     temp_results['val_loss_hist'] = val_loss_hist
-    #save stretch percs
-    temp_results['train_stretch_percs'] = train_stretch_percs_BVL
-    temp_results['val_stretch_percs'] = val_stretch_percs_BVL
-    temp_results['test_stretch_percs'] = test_stretch_percs_BVL
+    if task_type != 'regression':
+        temp_results['train_acc_hist'] = train_acc_hist
+        temp_results['val_acc_hist'] = val_acc_hist
 
     np.save(results_path, temp_results)
 
