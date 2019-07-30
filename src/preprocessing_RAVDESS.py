@@ -69,7 +69,7 @@ def preprocess_datapoint(input_sound):
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
-    sr, raw_samples = uf.wavread(input_sound)  #read audio
+    raw_samples, sr = librosa.core.load(input_sound, sr=librosa_SR)  #read audio
     if SEGMENTATION:
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
