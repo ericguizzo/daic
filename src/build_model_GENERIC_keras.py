@@ -58,7 +58,7 @@ try:
 
 except IndexError:
     #test parameters
-    #IF IN REGULAR MODE:no xvalidation, results saved as exp0
+    #IF IN TEST MODE:no xvalidation, results saved as exp0
     dataset = cfg.get('model', 'dataset_test')
     architecture = 'OMG_model'
     parameters = '0,0'
@@ -67,6 +67,7 @@ except IndexError:
     num_exp = 0
     num_run = 0
     num_folds = 1
+
     print ('test mode: I/O from config.ini file')
     print ('')
     print ('dataset: ' + dataset)
@@ -79,7 +80,6 @@ except IndexError:
 
 predictors_name = dataset + '_predictors.npy'
 target_name = dataset + '_target.npy'
-
 PREDICTORS_LOAD = os.path.join(DATASET_FOLDER, predictors_name)
 TARGET_LOAD = os.path.join(DATASET_FOLDER, target_name)
 
@@ -226,7 +226,6 @@ def main():
     test_target = np.divide(test_target, max_val)
     '''
 
-
     #select a subdataset for testing (to be commented when normally trained)
     '''
     bound = 30
@@ -238,22 +237,18 @@ def main():
     test_target = test_target[:bound]
     '''
 
-    #reshape
-    #TROVARE UN MODO PER FARE RESHAPE AUTOMATICO
+    #reshape tensors
     training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
     validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
     test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
     time_dim = training_predictors.shape[1]
     features_dim = training_predictors.shape[2]
 
-
     #load and compile model (model is in locals()['model'])
     print('\n loading model...')
     model_string = 'model = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
     exec(model_string)
     locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
-
-
     print (locals()['model'].summary())
 
     #callbacks
@@ -280,7 +275,6 @@ def main():
         train_acc_hist = history.history['acc']
         val_acc_hist = history.history['val_acc']
 
-
     #compute results on the best saved model
     K.clear_session()  #free GPU
     best_model = load_model(SAVE_MODEL)  #load best saved model
@@ -288,7 +282,7 @@ def main():
     train_score = best_model.evaluate(training_predictors, training_target)
     val_score = best_model.evaluate(validation_predictors, validation_target)
     test_score = best_model.evaluate(test_predictors, test_target)
-    print (train_score)
+
     #save results in temp dict file
     temp_results = {}
 
@@ -313,8 +307,6 @@ def main():
     print (temp_results)
 
     np.save(results_path, temp_results)
-
-
 
 if __name__ == '__main__':
     main()
