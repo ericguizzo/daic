@@ -68,6 +68,45 @@ def build_matrix_dataset(merged_predictors, merged_target, actors_list):
     print(' | shape: ' + str(predictors.shape))
     print ('\n')
 
-
-
     return predictors, target
+
+def find_longest_audio(input_folder):
+    '''
+    look for all .wav files in a folder and
+    return the duration (in samples) of the longest one
+    '''
+    contents = os.listdir(input_folder)
+    file_sizes = []
+    for file in contents:
+        if file[-3:] == "wav": #selects just wav files
+            file_name = input_folder + '/' + file   #construct file_name string
+            try:
+                sr, samples = wavread(file_name)  #read audio file
+                #samples = strip_silence(samples)
+                file_sizes.append(len(samples))
+            except ValueError:
+                pass
+    max_file_length = max(file_sizes)
+
+    return max_file_length
+
+def preemphasis(input_vector, fs):
+    '''
+    2 simple high pass FIR filters in cascade to emphasize high frequencies
+    and cut unwanted low-frequencies
+    '''
+    #first gentle high pass
+    alpha=0.5
+    present = input_vector
+    zero = [0]
+    past = input_vector[:-1]
+    past = np.concatenate([zero,past])
+    past = np.multiply(past, alpha)
+    filtered1 = np.subtract(present,past)
+    #second 30 hz high pass
+    fc = 100.  # Cut-off frequency of the filter
+    w = fc / (fs / 2.) # Normalize the frequency
+    b, a = butter(8, w, 'high')
+    output = filtfilt(b, a, filtered1)
+
+    return output
