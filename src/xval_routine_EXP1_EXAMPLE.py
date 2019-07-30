@@ -1,6 +1,6 @@
 import numpy as np
 import sys, os
-import xval_instance_GENERIC as xval
+import xval_instance_GENERIC_API as xval
 
 #EXPERIMENT PARAMETERS:
 short_description = 'stupid test'
