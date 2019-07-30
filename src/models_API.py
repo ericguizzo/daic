@@ -13,6 +13,7 @@ from keras.utils import np_utils
 from keras.backend import int_shape
 from keras import regularizers
 from keras import optimizers
+import sys
 
 
 
@@ -46,15 +47,16 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
     'conv3_depth': 40,
     'drop_prob': 0.3,
     'hidden_size': 200}
+
     reg = regularizers.l2(p['regularization_lambda'])
     #THEN CALL THIS FUNCTION TO OVERWRITE DEFAULT PARAMETERS
     #WITH PARAMETERS DEFINED IN THE UI SCRIPT
-    parse_parameters(p, user_parameters)
+    p = parse_parameters(p, user_parameters)
     print (p)
     sys.exit(0)
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
-    input_data = Input(shape=(d['time_dim'], features_dim, 1))
+    input_data = Input(shape=(p['time_dim'], locals()['features_dim'], 1))
     conv_1 = Convolution2D(conv1_depth, (kernel_size_1[0],kernel_size_1[1]), padding='same', activation='tanh')(input_data)
     pool_1 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_1)
     conv_2 = Convolution2D(conv2_depth, (kernel_size_2[0],kernel_size_2[1]), padding='same', activation='tanh')(pool_1)
