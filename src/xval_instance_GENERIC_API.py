@@ -154,7 +154,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     print ('\n Results summary:')
     print (folds['summary'])
     print ('')
-    print ('EXPERIMENT ' + str(num_exp) + ' INSTANCE ' + str(num_rum) + ' COMPLETED')
+    print ('EXPERIMENT ' + str(num_experiment) + ' INSTANCE ' + str(num_rum) + ' COMPLETED')
 
     #save results dict
     dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
