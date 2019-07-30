@@ -49,23 +49,22 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
     'hidden_size': 200}
 
     reg = regularizers.l2(p['regularization_lambda'])
-    #THEN CALL THIS FUNCTION TO OVERWRITE DEFAULT PARAMETERS
+
+    #THEN CALL PARSE_PAREMETERS TO OVERWRITE DEFAULT PARAMETERS
     #WITH PARAMETERS DEFINED IN THE UI SCRIPT
     p = parse_parameters(p, user_parameters)
-    print (p)
-    sys.exit(0)
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
-    input_data = Input(shape=(p['time_dim'], locals()['features_dim'], 1))
-    conv_1 = Convolution2D(conv1_depth, (kernel_size_1[0],kernel_size_1[1]), padding='same', activation='tanh')(input_data)
-    pool_1 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_1)
-    conv_2 = Convolution2D(conv2_depth, (kernel_size_2[0],kernel_size_2[1]), padding='same', activation='tanh')(pool_1)
-    pool_2 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_2)
-    conv_3 = Convolution2D(conv3_depth, (kernel_size_3[0],kernel_size_3[1]), padding='same', activation='tanh')(pool_2)
-    pool_3 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_3)
+    input_data = Input(shape=(p['time_dim'], p['features_dim'], 1))
+    conv_1 = Convolution2D(p['conv1_depth'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
+    pool_1 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_1)
+    conv_2 = Convolution2D(p['conv2_depth'], (p['kernel_size_2'][0],p['kernel_size_2'][1]), padding='same', activation='tanh')(pool_1)
+    pool_2 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_2)
+    conv_3 = Convolution2D(p['conv3_depth'], (p['kernel_size_3'][0],p['kernel_size_3'][1]), padding='same', activation='tanh')(pool_2)
+    pool_3 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_3)
     flat = Flatten()(pool_3)
-    drop_1 = Dropout(drop_prob)(flat)
-    hidden = Dense(hidden_size, activation='tanh', kernel_regularizer=reg)(drop_1)
+    drop_1 = Dropout(p['drop_prob'])(flat)
+    hidden = Dense(p['hidden_size'], activation='tanh', kernel_regularizer=reg)(drop_1)
     out = Dense(8, activation='softmax')(hidden)
     model = Model(inputs=input_data, outputs=out)
 
