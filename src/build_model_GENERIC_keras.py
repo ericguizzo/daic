@@ -103,10 +103,10 @@ task_type = 'classification'
 if task_type == 'multilabel_classification':
     loss_function = 'categorical_crossentropy'
     metrics_list = ['accuracy']
-elif task_type = 'binary_classification':
+elif task_type == 'binary_classification':
     loss_function = 'binary_crossentropy'
     metrics_list = ['accuracy']
-elif task_type = 'regression':
+elif task_type == 'regression':
     loss_function = 'MSE'
     metrics_list = []
 
