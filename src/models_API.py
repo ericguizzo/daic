@@ -26,7 +26,7 @@ def parse_parameters(parameters):
 
 def EXAMPLE_model(time_dim, features_dim, model_parameters='0'):
     '''
-    to use this model, simply call model=EXAMPLE_model as a parameter
+    to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the UI script
     '''
     #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL

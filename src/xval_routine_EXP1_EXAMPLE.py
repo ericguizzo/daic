@@ -15,10 +15,10 @@ experiment_folder = '../../../copy/prova_API'  #where to save results
 #every parameter overwrites the default parameters
 #mandatory parameters:
 #-task_type: multimodal_classification, binary_classification or regression
-#-model: one of the models defined in the models_API script
+#-architecture: one of the models defined in the models_API script
 #-comment: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
-experiment[1] = ['task_type= "multilabel_classification"', 'model="EXAMPLE_model"',
+experiment[1] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
                  'comment="baseline setting"']
 
 
