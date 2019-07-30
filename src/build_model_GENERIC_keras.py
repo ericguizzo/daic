@@ -281,8 +281,8 @@ def main():
 
 
     #compute results on the best saved model
-    del locals()['model']  #delete model
-    gc.collect()
+    K.clear_session()  #free GPU
+    eval_model = load_model(SAVE_MODEL)  #load best saved model
 
     #save results in temp dict file
     temp_results = {}
