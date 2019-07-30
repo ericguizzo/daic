@@ -45,7 +45,7 @@ def EXAMPLE_model(time_dim, features_dim, model_parameters='0'):
     #THEN CALL THIS FUNCTION TO OVERWRITE DEFAULT PARAMETERS
     #WITH PARAMETERS DEFINED IN THE UI SCRIPT
     parse_parameters(model_parameters)
-    print (parameters)
+    print (model_parameters)
     sys.exit(0)
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
