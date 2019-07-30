@@ -155,24 +155,23 @@ def main():
     test_target_path = os.path.join(folds_dataset_path, test_target_path)
 
     #compute which actors put in train, val, test for current fold
+    #PUT HERE SOME FUNCTION TO SPLIT BETTER DATASET
+    dummy = np.load(TARGET_LOAD)
+    dummy = dummy.item()
+    foldable_list = list(dummy.keys())
+    fold_actors_list = uf.folds_generator(num_folds, foldable_list, percs)
     train_list = fold_actors_list[int(num_fold)]['train']
     val_list = fold_actors_list[int(num_fold)]['val']
     test_list = fold_actors_list[int(num_fold)]['test']
+    del dummy
 
+    #if tensors of current fold has not been computed:
     if not os.path.exists(test_target_path):
-
+        #load merged dataset, compute and save current tensors
         predictors_merged = np.load(PREDICTORS_LOAD)
         target_merged = np.load(TARGET_LOAD)
         predictors_merged = predictors_merged.item()
         target_merged = target_merged.item()
-
-        foldable_list = list(target_merged.keys())
-
-        #split dataset into train, val and test_sets
-        #PUT HERE SOME FUNCTION TO SPLIT BETTER DATASET
-        fold_actors_list = uf.folds_generator(num_folds, foldable_list, percs)
-
-
 
         print ('\n building dataset for current fold')
         print ('\n training:')
@@ -195,6 +194,7 @@ def main():
         np.save(test_target_path, test_target)
 
     else:
+        #load pre-computed tensors
         training_predictors = np.load(train_pred_path)
         training_target = np.load(train_target_path)
         validation_predictors = np.load(val_pred_path)
