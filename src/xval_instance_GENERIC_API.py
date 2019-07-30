@@ -99,6 +99,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
     #compute summary
     folds['summary'] = {}
+    print ('culo')
+    print (parameters)
     folds['summary']['parameters'] = parameters
 
     #compute mean loss and loss std
