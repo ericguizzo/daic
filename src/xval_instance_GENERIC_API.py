@@ -25,13 +25,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     print("NEW EXPERIMENT: exp: " + str(num_experiment) + ' run: ' + str(num_run))
     print('Dataset: ' + dataset)
 
-    if dataset == 'daic':
-        num_actors = 142
-
-    else:
-        raise ValueError('Invalid dataset name')
-
-
     #create output path if not existing
     output_path = experiment_folder + '/experiment_' + str(num_experiment)
     if not os.path.exists(output_path):
