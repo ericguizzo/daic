@@ -35,8 +35,12 @@ print ('Segmentation: ' + str(SEGMENTATION))
 
 
 num_classes_ravdess = 8
-max_file_length = uf.find_longest_audio(INPUT_RAVDESS_FOLDER)
+max_file_length, sr = uf.find_longest_audio(INPUT_RAVDESS_FOLDER)
 max_file_length = int(max_file_length * SR)
+if sr == SR:
+    librosa_SR = None
+else:
+    librosa_SR = SR
 
 def filter_data(contents, criterion, train_list, val_list, test_list):
     '''
@@ -71,7 +75,7 @@ def preprocess_datapoint(input_sound):
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
-    raw_samples, sr = librosa.core.load(input_sound, sr=SR)  #read audio
+    raw_samples, sr = librosa.core.load(input_sound, sr=librosa_SR)  #read audio
     if SEGMENTATION:
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
