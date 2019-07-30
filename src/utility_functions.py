@@ -7,6 +7,7 @@ from scipy.fftpack import fft
 from scipy.signal import iirfilter, butter, filtfilt, lfilter
 from shutil import copyfile
 from librosa.effects import split
+import librosa
 
 def print_bar(index, total):
     perc = int(index / total * 20)
