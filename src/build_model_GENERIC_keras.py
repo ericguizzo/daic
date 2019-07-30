@@ -11,6 +11,7 @@ from keras.models import load_model
 from keras import regularizers
 from keras import optimizers
 import utility_functions as uf
+from keras import backend as K
 import models_API as choose_model
 import matplotlib.pyplot as plt
 #import preprocessing_DAIC as pre
