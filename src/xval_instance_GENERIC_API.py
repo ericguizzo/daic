@@ -78,13 +78,11 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         #init results as ERROR
         np.save(results_name, np.array(['ERROR']))
 
-        folds_list = str(folds_list)  #convert to string to pass it as argument
-
         #run training
         training = subprocess.Popen(['python3', 'build_model_GENERIC_keras.py',
                                      'crossvalidation', str(num_experiment), str(num_run),
                                       str(num_fold), parameters, model_name, results_name,
-                                      output_temp_data_path, dataset, str(gpu_ID), folds_list])
+                                      output_temp_data_path, dataset, str(gpu_ID)])
         training.communicate()
         training.wait()
 
