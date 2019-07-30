@@ -1,7 +1,7 @@
 from __future__ import print_function
 import loadconfig
 import configparser
-import utilities_func as uf
+import utility_functions as uf
 from librosa.feature import mfcc
 import numpy as np
 import utility_functions as uf
