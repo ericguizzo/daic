@@ -37,7 +37,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
     #default parameters
     p = {
     'regularization_lambda': 0.01,
-    'reg': regularizers.l2(regularization_lambda),
+    'reg': regularizers.l2(p['regularization_lambda']),
     'kernel_size_1': [16, 12],
     'kernel_size_2': [8, 12],
     'kernel_size_3': [5,7],
