@@ -4,7 +4,7 @@ import essentia
 import essentia
 import configparser
 import loadconfig
-import utilities_func as uf
+import utility_functions as uf
 
 config = loadconfig.load()
 cfg = configparser.ConfigParser()
