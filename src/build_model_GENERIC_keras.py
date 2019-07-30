@@ -154,6 +154,11 @@ def main():
     test_pred_path = os.path.join(folds_dataset_path, test_pred_path)
     test_target_path = os.path.join(folds_dataset_path, test_target_path)
 
+    #compute which actors put in train, val, test for current fold
+    train_list = fold_actors_list[int(num_fold)]['train']
+    val_list = fold_actors_list[int(num_fold)]['val']
+    test_list = fold_actors_list[int(num_fold)]['test']
+
     if not os.path.exists(test_target_path):
 
         predictors_merged = np.load(PREDICTORS_LOAD)
@@ -168,9 +173,6 @@ def main():
         fold_actors_list = uf.folds_generator(num_folds, foldable_list, percs)
 
 
-        train_list = fold_actors_list[int(num_fold)]['train']
-        val_list = fold_actors_list[int(num_fold)]['val']
-        test_list = fold_actors_list[int(num_fold)]['test']
 
         print ('\n building dataset for current fold')
         print ('\n training:')
