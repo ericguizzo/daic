@@ -81,7 +81,7 @@ def find_longest_audio(input_folder):
         if file[-3:] == "wav": #selects just wav files
             file_name = input_folder + '/' + file   #construct file_name string
             try:
-                sr, samples = wavread(file_name)  #read audio file
+                samples, sr = librosa.core.load(file_name, sr=SR)  #read audio file
                 #samples = strip_silence(samples)
                 file_sizes.append(len(samples))
             except ValueError:
