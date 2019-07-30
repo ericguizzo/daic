@@ -18,7 +18,6 @@ from keras import optimizers
 
 
 def parse_parameters(parameters):
-    parameters = parameters.split('/')
     for param in parameters:
         exec(param)
 
