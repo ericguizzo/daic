@@ -18,31 +18,6 @@ def save_code(output_code_path):
     copy2.communicate()
 
 
-def init_experiment_dict(num_folds):
-    '''init dict for crossvalidation experiments'''
-    folds = {}
-    for i in np.arange(num_folds):
-        #temp_exp_name = 'experiment_' + str(i+1)
-        folds[i] = {'training':{},
-                                    'validation':{},
-                                    'test':{}}
-
-    return folds
-
-def build_experiment_dict(n_folds, n_actors, dataset):
-    '''fill dict with values for a desired experiment'''
-    #ac_list = folds_generator(n_folds, n_actors, dataset)
-    if dataset == 'daic':
-        ac_list = folds_generator_daic(n_folds)
-    folds = init_experiment_dict(n_folds)
-
-    for i in range(n_folds):
-        folds[i]['training']['actors'] = ac_list[i]['train']
-        folds[i]['validation']['actors'] = ac_list[i]['val']
-        folds[i]['test']['actors'] = ac_list[i]['test']
-
-    return folds, ac_list
-
 def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folder, parameters, gpu_ID):
     '''
     run the crossvalidation
@@ -95,16 +70,15 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         os.makedirs(output_config_path)
 
 
-    #create dict wit actors distributed per every fold
-    folds, folds_list = build_experiment_dict(num_folds, num_actors, dataset)
-
+    #initialize results dict
+    folds = {}
 
     #iterate folds
     for i in range(num_folds):
         #create paths
         num_fold = i
 
-        #init paths to give to build model script
+        #init paths
         model_name = output_models_path + '/model_xval_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_fold' + str(num_fold)
         results_name = output_temp_results_path + '/temp_results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_fold' + str(num_fold) + '.npy'
 
@@ -133,26 +107,51 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds[i] = temp_results
 
     #compute summary
+    folds['summary']['parameters'] = parameters
+
+    #compute mean loss and loss std
     tr_loss = []
     val_loss = []
     test_loss = []
     for i in range(num_folds):
-        tr_loss.append(folds[i]['train_loss_BVL'])
-        val_loss.append(folds[i]['val_loss_BVL'])
-        test_loss.append(folds[i]['test_loss_BVL'])
+        tr_loss.append(folds[i]['train_loss'])
+        val_loss.append(folds[i]['val_loss'])
+        test_loss.append(folds[i]['test_loss'])
     tr_mean = np.mean(tr_loss)
     val_mean = np.mean(val_loss)
     test_mean = np.mean(test_loss)
-    tr_dev = np.std(tr_loss)
-    val_dev = np.std(val_loss)
-    test_dev = np.std(test_loss)
-    folds['summary'] = {'training_BVL':{'mean_loss': tr_mean,
-                                    'loss_std': tr_dev},
-                        'validation_BVL':{'mean_loss': val_mean,
-                                    'loss_std': val_dev},
-                        'test_BVL':{'mean_loss': test_mean,
-                                    'loss_std': test_dev}}
-    folds['summary']['parameters'] = parameters
+    tr_std = np.std(tr_loss)
+    val_std = np.std(val_loss)
+    test_std = np.std(test_loss)
+    folds['summary'] = {'training':{'mean_loss': tr_mean,
+                                    'loss_std': tr_std},
+                        'validation':{'mean_loss': val_mean,
+                                    'loss_std': val_std},
+                        'test':{'mean_loss': test_mean,
+                                    'loss_std': test_std}}
+
+    #compute mean acc and acc std if task_type is classification
+    if task_type != 'regresion':
+        tr_acc = []
+        val_acc = []
+        test_acc = []
+        for i in range(num_folds):
+            tr_acc.append(folds[i]['train_acc'])
+            val_acc.append(folds[i]['val_acc'])
+            test_acc.append(folds[i]['test_acc'])
+        tr_mean = np.mean(tr_acc)
+        val_mean = np.mean(val_acc)
+        test_mean = np.mean(test_acc)
+        tr_std = np.std(tr_acc)
+        val_std = np.std(val_acc)
+        test_std = np.std(test_acc)
+        folds['summary'] = {'training':{'mean_acc': tr_mean,
+                                        'acc_std': tr_std},
+                            'validation':{'mean_acc': val_mean,
+                                        'acc_std': val_std},
+                            'test':{'mean_acc': test_mean,
+                                        'loss_std': test_std}}
+
 
     print (folds)
 

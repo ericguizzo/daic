@@ -173,7 +173,7 @@ def main():
         val_list = fold_actors_list[int(num_fold)]['val']
         test_list = fold_actors_list[int(num_fold)]['test']
 
-        print ('\n building fold dataset')
+        print ('\n building dataset for current fold')
         print ('\n training:')
         training_predictors, training_target = uf.build_matrix_dataset(predictors_merged,
                                                             target_merged, train_list)
@@ -303,6 +303,11 @@ def main():
     if task_type != 'regression':
         temp_results['train_acc_hist'] = train_acc_hist
         temp_results['val_acc_hist'] = val_acc_hist
+
+    #save actors present in current fold
+    temp_results['training_actors'] = train_list
+    temp_results['validation_actors'] = val_list
+    temp_results['test_actors'] = test_list 
 
     print (temp_results)
 
