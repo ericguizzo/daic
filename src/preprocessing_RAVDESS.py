@@ -28,6 +28,8 @@ SEQUENCE_OVERLAP = cfg.getfloat('preprocessing', 'sequence_overlap')
 INPUT_RAVDESS_FOLDER =  cfg.get('preprocessing', 'input_audio_folder_ravdess')
 #out
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
+
+SEGMENTATION = False
 print ('Segmentation: ' + str(SEGMENTATION))
 
 
