@@ -98,7 +98,7 @@ num_epochs = 2
 learning_rate = 0.0005
 regularization_lambda = 0.07
 conv_regularization_lambda = 0.01
-task_type = 'classification'
+task_type = 'multilabel_classification'
 
 if task_type == 'multilabel_classification':
     loss_function = 'categorical_crossentropy'
