@@ -127,7 +127,9 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     #unroll parameters to find task_type:
     unrolled = parameters.split('/')
     for param in parameters:
+        print (param)
         if 'task_type' in param:
+            print (param)
             exec(param)
     if task_type != 'regression':
         tr_acc = []

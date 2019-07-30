@@ -6,7 +6,7 @@ import xval_instance_GENERIC_API as xval
 short_description = 'stupid test'
 dataset = 'ravdess'
 num_experiment = 1  #id of the experiment
-num_folds = 3  #number of k-folds for cross-validation
+num_folds = 1  #number of k-folds for cross-validation
 experiment_folder = '../../../copy/prova_API'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
