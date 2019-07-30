@@ -275,7 +275,7 @@ def main():
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
 
     train_loss_hist = history.history['loss']
-    val_loss_hist = history.history.['val_loss']
+    val_loss_hist = history.history['val_loss']
     if task_type != 'regression':
         train_acc_hist = history.history['acc']
         val_acc_hist = history.history['val_acc']
