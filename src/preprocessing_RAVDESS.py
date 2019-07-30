@@ -36,6 +36,7 @@ print ('Segmentation: ' + str(SEGMENTATION))
 
 num_classes_ravdess = 8
 max_file_length = uf.find_longest_audio(INPUT_RAVDESS_FOLDER)
+max_file_length = int(max_file_length * SR)
 
 def filter_data(contents, criterion, train_list, val_list, test_list):
     '''
