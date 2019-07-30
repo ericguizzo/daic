@@ -51,6 +51,7 @@ def build_matrix_dataset(merged_predictors, merged_target, actors_list):
     index = 0
     total = len(actors_list)
     for i in actors_list:
+        print (merged_predictors[i].shape)
         if i == actors_list[0]:  #if is first item
             predictors = np.array(merged_predictors[i])
             target = np.array(merged_target[i],dtype='float32')

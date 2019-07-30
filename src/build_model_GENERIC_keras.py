@@ -241,8 +241,6 @@ def main():
     test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
 
 
-
-
     print (model.summary())
 
     #callbacks
