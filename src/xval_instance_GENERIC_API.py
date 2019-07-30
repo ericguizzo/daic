@@ -98,10 +98,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds[i] = temp_results
 
     #compute summary
-    folds['summary'] = {}
-    print ('culo')
-    print (parameters)
-    folds['summary']['parameters'] = parameters
+    folds['summary'] = {'parameters': parameters}
+
 
     #compute mean loss and loss std
     tr_loss = []
@@ -163,7 +161,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     np.save(final_dict_path, folds)
 
     #save current code
-    save_code(output_code_path)
+    #save_code(output_code_path)
 
 
 if __name__ == '__main__':
