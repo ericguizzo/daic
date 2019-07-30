@@ -93,7 +93,7 @@ def OMG_model(time_dim, features_dim, model_parameters='0'):
     drop_1 = Dropout(drop_prob)(flat)
     hidden = Dense(hidden_size, activation='tanh', kernel_regularizer=reg)(drop_1)
 
-    out = Dense(8, activation='linear')(hidden)
+    out = Dense(8, activation='softmax')(hidden)
 
     model = Model(inputs=input_data, outputs=out)
 
