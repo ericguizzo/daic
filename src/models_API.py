@@ -55,7 +55,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
     p = parse_parameters(p, user_parameters)
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
-    input_data = Input(shape=time_dim, features_dim, 1)  #time_dim and features_dim are not from the dict
+    input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
     conv_1 = Convolution2D(p['conv1_depth'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
     pool_1 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_1)
     conv_2 = Convolution2D(p['conv2_depth'], (p['kernel_size_2'][0],p['kernel_size_2'][1]), padding='same', activation='tanh')(pool_1)
