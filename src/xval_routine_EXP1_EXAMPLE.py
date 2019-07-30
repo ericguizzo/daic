@@ -6,7 +6,7 @@ import xval_instance_GENERIC_API as xval
 short_description = 'stupid test'
 dataset = 'ravdess'
 num_experiment = 1  #id of the experiment
-num_folds = 1  #number of k-folds for cross-validation
+num_folds = 3  #number of k-folds for cross-validation
 experiment_folder = '../../../copy/prova_API'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
@@ -19,7 +19,11 @@ experiment_folder = '../../../copy/prova_API'  #where to save results
 #-comment: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
 experiment[1] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
-                 'comment="baseline setting"', 'regularization_lambda="coglione"']
+                 'comment="reg 0.01"', 'regularization_lambda="0.01"']
+experiment[2] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
+                 'comment="reg 0.1"', 'regularization_lambda="0.1"']
+experiment[3] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
+                 'comment="reg 0.5 setting"', 'regularization_lambda="0.5"']
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
