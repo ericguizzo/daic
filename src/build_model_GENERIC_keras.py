@@ -297,7 +297,11 @@ def main():
     temp_results['val_loss'] = val_score[0]
     temp_results['test_loss'] = test_score[0]
 
-
+    #save acc if classification
+    if task_type != 'regression':
+        temp_results['train_acc'] = train_score[1]
+        temp_results['val_acc'] = val_score[1]
+        temp_results['test_acc'] = test_score[1]
 
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
@@ -305,6 +309,8 @@ def main():
     if task_type != 'regression':
         temp_results['train_acc_hist'] = train_acc_hist
         temp_results['val_acc_hist'] = val_acc_hist
+
+    print (temp_results)
 
     np.save(results_path, temp_results)
 
