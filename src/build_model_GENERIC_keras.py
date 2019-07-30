@@ -252,16 +252,14 @@ def main():
         callbacks_list = [best_model]
 
     #run training
-
     if not os.path.exists(results_path):
         os.makedirs(results_path)
 
-    #model = choose_model
     locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
 
 
-    sys.exit(0)
+    #sys.exit(0)
 
     #save results in temp dict file
     temp_results = {}
