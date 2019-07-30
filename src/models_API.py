@@ -17,39 +17,45 @@ from keras import optimizers
 
 
 
-def parse_parameters(parameters):
+def parse_parameters(defaults, parameters):
     for param in parameters:
-        exec(param)
+        param = param.split('=')
+        item = param[0].replace(' ', '')
+        value = eval(param[1].replace(' ', ''))
+        defaults[item] = value
+    return defaults
+
 
 #DEFINE HERE YOUR MODELS!!
 
-def EXAMPLE_model(time_dim, features_dim, model_parameters='0'):
+def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
     '''
     to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the UI script
     '''
-    #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL
+    #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL AS KEYS OF A DICT
     #default parameters
-    regularization_lambda = 0.01
-    reg = regularizers.l2(regularization_lambda)
-    kernel_size_1 = [16, 12]
-    kernel_size_2 = [8, 12]
-    kernel_size_3 = [5,7]
-    pool_size = [2,2]
-    conv1_depth = 20
-    conv2_depth = 28
-    conv3_depth = 40
-    drop_prob = 0.3
-    hidden_size = 200
+    p = {
+    'regularization_lambda' = 0.01,
+    'reg' = regularizers.l2(regularization_lambda),
+    'kernel_size_1' = [16, 12],
+    'kernel_size_2' = [8, 12],
+    'kernel_size_3' = [5,7],
+    'pool_size' = [2,2],
+    'conv1_depth' = 20,
+    'conv2_depth' = 28,
+    'conv3_depth' = 40,
+    'drop_prob' = 0.3,
+    'hidden_size' = 200}
 
     #THEN CALL THIS FUNCTION TO OVERWRITE DEFAULT PARAMETERS
     #WITH PARAMETERS DEFINED IN THE UI SCRIPT
-    parse_parameters(model_parameters)
-    print (model_parameters)
+    parse_parameters(p, user_parameters)
+    print (p)
     sys.exit(0)
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
-    input_data = Input(shape=(time_dim, features_dim, 1))
+    input_data = Input(shape=(d['time_dim'], features_dim, 1))
     conv_1 = Convolution2D(conv1_depth, (kernel_size_1[0],kernel_size_1[1]), padding='same', activation='tanh')(input_data)
     pool_1 = MaxPooling2D(pool_size=(pool_size[0],pool_size[1]))(conv_1)
     conv_2 = Convolution2D(conv2_depth, (kernel_size_2[0],kernel_size_2[1]), padding='same', activation='tanh')(pool_1)
