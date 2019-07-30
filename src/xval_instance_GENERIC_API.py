@@ -98,6 +98,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds[i] = temp_results
 
     #compute summary
+    folds['summary'] = {}
     folds['summary']['parameters'] = parameters
 
     #compute mean loss and loss std
