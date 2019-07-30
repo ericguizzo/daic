@@ -6,7 +6,7 @@ import xval_instance_GENERIC_API as xval
 short_description = 'stupid test'
 dataset = 'ravdess'
 num_experiment = 1  #id of the experiment
-num_folds = 3  #number of k-folds for cross-validation
+num_folds = 2  #number of k-folds for cross-validation
 experiment_folder = '../../../copy/prova_API'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
@@ -22,8 +22,6 @@ experiment[1] = ['task_type= "multilabel_classification"', 'architecture="EXAMPL
                  'comment="reg 0.01"', 'regularization_lambda="0.01"']
 experiment[2] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
                  'comment="reg 0.1"', 'regularization_lambda="0.1"']
-experiment[3] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
-                 'comment="reg 0.5 setting"', 'regularization_lambda="0.5"']
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
@@ -51,3 +49,5 @@ except IndexError:
 for num_run in range(begin,end+1):
     temp_params = '/'.join(experiment[num_run])
     xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
+
+print ('REQUESTED EXPERIMENTS SUCCESSFULLY COMPLETED')
