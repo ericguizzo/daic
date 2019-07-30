@@ -120,3 +120,12 @@ def preemphasis(input_vector, fs):
     output = filtfilt(b, a, filtered1)
 
     return output
+
+def onehot(value, range):
+    '''
+    int to one hot vector conversion
+    '''
+    one_hot = np.zeros(range)
+    one_hot[value] = 1
+
+    return one_hot
