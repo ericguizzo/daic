@@ -238,11 +238,11 @@ def main():
     print('\n loading model...')
     model_string = 'model = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
     exec(model_string)
-    locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
+    #locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
 
     model = choose_model.OMG_model(time_dim, features_dim, parameters)
     model.compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
-    print (locals()['model'].summary())
+    #print (locals()['model'].summary())
 
     #callbacks
     best_model = ModelCheckpoint(model, monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
