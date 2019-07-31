@@ -287,9 +287,9 @@ def main():
     val_score = best_model.evaluate(validation_predictors, validation_target)
     test_score = best_model.evaluate(test_predictors, test_target)
 
-    train_pred = np.argmax(best_model.predict(training_predictors))
-    val_pred = np.argmax(best_model.predict(validation_predictors))
-    test_pred = np.argmax(best_model.predict(test_predictors))
+    train_pred = np.argmax(best_model.predict(training_predictors), axis=1)
+    val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
+    test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
 
     report = classification_report(training_target, train_pred)
     print (temp_results['train_acc'])
