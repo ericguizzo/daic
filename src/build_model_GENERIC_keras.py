@@ -291,8 +291,9 @@ def main():
     train_pred = np.argmax(best_model.predict(training_predictors), axis=1)
     val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
     test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
-
-    print(precision_score(train_pred, training_target , average="macro"))
+    print (test_pred)
+    print (test_pred.shape)
+    print(precision_score(test_pred, test_target , average="macro"))
     #print(recall_score(y_test, y_pred , average="macro"))
     #print(f1_score(y_test, y_pred , average="macro"))
 
