@@ -176,7 +176,7 @@ for i in contents:
         comment_1 = '/'
         comment_2 = '/'
         for i in parameters:
-            if 'comment' in i:
+            if 'comment_1' in i:
                 comment_1 = i.split('=')[1].replace('"', '')
             if 'comment_2' in i:
                 comment_2 = i.split('=')[1].replace('"', '')
@@ -189,20 +189,40 @@ for i in contents:
         tr = dict['summary']['training']
         tr_acc = tr['mean_acc']
         tr_loss = tr['mean_loss']
+        tr_f1 = tr['mean_f1']
+        tr_precision = tr['mean_precision']
+        tr_recall = tr['mean_recall']
         tr_acc_std = tr['acc_std']
         tr_loss_std = tr['loss_std']
+        tr_f1_std = tr['f1_std']
+        tr_precision_std = tr['precision_std']
+        tr_recall_std = tr['recall_std']
+
         #validation results
         val = dict['summary']['validation']
         val_acc = val['mean_acc']
         val_loss = val['mean_loss']
+        val_f1 = val['mean_f1']
+        val_precision = val['mean_precision']
+        val_recall = val['mean_recall']
         val_acc_std = val['acc_std']
         val_loss_std = val['loss_std']
+        val_f1_std = val['f1_std']
+        val_precision_std = val['precision_std']
+        val_recall_std = val['recall_std']
+
         #test results
         test = dict['summary']['test']
         test_acc = test['mean_acc']
         test_loss = test['mean_loss']
+        test_f1 = test['mean_f1']
+        test_precision = test['mean_precision']
+        test_recall = test['mean_recall']
         test_acc_std = test['acc_std']
         test_loss_std = test['loss_std']
+        test_f1_std = test['f1_std']
+        test_precision_std = test['precision_std']
+        test_recall_std = test['recall_std']
 
         #print results
         #acc
@@ -221,7 +241,30 @@ for i in contents:
         worksheet.write(curr_row, train_loss_std_c, tr_loss_std,values_format)
         worksheet.write(curr_row, val_loss_std_c, val_loss_std,values_format)
         worksheet.write(curr_row, test_loss_std_c, test_loss_std,values_format)
-
+        #f1
+        worksheet.write(curr_row, train_f1_c, tr_f1,values_format)
+        worksheet.write(curr_row, val_f1_c, val_f1,values_format)
+        worksheet.write(curr_row, test_f1_c, test_f1,values_format)
+        #f1 std
+        worksheet.write(curr_row, train_f1_std_c, tr_f1_std,values_format)
+        worksheet.write(curr_row, val_f1_std_c, val_f1_std,values_format)
+        worksheet.write(curr_row, test_f1_std_c, test_f1_std,values_format)
+        #precision
+        worksheet.write(curr_row, train_precision_c, tr_precision,values_format)
+        worksheet.write(curr_row, val_precision_c, val_precision,values_format)
+        worksheet.write(curr_row, test_precision_c, test_precision,values_format)
+        #precision std
+        worksheet.write(curr_row, train_precision_std_c, tr_precision_std,values_format)
+        worksheet.write(curr_row, val_precision_std_c, val_precision_std,values_format)
+        worksheet.write(curr_row, test_precision_std_c, test_precision_std,values_format)
+        #recall
+        worksheet.write(curr_row, train_recall_c, tr_recall,values_format)
+        worksheet.write(curr_row, val_recall_c, val_recall,values_format)
+        worksheet.write(curr_row, test_recall_c, test_recall,values_format)
+        #recall std
+        worksheet.write(curr_row, train_recall_std_c, tr_recall_std,values_format)
+        worksheet.write(curr_row, val_recall_std_c, val_recall_std,values_format)
+        worksheet.write(curr_row, test_recall_std_c, test_recall_std,values_format)
 
 
 explist = list(range(1, num_exps+1))
@@ -253,7 +296,6 @@ worksheet.conditional_format(v_offset, val_loss_std_c, v_offset+num_exps, val_lo
 worksheet.conditional_format(v_offset, test_loss_std_c, v_offset+num_exps, test_loss_std_c,
                                 {'type': 'bottom','value': '1','format': bestvalueSTD_format})
 
-
 #acc
 worksheet.conditional_format(v_offset, train_acc_c, v_offset+num_exps, train_acc_c,
                                 {'type': 'top','value': '1','format': bestvalue_format})
@@ -272,6 +314,59 @@ worksheet.conditional_format(v_offset, val_acc_std_c, v_offset+num_exps, val_acc
 
 worksheet.conditional_format(v_offset, test_acc_std_c, v_offset+num_exps, test_acc_std_c,
                                 {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+#f1
+worksheet.conditional_format(v_offset, train_f1_c, v_offset+num_exps, train_f1_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
 
+worksheet.conditional_format(v_offset, val_f1_c, v_offset+num_exps, val_f1_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+
+worksheet.conditional_format(v_offset, test_f1_c, v_offset+num_exps, test_f1_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+#f1 std
+worksheet.conditional_format(v_offset, train_f1_std_c, v_offset+num_exps, train_f1_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+
+worksheet.conditional_format(v_offset, val_f1_std_c, v_offset+num_exps, val_f1_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+
+worksheet.conditional_format(v_offset, test_f1_std_c, v_offset+num_exps, test_f1_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+#precision
+worksheet.conditional_format(v_offset, train_precision_c, v_offset+num_exps, train_precision_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+
+worksheet.conditional_format(v_offset, val_precision_c, v_offset+num_exps, val_precision_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+
+worksheet.conditional_format(v_offset, test_precision_c, v_offset+num_exps, test_precision_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+#precision std
+worksheet.conditional_format(v_offset, train_precision_std_c, v_offset+num_exps, train_precision_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+
+worksheet.conditional_format(v_offset, val_precision_std_c, v_offset+num_exps, val_precision_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+
+worksheet.conditional_format(v_offset, test_precision_std_c, v_offset+num_exps, test_precision_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+#recall
+worksheet.conditional_format(v_offset, train_recall_c, v_offset+num_exps, train_recall_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+
+worksheet.conditional_format(v_offset, val_recall_c, v_offset+num_exps, val_recall_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+
+worksheet.conditional_format(v_offset, test_recall_c, v_offset+num_exps, test_recall_c,
+                                {'type': 'top','value': '1','format': bestvalue_format})
+#recall std
+worksheet.conditional_format(v_offset, train_recall_std_c, v_offset+num_exps, train_recall_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+
+worksheet.conditional_format(v_offset, val_recall_std_c, v_offset+num_exps, val_recall_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
+
+worksheet.conditional_format(v_offset, test_recall_std_c, v_offset+num_exps, test_recall_std_c,
+                                {'type': 'bottom','value': '1','format': bestvalueSTD_format})
 
 workbook.close()
