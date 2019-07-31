@@ -288,25 +288,25 @@ def main():
     val_score = best_model.evaluate(validation_predictors, validation_target)
     test_score = best_model.evaluate(test_predictors, test_target)
 
-    train_pred = np.argmax(best_model.predict(training_predictors), axis=1)
-    test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
-    val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
+    #if classification compute also f1, precision, recall
+    if task_type != 'regression':
+        #pred
+        train_pred = np.argmax(best_model.predict(training_predictors), axis=1)
+        test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
+        val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
+        #precision
+        train_precision = precision_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
+        val_precision = precision_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
+        test_precision = precision_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
+        #recall
+        train_recall = recall_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
+        val_recall = recall_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
+        test_recall = recall_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
+        #f1
+        train_f1 = f1_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
+        val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
+        test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
 
-    #precision
-    train_precision = precision_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
-    val_precision = precision_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
-    test_precision = precision_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
-    #recall
-    train_recall = recall_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
-    val_recall = recall_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
-    test_recall = recall_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
-    #f1
-    train_f1 = f1_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
-    val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
-    test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
-
-    #print(recall_score(y_test, y_pred , average="macro"))
-    #print(f1_score(y_test, y_pred , average="macro"))
 
     #save results in temp dict file
     temp_results = {}
@@ -316,11 +316,23 @@ def main():
     temp_results['val_loss'] = val_score[0]
     temp_results['test_loss'] = test_score[0]
 
-    #save acc if classification
+    #save acc if classification append classification metrics
     if task_type != 'regression':
         temp_results['train_acc'] = train_score[1]
         temp_results['val_acc'] = val_score[1]
         temp_results['test_acc'] = test_score[1]
+
+        temp_results['train_f1'] = train_f1
+        temp_results['val_f1'] = val_f1
+        temp_results['test_f1'] = test_f1
+
+        temp_results['train_precision'] = train_precision
+        temp_results['val_precision'] = val_precision
+        temp_results['test_precision'] = test_precision
+
+        temp_results['train_recall'] = train_recall
+        temp_results['val_recall'] = val_recall
+        temp_results['test_recall'] = test_recall
 
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
@@ -334,7 +346,7 @@ def main():
     temp_results['validation_actors'] = val_list
     temp_results['test_actors'] = test_list
 
-    #print (temp_results)
+    print (temp_results)
 
     np.save(results_path, temp_results)
 
