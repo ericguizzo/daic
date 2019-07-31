@@ -293,7 +293,7 @@ def main():
     test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
     print (test_pred)
     print (test_pred.shape)
-    print(precision_score(test_pred, test_target , average="macro"))
+    print(precision_score(test_pred, np.argmax(test_target) , average="macro"))
     #print(recall_score(y_test, y_pred , average="macro"))
     #print(f1_score(y_test, y_pred , average="macro"))
 
