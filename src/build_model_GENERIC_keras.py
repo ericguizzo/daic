@@ -16,6 +16,7 @@ from keras import backend as K
 import models_API as choose_model
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score, precision_score, recall_score, confusion_matrix
 #import preprocessing_DAIC as pre
 import sys, os
 import loadconfig
@@ -291,9 +292,9 @@ def main():
     val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
     test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
 
-    report = classification_report(training_target, train_pred)
-    print (temp_results['train_acc'])
-    print (report)
+    print(precision_score(train_pred, training_target , average="macro"))
+    #print(recall_score(y_test, y_pred , average="macro"))
+    #print(f1_score(y_test, y_pred , average="macro"))
 
     #save results in temp dict file
     temp_results = {}
