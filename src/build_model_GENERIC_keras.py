@@ -63,7 +63,7 @@ except IndexError:
     #IF IN TEST MODE:no xvalidation, results saved as exp0
     dataset = cfg.get('model', 'dataset_test')
     architecture = 'EXAMPLE_model'
-    parameters = '0,0'
+    parameters = 'niente=0'
     results_path = SAVE_RESULTS
     num_fold = 0
     num_exp = 0
