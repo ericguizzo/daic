@@ -220,10 +220,12 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds['summary']['test']['mean_recall'] =  test_mean_recall
         folds['summary']['test']['recall_std'] = test_std_recall
 
-        
+
     folds['summary']['parameters'] = parameters
     print ('\n Results summary:')
     print (folds['summary'])
+    print ('')
+    print ('')
     print ('\n CROSSVALIDATION COMPLETED')
 
     #save results dict

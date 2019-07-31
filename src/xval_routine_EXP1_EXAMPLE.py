@@ -13,7 +13,7 @@ experiment_folder = '../results'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
-#every key must be a list of strings
+#every key must be a list of stringsprova_API
 #every parameter overwrites the default parameters
 #mandatory parameters:
 #-task_type: multimodal_classification, binary_classification or regression
@@ -21,9 +21,9 @@ experiment_folder = '../results'  #where to save results
 #-comment: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
 experiment[1] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
-                 'comment="reg 0.01"', 'regularization_lambda="0.01"']
+                 'comment_1="reg 0.01"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.01"']
 experiment[2] = ['task_type= "multilabel_classification"', 'architecture="EXAMPLE_model"',
-                 'comment="reg 0.1"', 'regularization_lambda="0.1"']
+                 'comment_1="reg 0.1"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
