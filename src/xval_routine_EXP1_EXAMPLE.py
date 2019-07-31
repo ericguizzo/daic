@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import sys, os
 import xval_instance_GENERIC_API as xval
@@ -7,7 +8,8 @@ short_description = 'stupid test'
 dataset = 'ravdess'
 num_experiment = 1  #id of the experiment
 num_folds = 2  #number of k-folds for cross-validation
-experiment_folder = '../../../copy/prova_API'  #where to save results
+#experiment_folder = '../../../copy/prova_API'  #where to save results
+experiment_folder = '../results'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict

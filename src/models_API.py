@@ -1,6 +1,4 @@
-#CONVOLUTIONAL NEURAL NETWORK
-#tuned as in https://www.researchgate.net/publication/306187492_Deep_Convolutional_Neural_Networks_and_Data_Augmentation_for_Environmental_Sound_Classification
-
+from __future__ import print_function
 import numpy as np
 import configparser
 import matplotlib.pyplot as plt

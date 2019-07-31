@@ -1,5 +1,5 @@
-import numpy as np
-
+#from __future__ import print_function
+import keras
 from keras.models import Model
 from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
 from keras.layers.normalization import BatchNormalization
@@ -7,6 +7,7 @@ from keras.layers.advanced_activations import ELU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, History
 from keras.utils import np_utils
 from keras.backend import int_shape
+import numpy as np
 from keras.models import load_model
 from keras import regularizers
 from keras import optimizers
@@ -14,6 +15,7 @@ import utility_functions as uf
 from keras import backend as K
 import models_API as choose_model
 import matplotlib.pyplot as plt
+from sklearn.metrics import classification_report
 #import preprocessing_DAIC as pre
 import sys, os
 import loadconfig
@@ -285,6 +287,14 @@ def main():
     val_score = best_model.evaluate(validation_predictors, validation_target)
     test_score = best_model.evaluate(test_predictors, test_target)
 
+    train_pred = best_model.predictors(training_predictors)
+    val_pred = best_model.predictors(validation_predictors)
+    test_pred = best_model.predictors(test_predictors)
+
+    report = classification_report(training_target, train_pred)
+    print (temp_results['train_acc'])
+    print (report)
+
     #save results in temp dict file
     temp_results = {}
 
@@ -311,7 +321,7 @@ def main():
     temp_results['validation_actors'] = val_list
     temp_results['test_actors'] = test_list
 
-    print (temp_results)
+    #print (temp_results)
 
     np.save(results_path, temp_results)
 
