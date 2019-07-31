@@ -293,17 +293,17 @@ def main():
     val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
 
     #precision
-    train_precision = precision_score(train_pred, np.argmax(training_target, axis=1) , average="macro"))
-    val_precision = precision_score(val_pred, np.argmax(validation_target, axis=1) , average="macro"))
-    test_precision = precision_score(test_pred, np.argmax(test_target, axis=1) , average="macro"))
+    train_precision = precision_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
+    val_precision = precision_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
+    test_precision = precision_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
     #recall
-    train_recall = recall_score(train_pred, np.argmax(training_target, axis=1) , average="macro"))
-    val_recall = recall_score(val_pred, np.argmax(validation_target, axis=1) , average="macro"))
-    test_recall = recall_score(test_pred, np.argmax(test_target, axis=1) , average="macro"))
+    train_recall = recall_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
+    val_recall = recall_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
+    test_recall = recall_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
     #f1
-    train_f1 = f1_score(train_pred, np.argmax(training_target, axis=1) , average="macro"))
-    val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro"))
-    test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro"))
+    train_f1 = f1_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
+    val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
+    test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
 
     #print(recall_score(y_test, y_pred , average="macro"))
     #print(f1_score(y_test, y_pred , average="macro"))
