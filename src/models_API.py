@@ -27,7 +27,7 @@ def parse_parameters(defaults, parameters):
 
 #DEFINE HERE YOUR MODELS!!
 
-def EXAMPLE_model(time_dim, features_dim, user_parameters='0'):
+def EXAMPLE_model(time_dim, features_dim, user_parameters='0=0'):
     '''
     to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the UI script
