@@ -19,7 +19,9 @@ import sys
 def parse_parameters(defaults, parameters):
     for param in parameters:
         param = param.split('=')
+        print (param)
         item = param[0].replace(' ', '')
+
         value = eval(param[1].replace(' ', ''))
         defaults[item] = value
     return defaults
