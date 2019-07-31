@@ -131,23 +131,96 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         tr_acc = []
         val_acc = []
         test_acc = []
+
+        tr_f1 = []
+        val_f1 = []
+        test_f1 = []
+
+        tr_precision = []
+        val_precision = []
+        test_precision = []
+
+        tr_recall = []
+        val_recall = []
+        test_recall = []
+
+
         for i in range(num_folds):
             tr_acc.append(folds[i]['train_acc'])
             val_acc.append(folds[i]['val_acc'])
             test_acc.append(folds[i]['test_acc'])
-        tr_mean = np.mean(tr_acc)
-        val_mean = np.mean(val_acc)
-        test_mean = np.mean(test_acc)
-        tr_std = np.std(tr_acc)
-        val_std = np.std(val_acc)
-        test_std = np.std(test_acc)
-        folds['summary']['training']['mean_acc'] =  tr_mean
-        folds['summary']['training']['acc_std'] = tr_std
-        folds['summary']['validation']['mean_acc'] =  val_mean
-        folds['summary']['validation']['acc_std'] = val_std
-        folds['summary']['test']['mean_acc'] =  test_mean
-        folds['summary']['test']['acc_std'] = test_std
 
+            tr_f1.append(folds[i]['train_f1'])
+            val_f1.append(folds[i]['val_f1'])
+            test_f1.append(folds[i]['test_f1'])
+
+            tr_precision.append(folds[i]['train_precision'])
+            val_precision.append(folds[i]['val_precision'])
+            test_precision.append(folds[i]['test_precision'])
+
+            tr_recall.append(folds[i]['train_recall'])
+            val_recall.append(folds[i]['val_recall'])
+            test_recall.append(folds[i]['test_recall'])
+
+        tr_mean_acc = np.mean(tr_acc)
+        val_mean_acc = np.mean(val_acc)
+        test_mean_acc = np.mean(test_acc)
+        tr_std_acc = np.std(tr_acc)
+        val_std_acc = np.std(val_acc)
+        test_std_acc = np.std(test_acc)
+
+        tr_mean_f1 = np.mean(tr_f1)
+        val_mean_f1 = np.mean(val_f1)
+        test_mean_f1 = np.mean(test_f1)
+        tr_std_f1 = np.std(tr_f1)
+        val_std_f1 = np.std(val_f1)
+        test_std_f1 = np.std(test_f1)
+
+        tr_mean_precision = np.mean(tr_precision)
+        val_mean_precision = np.mean(val_precision)
+        test_mean_precision = np.mean(test_precision)
+        tr_std_precision = np.std(tr_precision)
+        val_std_precision = np.std(val_precision)
+        test_std_precision = np.std(test_precision)
+
+        tr_mean_recall = np.mean(tr_recall)
+        val_mean_recall = np.mean(val_recall)
+        test_mean_recall = np.mean(test_recall)
+        tr_std_recall = np.std(tr_recall)
+        val_std_recall = np.std(val_recall)
+        test_std_recall = np.std(test_recall)
+
+
+
+
+        folds['summary']['training']['mean_acc'] =  tr_mean_acc
+        folds['summary']['training']['acc_std'] = tr_std_acc
+        folds['summary']['training']['mean_f1'] =  tr_mean_f1
+        folds['summary']['training']['f1_std'] = tr_std_f1
+        folds['summary']['training']['mean_precision'] =  tr_mean_precision
+        folds['summary']['training']['precision_std'] = tr_std_precision
+        folds['summary']['training']['mean_recall'] =  tr_mean_recall
+        folds['summary']['training']['recall_std'] = tr_std_recall
+
+        folds['summary']['validation']['mean_acc'] =  val_mean_acc
+        folds['summary']['validation']['acc_std'] = val_std_acc
+        folds['summary']['validation']['mean_f1'] =  val_mean_f1
+        folds['summary']['validation']['f1_std'] = val_std_f1
+        folds['summary']['validation']['mean_precision'] =  val_mean_precision
+        folds['summary']['validation']['precision_std'] = val_std_precision
+        folds['summary']['validation']['mean_recall'] =  val_mean_recall
+        folds['summary']['validation']['recall_std'] = val_std_recall
+
+        folds['summary']['test']['mean_acc'] =  test_mean_acc
+        folds['summary']['test']['acc_std'] = test_std_acc
+        folds['summary']['test']['mean_f1'] =  test_mean_f1
+        folds['summary']['test']['f1_std'] = test_std_f1
+        folds['summary']['test']['mean_precision'] =  test_mean_precision
+        folds['summary']['test']['precision_std'] = test_std_precision
+        folds['summary']['test']['mean_recall'] =  test_mean_recall
+        folds['summary']['test']['recall_std'] = test_std_recall
+
+        
     folds['summary']['parameters'] = parameters
     print ('\n Results summary:')
     print (folds['summary'])
