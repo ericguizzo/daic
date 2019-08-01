@@ -1,4 +1,4 @@
-#GENERAL DESCRIPTION
+GENERAL DESCRIPTION
 This API is aimed at asily defining and running experiments, intended as routines
 of multiple trainings. In each instance of an experiment it is possible to specify any kind
 of parameter, as well as automatically performing k-fold cross-validation. The outcomes
@@ -14,7 +14,7 @@ of an experiment are saved in a custom-defined folder, which contains:
     results.
 
 
-#SCRIPTS
+SCRIPTS
 -xval_routine: UI to define an experiment and its instances. This script iterates
   all instances of an experiment calling the script xval_instance.
 -xval_instance: This script automatically performs the k-fold cross-validation. It
@@ -29,7 +29,7 @@ of an experiment are saved in a custom-defined folder, which contains:
 -config.ini: This config file contains mainly I/O folder paths
 
 
-#EXPERIMENT DEFINITION
+EXPERIMENT DEFINITION
 For each experiment you can create a new xval_routine script, copying the example one.
 In each experiment it is mandatory to define these macro parameters:
   -A short description of the experiment that will be saved in a txt file. For
@@ -59,11 +59,11 @@ In each instance it is mandatory to declare at least these 4 parameters (See pre
   -architecture: the model you want to use. Should be the name of a model function
     present in models_API script.
 
-#CUSTOM MODELS DEFINITION
+CUSTOM MODELS DEFINITION
 To define a model follow the instructions written in models_API.EXAMPLE_model()
 
 
-#PREPROCESSING
+PREPROCESSING
 Unfortunately, the preprocessing needs to be customized for every new dataset.
 In order to be compatible con the rest of the API, any proprocessing script has to
 output 2 dictionaries: 1 containing the predictors and 1 containing the target.
