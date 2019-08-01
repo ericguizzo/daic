@@ -16,7 +16,7 @@ from keras import backend as K
 import models_API as choose_model
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
-from sklearn.metrics import f1_score, precision_score, recall_score, confusion_matrix
+from sklearn.metrics import f1_score, precision_score, recall_score, mea
 #import preprocessing_DAIC as pre
 import sys, os
 import loadconfig
@@ -111,7 +111,7 @@ elif task_type == 'binary_classification':
     metrics_list = ['accuracy']
 elif task_type == 'regression':
     loss_function = 'MSE'
-    metrics_list = ['RMSE', 'MAE']
+    metrics_list = ['MAE']
 
 else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
@@ -287,6 +287,9 @@ def main():
     train_score = best_model.evaluate(training_predictors, training_target)
     val_score = best_model.evaluate(validation_predictors, validation_target)
     test_score = best_model.evaluate(test_predictors, test_target)
+    train_pred = best_model.predict(training_predictors)
+    val_pred = best_model.predict(validation_predictors)
+    test_pred = best_model.predict(test_predictors)
 
     #if classification compute also f1, precision, recall
     if task_type == 'regression':
@@ -294,9 +297,9 @@ def main():
         print (train_score)
     else:
         #pred
-        train_pred = np.argmax(best_model.predict(training_predictors), axis=1)
-        test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
-        val_pred = np.argmax(best_model.predict(validation_predictors), axis=1)
+        train_pred = np.argmax(train_pred, axis=1)
+        val_pred = np.argmax(val_pred, axis=1)
+        test_pred = np.argmax(test_pred, axis=1)
         #precision
         train_precision = precision_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
         val_precision = precision_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
@@ -321,7 +324,16 @@ def main():
     temp_results['test_loss'] = test_score[0]
 
     #save acc if classification append classification metrics
-    if task_type != 'regression':
+    if task_type == 'regression':
+        temp_results['train_MAE'] = train_score[1]
+        temp_results['val_MAE'] = val_score[1]
+        temp_results['test_MAE'] = val_score[1]
+
+        temp_results['train_RMSE'] = np.sqrt(train_score[0])
+        temp_results['val_RMSE'] = np.sqrt(val_score[0])
+        temp_results['test_RMSE'] = np.sqrt(val_score[0])
+
+    else:
         temp_results['train_acc'] = train_score[1]
         temp_results['val_acc'] = val_score[1]
         temp_results['test_acc'] = test_score[1]
