@@ -111,7 +111,7 @@ elif task_type == 'binary_classification':
     metrics_list = ['accuracy']
 elif task_type == 'regression':
     loss_function = 'MSE'
-    metrics_list = []
+    metrics_list = ['RMSE', 'MAE']
 
 else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
@@ -289,7 +289,10 @@ def main():
     test_score = best_model.evaluate(test_predictors, test_target)
 
     #if classification compute also f1, precision, recall
-    if task_type != 'regression':
+    if task_type == 'regression':
+        print ('culo')
+        print (train_score)
+    else:
         #pred
         train_pred = np.argmax(best_model.predict(training_predictors), axis=1)
         test_pred = np.argmax(best_model.predict(test_predictors), axis=1)
@@ -306,6 +309,7 @@ def main():
         train_f1 = f1_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
         val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
         test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
+
 
 
     #save results in temp dict file
