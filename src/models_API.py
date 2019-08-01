@@ -104,7 +104,7 @@ def EXAMPLE_model_regression(time_dim, features_dim, user_parameters=['niente = 
     flat = Flatten()(pool_3)
     drop_1 = Dropout(p['drop_prob'])(flat)
     hidden = Dense(p['hidden_size'], activation='tanh', kernel_regularizer=reg)(drop_1)
-    out = Dense(8, activation='softmax')(hidden)
+    out = Dense(1, activation='linear')(hidden)
     model = Model(inputs=input_data, outputs=out)
 
     return model
