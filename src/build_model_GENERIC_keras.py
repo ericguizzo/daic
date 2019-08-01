@@ -62,8 +62,8 @@ try:
 except IndexError:
     #test parameters
     #IF IN TEST MODE:no xvalidation, results saved as exp0
-    dataset = cfg.get('model', 'dataset_test')
-    architecture = 'EXAMPLE_model'
+    dataset = 'daic'
+    architecture = 'EXAMPLE_model_regression'
     parameters = ['niente = 0']
     results_path = SAVE_RESULTS
     num_fold = 0
