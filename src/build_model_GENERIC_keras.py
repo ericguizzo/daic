@@ -160,9 +160,11 @@ def main():
     test_target_path = os.path.join(folds_dataset_path, test_target_path)
 
     #compute which actors put in train, val, test for current fold
-    #PUT HERE SOME FUNCTION TO SPLIT BETTER DATASET
     dummy = np.load(TARGET_LOAD)
     dummy = dummy.item()
+    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #JUST WRITE A FUNCTION TO RE-ORDER foldable_list TO SPLIT
+    #TRAIN/VAL/TEST IN A BALANCED WAY
     foldable_list = list(dummy.keys())
     fold_actors_list = uf.folds_generator(num_folds, foldable_list, percs)
     train_list = fold_actors_list[int(num_fold)]['train']
@@ -277,7 +279,7 @@ def main():
 
     train_loss_hist = history.history['loss']
     val_loss_hist = history.history['val_loss']
-    if task_type != 'regression':
+    if task_type == 'classification':
         train_acc_hist = history.history['acc']
         val_acc_hist = history.history['val_acc']
 
@@ -292,11 +294,16 @@ def main():
     val_pred = best_model.predict(validation_predictors)
     test_pred = best_model.predict(test_predictors)
 
+    #save results in temp dict file
+    temp_results = {}
+
+    #save loss
+    temp_results['train_loss'] = train_score[0]
+    temp_results['val_loss'] = val_score[0]
+    temp_results['test_loss'] = test_score[0]
+
     #if classification compute also f1, precision, recall
-    if task_type == 'regression':
-        print ('culo')
-        print (train_score)
-    else:
+    if task_type == 'classification':
         #pred
         train_pred = np.argmax(train_pred, axis=1)
         val_pred = np.argmax(val_pred, axis=1)
@@ -314,27 +321,6 @@ def main():
         val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
         test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
 
-
-
-    #save results in temp dict file
-    temp_results = {}
-
-    #save loss
-    temp_results['train_loss'] = train_score[0]
-    temp_results['val_loss'] = val_score[0]
-    temp_results['test_loss'] = test_score[0]
-
-    #save acc if classification append classification metrics
-    if task_type == 'regression':
-        temp_results['train_MAE'] = train_score[1]
-        temp_results['val_MAE'] = val_score[1]
-        temp_results['test_MAE'] = test_score[1]
-
-        temp_results['train_RMSE'] = np.sqrt(train_score[0])
-        temp_results['val_RMSE'] = np.sqrt(val_score[0])
-        temp_results['test_RMSE'] = np.sqrt(test_score[0])
-
-    else:
         temp_results['train_acc'] = train_score[1]
         temp_results['val_acc'] = val_score[1]
         temp_results['test_acc'] = test_score[1]
@@ -350,6 +336,15 @@ def main():
         temp_results['train_recall'] = train_recall
         temp_results['val_recall'] = val_recall
         temp_results['test_recall'] = test_recall
+    #save acc if classification append classification metrics
+    elif task_type == 'regression':
+        temp_results['train_MAE'] = train_score[1]
+        temp_results['val_MAE'] = val_score[1]
+        temp_results['test_MAE'] = test_score[1]
+
+        temp_results['train_RMSE'] = np.sqrt(train_score[0])
+        temp_results['val_RMSE'] = np.sqrt(val_score[0])
+        temp_results['test_RMSE'] = np.sqrt(test_score[0])
 
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
