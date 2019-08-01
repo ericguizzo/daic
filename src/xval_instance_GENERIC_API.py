@@ -69,6 +69,11 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
     #iterate folds
     for i in range(num_folds):
+        #unroll parameters to find task_type:
+        unrolled = parameters.split('/')
+        for param in unrolled:
+            if 'task_type' in param:
+                exec(param)
         #create paths
         num_fold = i
 
@@ -83,7 +88,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         training = subprocess.Popen(['python3', 'build_model_GENERIC_keras.py',
                                      'crossvalidation', str(num_experiment), str(num_run),
                                       str(num_fold), parameters, model_name, results_name,
-                                      output_temp_data_path, dataset, str(gpu_ID), str(num_folds)])
+                                      output_temp_data_path, dataset, str(gpu_ID),
+                                      str(num_folds), locals()['task_type']])
         training.communicate()
         training.wait()
 
@@ -121,12 +127,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                     'loss_std': test_std}}
 
     #compute mean acc and acc std if task_type is classification
-
-    #unroll parameters to find task_type:
-    unrolled = parameters.split('/')
-    for param in unrolled:
-        if 'task_type' in param:
-            exec(param)
     if locals()['task_type'] == 'regression':
         tr_RMSE = []
         val_RMSE = []
