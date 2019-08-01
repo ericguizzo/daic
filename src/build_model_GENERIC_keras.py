@@ -327,11 +327,11 @@ def main():
     if task_type == 'regression':
         temp_results['train_MAE'] = train_score[1]
         temp_results['val_MAE'] = val_score[1]
-        temp_results['test_MAE'] = val_score[1]
+        temp_results['test_MAE'] = test_score[1]
 
         temp_results['train_RMSE'] = np.sqrt(train_score[0])
         temp_results['val_RMSE'] = np.sqrt(val_score[0])
-        temp_results['test_RMSE'] = np.sqrt(val_score[0])
+        temp_results['test_RMSE'] = np.sqrt(test_score[0])
 
     else:
         temp_results['train_acc'] = train_score[1]
