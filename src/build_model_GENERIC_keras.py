@@ -16,7 +16,7 @@ from keras import backend as K
 import models_API as choose_model
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
-from sklearn.metrics import f1_score, precision_score, recall_score, mea
+from sklearn.metrics import f1_score, precision_score, recall_score
 #import preprocessing_DAIC as pre
 import sys, os
 import loadconfig
