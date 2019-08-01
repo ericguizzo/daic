@@ -29,7 +29,7 @@ config = loadconfig.load()
 cfg = configparser.ConfigParser()
 cfg.read(config)
 
-#load parameters from config file
+#load parameters from config file only test mode
 DATASET_FOLDER = cfg.get('preprocessing', 'output_folder')
 SAVE_MODEL = cfg.get('model', 'save_model') #only if not in crossval mode
 SAVE_RESULTS = cfg.get('model', 'save_results') #only if not in crossval mode
@@ -104,11 +104,8 @@ learning_rate = 0.0005
 regularization_lambda = 0.07
 conv_regularization_lambda = 0.01
 
-if task_type == 'multilabel_classification':
+if task_type == 'classification':
     loss_function = 'categorical_crossentropy'
-    metrics_list = ['accuracy']
-elif task_type == 'binary_classification':
-    loss_function = 'binary_crossentropy'
     metrics_list = ['accuracy']
 elif task_type == 'regression':
     loss_function = 'MSE'
@@ -121,6 +118,9 @@ else:
 #path for saving best val loss and best val acc models
 BVL_model_path = SAVE_MODEL + '.hdf5'
 
+#define optimizer
+opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
     a = sys.argv[5]
@@ -131,11 +131,8 @@ try:
 except IndexError:
     pass
 
-#define optimizer
-opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 
 def main():
-
     #CREATE DATASET
     #load numpy data
     print('\n loading dataset...')
@@ -349,7 +346,7 @@ def main():
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
     temp_results['val_loss_hist'] = val_loss_hist
-    if task_type != 'regression':
+    if task_type == 'classification':
         temp_results['train_acc_hist'] = train_acc_hist
         temp_results['val_acc_hist'] = val_acc_hist
 

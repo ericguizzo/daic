@@ -13,12 +13,12 @@ experiment_folder = '../results'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
-#every key must be a list of stringsprova_API
-#every parameter overwrites the default parameters
+#every key must be a list of strings
+#every parameter overwrites the correspective default parameter
 #mandatory parameters:
 #-task_type: classification, or regression
 #-architecture: one of the models defined in the models_API script
-#-comment: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
+#-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
 experiment[1] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
                  'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
@@ -31,7 +31,7 @@ experiment[4] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------#
 output_path = experiment_folder + '/experiment_' + str(num_experiment)
 if not os.path.exists(output_path):
     os.makedirs(output_path)

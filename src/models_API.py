@@ -13,9 +13,6 @@ from keras import regularizers
 from keras import optimizers
 import sys
 
-
-
-
 def parse_parameters(defaults, parameters):
     for param in parameters:
         param = param.split('=')
