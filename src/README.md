@@ -1,4 +1,4 @@
-GENERAL DESCRIPTION
+#Header GENERAL DESCRIPTION#
 This API is aimed at asily defining and running experiments, intended as routines
 of multiple trainings. In each instance of an experiment it is possible to specify any kind
 of parameter, as well as automatically performing k-fold cross-validation. The outcomes
