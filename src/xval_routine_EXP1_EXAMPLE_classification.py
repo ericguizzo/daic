@@ -59,13 +59,10 @@ except IndexError:
     gpu_ID = 1
 
 for num_run in range(begin,end+1):
-    if overwrite_results:
-        results_name = 'unexisting_path'
-    else:
-        results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+    results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     temp_params = '/'.join(experiment[num_run])
 
-    if not os.path.exists(output_path):  #not overwrite experiments
+    if overwrite_results:
         if debug_mode == False:
             try:
                 xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
@@ -73,7 +70,17 @@ for num_run in range(begin,end+1):
                 pass
         else:
             xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
-    else:
-        print ('exp' + str(num_experiment) + ' run' + str(num_run) + ' already exists: skipping')
+
+    else:  #if not overwrite results
+        if not os.path.exists(output_path):  #not overwrite experiments
+            if debug_mode == False:
+                try:
+                    xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
+                except:
+                    pass
+            else:
+                xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
+        else:  #if result exists print below line
+            print ('exp' + str(num_experiment) + ' run' + str(num_run) + ' already exists: skipping')
 
 print ('REQUESTED EXPERIMENTS SUCCESSFULLY COMPLETED')
