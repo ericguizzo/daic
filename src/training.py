@@ -1,4 +1,7 @@
 #from __future__ import print_function
+import sys, os
+import loadconfig
+import configparser
 import keras
 from keras.models import Model
 from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
@@ -7,20 +10,16 @@ from keras.layers.advanced_activations import ELU
 from keras.callbacks import EarlyStopping, ModelCheckpoint, History
 from keras.utils import np_utils
 from keras.backend import int_shape
-import numpy as np
 from keras.models import load_model
 from keras import regularizers
 from keras import optimizers
-import utility_functions as uf
 from keras import backend as K
-import models_API as choose_model
-import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score, precision_score, recall_score
+import numpy as np
+import define_models as choose_model
+import utility_functions as uf
 #import preprocessing_DAIC as pre
-import sys, os
-import loadconfig
-import configparser
 
 #np.random.seed(0)
 #torch.manual_seed(0)

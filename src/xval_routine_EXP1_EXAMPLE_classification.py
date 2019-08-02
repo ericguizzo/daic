@@ -1,7 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import sys, os
-import xval_instance_GENERIC_API as xval
+import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
 overwrite_results = False  #if true overwrite existing experiment instances
