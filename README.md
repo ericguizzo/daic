@@ -3,11 +3,10 @@ This API is aimed at asily defining and running experiments, intended as routine
 of multiple trainings. In each instance of an experiment it is possible to specify any kind
 of parameter, as well as automatically performing k-fold cross-validation. The outcomes
 of an experiment are saved in a custom-defined folder, which contains:
--A dict with all metrics and history, separately computed for every instance of the experiment and for every k-fold.
- All models (.hdf5), separately computed for every instance of the experiment and for every k-fold.
--A copy of he current version of the code, saved at the moment of running of the last instance of the experiment.
--A txt file containing a short description of what has been done in the experiment
--A spreadsheet that shows the most important metrics and highlights the best results.
+* A dict with all metrics and history, separately computed for every instance of the experiment and for every k-fold. All models (.hdf5), separately computed for every instance of the experiment and for every k-fold.
+* A copy of he current version of the code, saved at the moment of running of the last instance of the experiment.
+* A txt file containing a short description of what has been done in the experiment
+* A spreadsheet that shows the most important metrics and highlights the best results.
 
 
 ## SCRIPTS
