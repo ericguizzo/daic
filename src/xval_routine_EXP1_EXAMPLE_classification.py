@@ -34,6 +34,9 @@ experiment[4] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#
+print ('Overwrite results: ' + str(overwrite_results))
+print ('Debug mode: ' + str(debug_mode))
+
 output_path = experiment_folder + '/experiment_' + str(num_experiment)
 if not os.path.exists(output_path):
     os.makedirs(output_path)
