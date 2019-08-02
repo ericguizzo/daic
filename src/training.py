@@ -128,6 +128,8 @@ if optimizer == 'adam':
     opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 elif optimizer == 'sgd':
     opt.optimizers.SGD(lr=learning_rate)
+else:
+    raise ValueError('Bad optimizer chosen')
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
