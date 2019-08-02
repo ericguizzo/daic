@@ -93,20 +93,19 @@ PREDICTORS_LOAD = os.path.join(DATASET_FOLDER, predictors_name)
 TARGET_LOAD = os.path.join(DATASET_FOLDER, target_name)
 
 #default training parameters
-train_split = 0.7
-validation_split = 0.2
-test_split = 0.1
+train_split = cfg.getfloat('training_defaults', 'train_split')
+validation_split = cfg.getfloat('training_defaults', 'validation_split')
+test_split = cfg.getfloat('training_defaults', 'test_split')
+save_best_model_metric = cfg.get('training_defaults', 'save_best_model_metric')
+save_best_model_mode = cfg.get('training_defaults', 'save_best_model_mode')
+early_stopping = eval(cfg.get('training_defaults', 'early_stopping'))
+patience = cfg.getint('training_defaults', 'patience')
+batch_size = cfg.getint('training_defaults', 'batch_size')
+num_epochs = cfg.getint('training_defaults', 'num_epochs')
+learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
+regularization_lambda = cfg.getfloat('training_defaults', 'regularization_lambda')
+
 percs = [train_split, validation_split, test_split]
-save_best_model_metric = 'val_loss'
-save_best_model_mode = 'min'
-gpu_ID = 1
-early_stopping = True
-patience = 10
-batch_size = 120
-num_epochs = 2
-learning_rate = 0.0005
-regularization_lambda = 0.07
-conv_regularization_lambda = 0.01
 
 if task_type == 'classification':
     loss_function = 'categorical_crossentropy'

@@ -4,6 +4,7 @@ import sys, os
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
+gpu_ID = 0
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'stupid test'
@@ -56,7 +57,6 @@ except IndexError:
     keys = list(experiment.keys())
     begin = keys[0]
     end = keys[-1]
-    gpu_ID = 1
 
 for num_run in range(begin,end+1):
     results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
