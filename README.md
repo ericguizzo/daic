@@ -1,12 +1,11 @@
 ## GENERAL DESCRIPTION
-This API is aimed at asily defining and running experiments, intended as routines
-of multiple trainings. In each instance of an experiment it is possible to specify any kind
-of parameter, as well as automatically performing k-fold cross-validation. The outcomes
-of an experiment are saved in a custom-defined folder, which contains:
-* A dict with all metrics and history, separately computed for every instance of the experiment and for every k-fold. All models (.hdf5), separately computed for every instance of the experiment and for every k-fold.
+This API is aimed at easily defining and running routines
+of multiple keras/pytorch trainings and automatically collect the results in a convenient shape. In each instance of a routine (called 'experiment') it is possible to specify any kind of training-related and model-related parameter, as well as automatically performing k-fold cross-validation. The outcomes of an experiment are saved in a custom-defined folder, which contains:
+* A dictionary with all metrics and history, separately computed for every instance of the experiment and for every k-fold.
+* All generated models (.hdf5).
 * A copy of he current version of the code, saved at the moment of running of the last instance of the experiment.
-* A txt file containing a short description of what has been done in the experiment
-* A spreadsheet that shows the most important metrics and highlights the best results.
+* A txt file containing a custom description of the experiment.
+* A spreadsheet that collects the results of every instance, showing the most important metrics, parameters and highlighting the best results.
 
 
 ## SCRIPTS
@@ -23,8 +22,8 @@ of an experiment are saved in a custom-defined folder, which contains:
 
 ## EXPERIMENT DEFINITION
 For each experiment you can create a new xval_routine script, copying the example one.
-In each experiment it is mandatory to define these macro parameters:
-*A short description of the experiment that will be saved in a txt file. For example 'In this experiment we tested different learning rates'
+In each experiment it is mandatory to define these macro parameters
+* A short description of the experiment that will be saved in a txt file. For example 'In this experiment we tested different learning rates'
 * gpu_ID: GPU number ID in which run the training
 * dataset: a short name of the used dataset. This will affect the name of the results and serves as well to load the correct dataset.
 * num_experiment: number of current experiment (has to be an integer).

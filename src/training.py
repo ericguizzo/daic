@@ -386,11 +386,11 @@ def main():
             del locals()['model_parameters'][i]
 
     with open(parameters_path, 'w') as f:
-        f.write('%s\n' % ('Training parameters:'))
+        f.write('%s\n' % ('TRAINING PARAMETERS:'))
         for key, value in training_parameters.items():
             f.write('%s:%s\n' % (key, value))
         f.write('%s\n' % (''))
-        f.write('%s\n' % ('Model parameters:'))
+        f.write('%s\n' % ('MODEL PARAMETERS:'))
         for key, value in locals()['model_parameters'].items():
             f.write('%s:%s\n' % (key, value))
     print (temp_results)
