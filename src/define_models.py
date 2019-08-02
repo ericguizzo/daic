@@ -104,7 +104,8 @@ def EXAMPLE_model_regression(time_dim, features_dim, user_parameters=['niente = 
     out = Dense(1, activation='linear')(hidden)
     model = Model(inputs=input_data, outputs=out)
 
-    return model
+    #always return model AND p!!! 
+    return model, p
 
 
 if __name__ == '__main__':
