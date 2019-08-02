@@ -40,6 +40,9 @@ In each experiment it is mandatory to define these macro parameters:
   -num_folds: int, how many k for the k-fold cross-validation.
   -experiment_folder: path in which save all results. Different
     experiments for the same dataset are saved in the same directory.
+  -overwrite_results: False if you want to avoid overwriting previous results 
+  -debug_mode: if False, when en error occurs the script will pass to the next instance
+    without stopping.
 In each experiment you should define a dict containing the instances of the experiment.
 The keys should be progressive integers.
 Each key/instance has to be a list of strings and each element of a list is a
