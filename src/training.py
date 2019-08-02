@@ -104,6 +104,8 @@ batch_size = cfg.getint('training_defaults', 'batch_size')
 num_epochs = cfg.getint('training_defaults', 'num_epochs')
 learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
 regularization_lambda = cfg.getfloat('training_defaults', 'regularization_lambda')
+optimizer = cfg.getfloat('training_defaults', 'optimizer')
+
 
 percs = [train_split, validation_split, test_split]
 
@@ -121,8 +123,11 @@ else:
 #path for saving best val loss and best val acc models
 BVL_model_path = SAVE_MODEL + '.hdf5'
 
-#define optimizer
-opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+#define optimizer ADD HERE DIFFERENT OPTIMIZERS!!!!!!!
+if optimizer = 'adam':
+    opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+elif optimizer = 'sgd':
+    opt.optimizers.SGD(lr=learning_rate)
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
@@ -134,6 +139,19 @@ try:
 except IndexError:
     pass
 
+#build dict with all UPDATED training parameters
+training_parameters = {'train_split': train_split,
+    'validation_split': validation_split,
+    'test_split': test_split,
+    'save_best_model_metric': save_best_model_metric,
+    'save_best_model_mode': save_best_model_mode,
+    'early_stopping': early_stopping,
+    'patience': patience,
+    'batch_size': batch_size,
+    'num_epochs': num_epochs,
+    'learning_rate': learning_rate,
+    'regularization_lambda': regularization_lambda
+    }
 
 def main():
     #CREATE DATASET
