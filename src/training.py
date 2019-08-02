@@ -255,7 +255,7 @@ def main():
     #load and compile model (model is in locals()['model'])
     print('\n loading model...')
     model_string = 'model, model_parameters = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
-    #exec(model_string)
+    exec(model_string)
     locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
     print (locals()['model'].summary())
     print (locals()['model_parameters'])
