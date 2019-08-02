@@ -253,6 +253,9 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     print ('')
     print ('')
     print ('\n CROSSVALIDATION COMPLETED')
+    print ('')
+    print ('')
+
 
     #save results dict
     dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
