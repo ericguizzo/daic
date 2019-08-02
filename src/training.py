@@ -104,7 +104,7 @@ batch_size = cfg.getint('training_defaults', 'batch_size')
 num_epochs = cfg.getint('training_defaults', 'num_epochs')
 learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
 regularization_lambda = cfg.getfloat('training_defaults', 'regularization_lambda')
-optimizer = cfg.getfloat('training_defaults', 'optimizer')
+optimizer = cfg.get('training_defaults', 'optimizer')
 
 
 percs = [train_split, validation_split, test_split]
