@@ -33,7 +33,8 @@ In each experiment it is mandatory to define these macro parameters:
 * debug_mode: if False, when en error occurs the script will pass to the next instance without stopping.
 In each experiment you should define a dict containing the instances of the experiment. The keys should be progressive integers.
 Each key/instance has to be a list of strings and each element of a list is a parameter declaration.
-Example:\
+
+Example:
 '''python
 experiment_dict[1] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
                  'comment_1="reg base 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.001"']
