@@ -381,12 +381,15 @@ def main():
     temp_results['test_actors'] = test_list
 
     #save parameters dict
-    parameters_dict = {'training': training_parameters,
-                       'model': locals()['model_parameters']}
+    for i in training_parameters.keys():
+        if i in locals()['model_parameters'].keys():
+            del locals()['model_parameters'][i]
+
     with open(parameters_path, 'w') as f:
         f.write('%s\n' % ('Training parameters:'))
         for key, value in training_parameters.items():
             f.write('%s:%s\n' % (key, value))
+        f.write('%s\n' % (''))
         f.write('%s\n' % ('Model parameters:'))
         for key, value in locals()['model_parameters'].items():
             f.write('%s:%s\n' % (key, value))

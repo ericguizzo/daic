@@ -24,13 +24,13 @@ experiment_folder = '../results'  #where to save results
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
 experiment[1] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
-                 'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
+                 'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.001"']
 experiment[2] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
                  'comment_1="reg 0.01"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.01"']
 experiment[3] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
                  'comment_1="reg 0.1"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
 experiment[4] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
-                 'comment_1="reg 0.3"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
+                 'comment_1="reg 0.3"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.3"']
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
