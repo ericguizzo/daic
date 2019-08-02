@@ -63,7 +63,8 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
     out = Dense(8, activation='softmax')(hidden)
     model = Model(inputs=input_data, outputs=out)
 
-    return model
+    #always return model AND p!!!
+    return model, p
 
 def EXAMPLE_model_regression(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
