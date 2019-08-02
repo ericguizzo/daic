@@ -105,7 +105,7 @@ def EXAMPLE_model_regression(time_dim, features_dim, user_parameters=['niente = 
     model = Model(inputs=input_data, outputs=out)
 
     #always return model AND p!!!
-    return model
+    return model, p
 
 
 if __name__ == '__main__':
