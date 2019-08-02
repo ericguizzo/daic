@@ -25,6 +25,7 @@ of an experiment are saved in a custom-defined folder, which contains:
 For each experiment you can create a new xval_routine script, copying the example one.
 In each experiment it is mandatory to define these macro parameters:
 *A short description of the experiment that will be saved in a txt file. For example 'In this experiment we tested different learning rates'
+* gpu_ID: GPU number ID in which run the training
 * dataset: a short name of the used dataset. This will affect the name of the results and serves as well to load the correct dataset.
 * num_experiment: number of current experiment (has to be an integer).
 * num_folds: int, how many k for the k-fold cross-validation.
@@ -48,6 +49,17 @@ In each instance it is mandatory to declare at least these 4 parameters (See pre
 * comment_1 and comment_2: comments that are plotted in the spreadsheet.
 * task_type: should be 'classification' or 'regression'
 * architecture: the model you want to use. Should be the name of a model function present in models_API script.
+
+It is possible to run an xval_routine script from the terminal with 3 positional parameters:
+1: first instance to run
+2: last instance to run
+3: gpu ID
+
+Example:
+```bash
+python3 xval_instance_ravdess_exp1 3 7 1
+```
+The above code runs instances between 3 and 7 of experiment 1 in the GPU number 1
 
 ## CUSTOM MODELS DEFINITION
 To define a model follow the instructions written in define_models.EXAMPLE_model()
