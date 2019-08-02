@@ -9,7 +9,7 @@ import configparser
 config = loadconfig.load()
 cfg = configparser.ConfigParser()
 cfg.read(config)
-
+a = 0
 copy_folder = '../sshcopy/'
 #load parameters from config file
 '''
