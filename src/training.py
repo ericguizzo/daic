@@ -382,7 +382,7 @@ def main():
 
     #save parameters dict
     parameters_dict = {'training': training_parameters,
-                       'model': model_parameters}
+                       'model': locals()['model_parameters']}
     with open(parameters_path, "w") as fp:
         json.dump(parameters_dict , fp)
     print (temp_results)
