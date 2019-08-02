@@ -1,6 +1,6 @@
 ## GENERAL DESCRIPTION
 This API is aimed at easily defining and running routines
-of multiple keras/pytorch trainings and automatically collect the results in a convenient shape. In each instance of a routine (called 'experiment') it is possible to specify any kind of training-related and model-related parameter, as well as automatically performing k-fold cross-validation. The outcomes of an experiment are saved in a custom-defined folder, which contains:
+of multiple keras/pytorch trainings and automatically collect the results in a convenient shape. In each instance of a routine (a routine is referred as an 'experiment') it is possible to specify any kind of training-related and model-related parameter, as well as automatically performing k-fold cross-validation. The outcomes of an experiment are saved in a custom-defined folder, which contains:
 * A dictionary with all metrics and history, separately computed for every instance of the experiment and for every k-fold.
 * All generated models (.hdf5).
 * A copy of he current version of the code, saved at the moment of running of the last instance of the experiment.
