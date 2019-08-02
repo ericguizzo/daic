@@ -4,6 +4,8 @@ import sys, os
 import xval_instance_GENERIC_API as xval
 
 #EXPERIMENT PARAMETERS:
+overwrite_results = False  #if true overwrite existing experiment instances
+debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'stupid test'
 dataset = 'ravdess'
 num_experiment = 1  #id of the experiment
@@ -40,6 +42,7 @@ description_path = output_path + '/experiment_' + str(num_experiment) + '_descri
 with open(description_path, "w") as text_file:
     text_file.write(short_description)
 
+
 try:
     begin = int(sys.argv[1])
     end = int(sys.argv[2])
@@ -53,7 +56,20 @@ except IndexError:
     gpu_ID = 1
 
 for num_run in range(begin,end+1):
+    if overwrite_results:
+        results_name = 'unexisting_path'
+    else:
+        results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     temp_params = '/'.join(experiment[num_run])
-    xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
+
+    if not os.path.exists(output_path):  #not overwrite experiments
+        if debug_mode == False:
+            try:
+                xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
+            except:
+                pass
+        else:
+            xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
+
 
 print ('REQUESTED EXPERIMENTS SUCCESSFULLY COMPLETED')

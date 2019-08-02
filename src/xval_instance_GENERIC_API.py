@@ -103,6 +103,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         temp_results = np.load(results_name)
         temp_results = temp_results.item()
         folds[i] = temp_results
+        #stop fold iter
 
     #compute summary
     #compute mean loss and loss std
