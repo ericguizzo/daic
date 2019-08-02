@@ -124,9 +124,9 @@ else:
 BVL_model_path = SAVE_MODEL + '.hdf5'
 
 #define optimizer ADD HERE DIFFERENT OPTIMIZERS!!!!!!!
-if optimizer = 'adam':
+if optimizer == 'adam':
     opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-elif optimizer = 'sgd':
+elif optimizer == 'sgd':
     opt.optimizers.SGD(lr=learning_rate)
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
@@ -150,7 +150,8 @@ training_parameters = {'train_split': train_split,
     'batch_size': batch_size,
     'num_epochs': num_epochs,
     'learning_rate': learning_rate,
-    'regularization_lambda': regularization_lambda
+    'regularization_lambda': regularization_lambda,
+    'optimizer': optimizer
     }
 
 def main():
