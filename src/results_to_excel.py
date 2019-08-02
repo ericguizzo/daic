@@ -52,63 +52,64 @@ separation_border = workbook.add_format({'border': 1,'bottom': 6, 'bottom_color'
 
 #define column names
 exp_id_c = 0
-comment1_c = 1
-comment2_c = 2
+parameters_c = 1
+comment1_c = 2
+comment2_c = 3
 
-train_loss_c = 3
-val_loss_c = 4
-test_loss_c = 5
-train_loss_std_c = 6
-val_loss_std_c = 7
-test_loss_std_c = 8
+train_loss_c = 4
+val_loss_c = 5
+test_loss_c = 6
+train_loss_std_c = 7
+val_loss_std_c = 8
+test_loss_std_c = 9
 
 if task_type == 'regression':
-    train_rmse_c = 9
-    val_rmse_c = 10
-    test_rmse_c = 11
-    train_rmse_std_c = 12
-    val_rmse_std_c = 13
-    test_rmse_std_c = 14
+    train_rmse_c = 10
+    val_rmse_c = 11
+    test_rmse_c = 12
+    train_rmse_std_c = 13
+    val_rmse_std_c = 14
+    test_rmse_std_c = 15
 
-    train_mae_c = 15
-    val_mae_c = 16
-    test_mae_c = 17
-    train_mae_std_c = 18
-    val_mae_std_c = 19
-    test_mae_std_c = 20
+    train_mae_c = 16
+    val_mae_c = 17
+    test_mae_c = 18
+    train_mae_std_c = 19
+    val_mae_std_c = 20
+    test_mae_std_c = 21
 
-    end_c = 20
+    end_c = 21
 
 elif task_type == 'classification':
-    train_acc_c = 9
-    val_acc_c = 10
-    test_acc_c = 11
-    train_acc_std_c = 12
-    val_acc_std_c = 13
-    test_acc_std_c = 14
+    train_acc_c = 10
+    val_acc_c = 11
+    test_acc_c = 12
+    train_acc_std_c = 13
+    val_acc_std_c = 14
+    test_acc_std_c = 15
 
-    train_f1_c = 15
-    val_f1_c = 16
-    test_f1_c = 17
-    train_f1_std_c = 18
-    val_f1_std_c = 19
-    test_f1_std_c = 20
+    train_f1_c = 16
+    val_f1_c = 17
+    test_f1_c = 18
+    train_f1_std_c = 19
+    val_f1_std_c = 20
+    test_f1_std_c = 21
 
-    train_precision_c = 21
-    val_precision_c = 22
-    test_precision_c = 23
-    train_precision_std_c = 24
-    val_precision_std_c = 25
-    test_precision_std_c = 26
+    train_precision_c = 22
+    val_precision_c = 23
+    test_precision_c = 24
+    train_precision_std_c = 25
+    val_precision_std_c = 26
+    test_precision_std_c = 27
 
-    train_recall_c = 27
-    val_recall_c = 28
-    test_recall_c = 29
-    train_recall_std_c = 30
-    val_recall_std_c = 31
-    test_recall_std_c = 32
+    train_recall_c = 28
+    val_recall_c = 29
+    test_recall_c = 30
+    train_recall_std_c = 31
+    val_recall_std_c = 32
+    test_recall_std_c = 33
 
-    end_c = 32
+    end_c = 33
 
 
 v_offset = 2
@@ -154,6 +155,9 @@ worksheet.set_column(comment1_c,comment1_c,35)
 
 worksheet.write(v_offset, comment2_c, 'comment 2',parameters_format)
 worksheet.set_column(comment2_c,comment2_c,35)
+
+worksheet.write(v_offset, parameters_c, 'link to parameters',parameters_format)
+worksheet.set_column(parameters_c,parameters_c,35)
 
 worksheet.write(v_offset, train_loss_c, 'train',loss_format)
 worksheet.write(v_offset, val_loss_c, 'val',loss_format)
@@ -238,6 +242,10 @@ for i in contents:
                 comment_2 = i.split('=')[1].replace('"', '')
         worksheet.write(curr_row, comment1_c, comment_1,values_format)
         worksheet.write(curr_row, comment2_c, comment_2,values_format)
+
+        #write parameters link
+        #worksheet.write(curr_row, parameters_c, 'culo',values_format)
+        worksheet.write_url(curr_row, parameters_c, 'external:../link_prova.txt')
 
         #extract losses
         tr = dict['summary']['training']

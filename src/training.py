@@ -16,6 +16,7 @@ try:
         gpu_ID = int(sys.argv[10])
         num_folds = int(sys.argv[11])
         task_type = sys.argv[12]
+        parameters_path = sys.argv[13]
         SAVE_MODEL = model_path
 
         print('crossvalidation mode: I/O from crossvalidation script')
@@ -55,9 +56,9 @@ except IndexError:
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_ID)
 
-
 import loadconfig
 import configparser
+import json
 import keras
 from keras.models import Model
 from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
@@ -213,7 +214,6 @@ def main():
         test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
                                                             target_merged, test_list)
 
-
         np.save(train_pred_path, training_predictors)
         np.save(train_target_path, training_target)
         np.save(val_pred_path, validation_predictors)
@@ -279,7 +279,7 @@ def main():
     exec(model_string)
     locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
     print (locals()['model'].summary())
-    print (locals()['model_parameters'])
+    #print (locals()['model_parameters'])
 
     #callbacks
     best_model = ModelCheckpoint(SAVE_MODEL, monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
@@ -380,6 +380,11 @@ def main():
     temp_results['validation_actors'] = val_list
     temp_results['test_actors'] = test_list
 
+    #save parameters dict
+    parameters_dict = {'training': training_parameters,
+                       'model': model_parameters}
+    with open(parameters_path, "w") as fp:
+        json.dump(parameters_dict , fp)
     print (temp_results)
 
     np.save(results_path, temp_results)

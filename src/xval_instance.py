@@ -43,6 +43,10 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     if not os.path.exists(output_results_path):
         os.makedirs(output_results_path)
 
+    output_parameters_path = output_results_path + '/parameters'
+    if not os.path.exists(output_parameters_path):
+        os.makedirs(output_parameters_path)
+
     output_temp_data_path = output_temp_path + '/temp_data'
     if not os.path.exists(output_temp_data_path):
         os.makedirs(output_temp_data_path)
@@ -80,6 +84,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         #init paths
         model_name = output_models_path + '/model_xval_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_fold' + str(num_fold)
         results_name = output_temp_results_path + '/temp_results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_fold' + str(num_fold) + '.npy'
+        parameters_name = output_parameters_path + '/parameters_' + dataset + '_exp' + str(num_experiment) + '.json'
 
         #init results as ERROR
         np.save(results_name, np.array(['ERROR']))
@@ -89,7 +94,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                      'crossvalidation', str(num_experiment), str(num_run),
                                       str(num_fold), parameters, model_name, results_name,
                                       output_temp_data_path, dataset, str(gpu_ID),
-                                      str(num_folds), locals()['task_type']])
+                                      str(num_folds), locals()['task_type'],parameters_name])
         training.communicate()
         training.wait()
 
