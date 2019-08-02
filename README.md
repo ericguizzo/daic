@@ -10,39 +10,31 @@ of an experiment are saved in a custom-defined folder, which contains:
 
 
 ## SCRIPTS
--xval_routine: UI to define an experiment and its instances. This script iterates
-  all instances of an experiment calling the script xval_instance.
--xval_instance: This script automatically performs the k-fold cross-validation. It
-  iterates every fold calling the script build_model.
--build_model: This script runs the actual trainings.
--models: in this script it is possible to define custom keras models.
--utility_functions: self-explanatory.
--results_to_excel: computes the spreadsheets.
--preprocessing_DATASET: processes audio data building the features matrices calling
-  the script feat_analysis.
--feat_analysis: contains the feature extraction functions: STFT and MFCC
--config.ini: This config file contains mainly I/O folder paths
+* xval_routine: UI to define an experiment and its instances. This script iterates all instances of an experiment calling the script xval_instance.
+* xval_instance: This script automatically performs the k-fold cross-validation. It iterates every fold calling the script build_model.
+* training: This script runs the actual trainings.
+* define_models: in this script it is possible to define custom keras models.
+* utility_functions: self-explanatory.
+* results_to_excel: computes the spreadsheets.
+* preprocessing_DATASET: processes audio data building the features matrices calling the script feat_analysis.
+* feat_analysis: contains the feature extraction functions: STFT and MFCC
+* config.ini: This config file contains mainly I/O folder paths
 
 
 ## EXPERIMENT DEFINITION
 For each experiment you can create a new xval_routine script, copying the example one.
 In each experiment it is mandatory to define these macro parameters:
-  -A short description of the experiment that will be saved in a txt file. For
-    example 'In this experiment we tested different learning rates'
-  -dataset: a short name of the used dataset. This will affect the name of the
-    results and serves as well to load the correct dataset.
-  -num_experiment: number of current experiment (has to be an integer).
-  -num_folds: int, how many k for the k-fold cross-validation.
-  -experiment_folder: path in which save all results. Different
-    experiments for the same dataset are saved in the same directory.
-  -overwrite_results: False if you want to avoid overwriting previous results 
-  -debug_mode: if False, when en error occurs the script will pass to the next instance
-    without stopping.
-In each experiment you should define a dict containing the instances of the experiment.
-The keys should be progressive integers.
-Each key/instance has to be a list of strings and each element of a list is a
-parameter declaration.
+*A short description of the experiment that will be saved in a txt file. For example 'In this experiment we tested different learning rates'
+* dataset: a short name of the used dataset. This will affect the name of the results and serves as well to load the correct dataset.
+* num_experiment: number of current experiment (has to be an integer).
+* num_folds: int, how many k for the k-fold cross-validation.
+* experiment_folder: path in which save all results. Different experiments for the same dataset are saved in the same directory.
+* overwrite_results: False if you want to avoid overwriting previous results 
+* debug_mode: if False, when en error occurs the script will pass to the next instance without stopping.
+In each experiment you should define a dict containing the instances of the experiment. The keys should be progressive integers.
+Each key/instance has to be a list of strings and each element of a list is a parameter declaration.
 Example:
+code()
 experiment_dict[1] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
                  'comment_1="reg base 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.001"']
 experiment_dict[2] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
