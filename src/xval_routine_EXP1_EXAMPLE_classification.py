@@ -71,6 +71,6 @@ for num_run in range(begin,end+1):
         else:
             xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID)
     else:
-        print ('exp' + str(num_exp) + ' run' + str(num_run) + ' already exists: skipping')
+        print ('exp' + str(num_experiment) + ' run' + str(num_run) + ' already exists: skipping')
 
 print ('REQUESTED EXPERIMENTS SUCCESSFULLY COMPLETED')
