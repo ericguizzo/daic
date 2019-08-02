@@ -43,28 +43,23 @@ experiment_dict[2] = ['task_type= "classification"', 'architecture="EXAMPLE_mode
                  
 ```
 
-The parameters you insert overwrite the default one, which are declared in the
-build_model and models_API scripts. Since a copy of the code issaved for every
-experiment, you can easily check which were the default parameters in case you change them.
+The parameters you insert overwrite the default one, which are declared in the build_model and models_API scripts. Since a copy of the code issaved for every experiment, you can easily check which were the default parameters in case you change them.
 In each instance it is mandatory to declare at least these 4 parameters (See previous example):
-  -comment_1 and comment_2: comments that are plotted in the spreadsheet.
-  -task_type: should be 'classification' or 'regression'
-  -architecture: the model you want to use. Should be the name of a model function
-    present in models_API script.
+* comment_1 and comment_2: comments that are plotted in the spreadsheet.
+* task_type: should be 'classification' or 'regression'
+* architecture: the model you want to use. Should be the name of a model function present in models_API script.
 
 ## CUSTOM MODELS DEFINITION
-To define a model follow the instructions written in models_API.EXAMPLE_model()
+To define a model follow the instructions written in define_models.EXAMPLE_model()
 
 
 ## PREPROCESSING
-Unfortunately, the preprocessing needs to be customized for every new dataset.
-In order to be compatible con the rest of the API, any proprocessing script has to
-output 2 dictionaries: 1 containing the predictors and 1 containing the target.
-The keys of these dicts has to be the 'foldable items', that is the criterion
-that you want to use to divide train-va-test, for example the different actors in
-a speech dataset. So every key should contain all data from one single actor.
-example:
+Unfortunately, the preprocessing needs to be customized for every new dataset. In order to be compatible con the rest of the API, any proprocessing script has to output 2 dictionaries: 1 containing the predictors and 1 containing the target. The keys of these dicts has to be the 'foldable items', that is the criterion that you want to use to divide train-va-test, for example the different actors in a speech dataset. So every key should contain all data from one single actor.
+
+Example:
+```python
 predictors_dict['1': matrix with all spectra of actor 1,
                 '2': matrix with all spectra of actor 2]
 target_dict['1': matrix with all labels of actor 1,
             '2': matrix with all labels of actor 1]
+```
