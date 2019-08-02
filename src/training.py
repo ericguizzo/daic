@@ -1,38 +1,5 @@
 #from __future__ import print_function
 import sys, os
-import loadconfig
-import configparser
-import keras
-from keras.models import Model
-from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
-from keras.layers.normalization import BatchNormalization
-from keras.layers.advanced_activations import ELU
-from keras.callbacks import EarlyStopping, ModelCheckpoint, History
-from keras.utils import np_utils
-from keras.backend import int_shape
-from keras.models import load_model
-from keras import regularizers
-from keras import optimizers
-from keras import backend as K
-from sklearn.metrics import classification_report
-from sklearn.metrics import f1_score, precision_score, recall_score
-import numpy as np
-import define_models as choose_model
-import utility_functions as uf
-#import preprocessing_DAIC as pre
-
-#np.random.seed(0)
-#torch.manual_seed(0)
-print('')
-config = loadconfig.load()
-cfg = configparser.ConfigParser()
-cfg.read(config)
-
-#load parameters from config file only test mode
-DATASET_FOLDER = cfg.get('preprocessing', 'output_folder')
-SAVE_MODEL = cfg.get('model', 'save_model') #only if not in crossval mode
-SAVE_RESULTS = cfg.get('model', 'save_results') #only if not in crossval mode
-
 #look at sys argv: if in crossvalidation model i/o matrices and new model filename
 #are given from crossvalidation script, otherwise are normally taken from config.ini
 try:
@@ -66,11 +33,15 @@ except IndexError:
     architecture = 'EXAMPLE_model_regression'
     parameters = ['niente = 0']
     task_type = 'regression'
-    results_path = SAVE_RESULTS
+    SAVE_MODEL = '../models/prova'
+    dataset_test = 'daic'
+    results_path = '../results/provisional'
+    SAVE_RESULTS = results_path
     num_fold = 0
     num_exp = 0
     num_run = 0
     num_folds = 1
+    gpu_ID = 1
 
     print ('test mode: I/O from config.ini file')
     print ('')
@@ -81,6 +52,40 @@ except IndexError:
     print ('saving model at: ' + SAVE_MODEL + '.hdf5')
     print ('')
 
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_ID)
+
+
+import loadconfig
+import configparser
+import keras
+from keras.models import Model
+from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
+from keras.layers.normalization import BatchNormalization
+from keras.layers.advanced_activations import ELU
+from keras.callbacks import EarlyStopping, ModelCheckpoint, History
+from keras.utils import np_utils
+from keras.backend import int_shape
+from keras.models import load_model
+from keras import regularizers
+from keras import optimizers
+from keras import backend as K
+from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score, precision_score, recall_score
+import numpy as np
+import define_models as choose_model
+import utility_functions as uf
+#import preprocessing_DAIC as pre
+
+#np.random.seed(0)
+#torch.manual_seed(0)
+print('')
+config = loadconfig.load()
+cfg = configparser.ConfigParser()
+cfg.read(config)
+
+#load parameters from config file only test mode
+DATASET_FOLDER = cfg.get('preprocessing', 'output_folder')
 
 predictors_name = dataset + '_predictors.npy'
 target_name = dataset + '_target.npy'
