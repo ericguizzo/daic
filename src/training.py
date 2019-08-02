@@ -384,7 +384,11 @@ def main():
     parameters_dict = {'training': training_parameters,
                        'model': locals()['model_parameters']}
     with open(parameters_path, 'w') as f:
-        for key, value in parameters_dict.items():
+        f.write('%s\n' % ('Training parameters:'))
+        for key, value in training_parameters.items():
+            f.write('%s:%s\n' % (key, value))
+        f.write('%s\n' % ('Model parameters:'))
+        for key, value in model_parameters.items():
             f.write('%s:%s\n' % (key, value))
     print (temp_results)
 
