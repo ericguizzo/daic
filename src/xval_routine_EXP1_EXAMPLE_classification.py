@@ -4,7 +4,7 @@ import sys, os
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
-overwrite_results = False  #if true overwrite existing experiment instances
+overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'stupid test'
 dataset = 'ravdess'
