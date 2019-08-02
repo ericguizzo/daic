@@ -383,8 +383,9 @@ def main():
     #save parameters dict
     parameters_dict = {'training': training_parameters,
                        'model': locals()['model_parameters']}
-    with open(parameters_path, "w") as fp:
-        json.dump(parameters_dict , fp)
+    with open(parameters_path, 'w') as f:
+        for key, value in parameters_dict.items():
+            f.write('%s:%s\n' % (key, value))
     print (temp_results)
 
     np.save(results_path, temp_results)

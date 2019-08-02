@@ -25,7 +25,6 @@ except:
     task_type = 'classification'
 
 
-
 #init workbook
 workbook = xlsxwriter.Workbook(out_name)
 worksheet = workbook.add_worksheet()
@@ -235,17 +234,18 @@ for i in contents:
         parameters = dict['summary']['parameters'].split('/')
         comment_1 = '/'
         comment_2 = '/'
-        for i in parameters:
-            if 'comment_1' in i:
-                comment_1 = i.split('=')[1].replace('"', '')
-            if 'comment_2' in i:
-                comment_2 = i.split('=')[1].replace('"', '')
+        for par in parameters:
+            if 'comment_1' in par:
+                comment_1 = par.split('=')[1].replace('"', '')
+            if 'comment_2' in par:
+                comment_2 = par.split('=')[1].replace('"', '')
         worksheet.write(curr_row, comment1_c, comment_1,values_format)
         worksheet.write(curr_row, comment2_c, comment_2,values_format)
 
         #write parameters link
-        #worksheet.write(curr_row, parameters_c, 'culo',values_format)
-        worksheet.write_url(curr_row, parameters_c, 'external:../link_prova.txt')
+        split_par = i.split('.')[0].split('_')
+        curr_par_name = 'parameters/parameters_' + split_par[1] + '_' + split_par[2] + '_' + split_par[3] + '.txt'
+        worksheet.write_url(curr_row, parameters_c, 'external:'+curr_par_name)
 
         #extract losses
         tr = dict['summary']['training']
