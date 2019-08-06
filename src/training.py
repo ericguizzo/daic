@@ -38,6 +38,7 @@ except IndexError:
     SAVE_MODEL = '../models/prova'
     dataset_test = 'daic'
     results_path = '../results/provisional'
+    parameters_path = results_path + '/parameters'
     SAVE_RESULTS = results_path
     num_fold = 0
     num_exp = 0
