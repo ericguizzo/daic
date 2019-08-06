@@ -420,9 +420,12 @@ def main():
         f.write('%s\n' % ('MODEL PARAMETERS:'))
         for key, value in locals()['model_parameters'].items():
             f.write('%s:%s\n' % (key, value))
-    print (temp_results)
 
     np.save(results_path, temp_results)
+
+    for i in temp_results.keys():
+        if 'history' not in i:
+            print (temp_results[i])
 
 if __name__ == '__main__':
     main()
