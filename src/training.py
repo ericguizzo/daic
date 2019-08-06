@@ -429,17 +429,17 @@ def main():
     for i in temp_results.keys():
         if 'hist' not in i:
             if 'train' in i:
-            print (str(i) + ': ' + str(temp_results[i]))
+                print (str(i) + ': ' + str(temp_results[i]))
     print ('\n val results:')
     for i in temp_results.keys():
         if 'hist' not in i:
             if 'val' in i:
-            print (str(i) + ': ' + str(temp_results[i]))
+                print (str(i) + ': ' + str(temp_results[i]))
     print ('\n test results:')
     for i in temp_results.keys():
         if 'hist' not in i:
             if 'test' in i:
-            print (str(i) + ': ' + str(temp_results[i]))
+                print (str(i) + ': ' + str(temp_results[i]))
 
 if __name__ == '__main__':
     main()
