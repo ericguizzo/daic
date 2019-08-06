@@ -34,7 +34,7 @@ except IndexError:
     #nogenerator
     generator = False
     dataset = 'ravdess'
-    architecture = 'EXAMPLE_model_classification'
+    architecture = 'simple_CNN'
     parameters = ['niente = 0']
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
