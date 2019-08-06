@@ -152,7 +152,7 @@ except IndexError:
 training_parameters = {'train_split': train_split,
     'validation_split': validation_split,
     'test_split': test_split,
-    'shuffle_predictors': shuffle_predictors,
+    'shuffle_training_data': shuffle_training_data,
     'save_best_model_metric': save_best_model_metric,
     'save_best_model_mode': save_best_model_mode,
     'early_stopping': early_stopping,
