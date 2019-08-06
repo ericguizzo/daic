@@ -30,6 +30,7 @@ try:
 except IndexError:
     #test parameters
     #IF IN TEST MODE:no xvalidation, results saved as exp0
+    generator = True
     dataset = 'daic'
     architecture = 'EXAMPLE_model_regression'
     parameters = ['niente = 0']
@@ -296,7 +297,21 @@ def main():
     if not os.path.exists(model_folder):
         os.makedirs(model_folder)
 
-    history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
+
+    #if training with generator
+    if generator:  #if loading one batch at time to GPU
+        datagen = ImageDataGenerator()
+        training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size)
+        validation_generator = datagen.flow(validation_predictors, validation_target, batch_size=batch_size)
+        test_generator = datagen.flow(test_predictors, test_target, batch_size=batch_size)
+
+
+        history = locals()['model'].fit_generator(training_generator, validation_data=validation_generator,
+                    validation_steps=len(validation_data)/batch_size, callbacks=callbacks_list,
+                    steps_per_epoch=len(training_predictors)/batch_size, nb_epochs=num_epochs)
+
+    else:  #if loading all dataset to GPU
+        history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
 
     train_loss_hist = history.history['loss']
@@ -309,12 +324,20 @@ def main():
     K.clear_session()  #free GPU
     best_model = load_model(SAVE_MODEL)  #load best saved model
 
-    train_score = best_model.evaluate(training_predictors, training_target)
-    val_score = best_model.evaluate(validation_predictors, validation_target)
-    test_score = best_model.evaluate(test_predictors, test_target)
-    train_pred = best_model.predict(training_predictors)
-    val_pred = best_model.predict(validation_predictors)
-    test_pred = best_model.predict(test_predictors)
+    if generator:
+        train_score = best_model.evaluate_generator(training_generator, steps=len(training_target)/batch_size)
+        val_score = best_model.evaluate_generator(validation_generator, steps=len(validation_target)/batch_size)
+        test_score = best_model.evaluate_generator(test_generator, steps=len(test_target)/batch_size)
+        train_pred = best_model.predict_generator(training_generator, steps=len(training_target)/batch_size)
+        val_pred = best_model.predict_generator(validation_generator, steps=len(validation_target)/batch_size)
+        test_pred = best_model.predict_generator(test_generator, steps=len(test_target)/batch_size)
+    else:
+        train_score = best_model.evaluate(training_predictors, training_target)
+        val_score = best_model.evaluate(validation_predictors, validation_target)
+        test_score = best_model.evaluate(test_predictors, test_target)
+        train_pred = best_model.predict(training_predictors)
+        val_pred = best_model.predict(validation_predictors)
+        test_pred = best_model.predict(test_predictors)
 
     #save results in temp dict file
     temp_results = {}
