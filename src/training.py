@@ -102,6 +102,7 @@ TARGET_LOAD = os.path.join(DATASET_FOLDER, target_name)
 train_split = cfg.getfloat('training_defaults', 'train_split')
 validation_split = cfg.getfloat('training_defaults', 'validation_split')
 test_split = cfg.getfloat('training_defaults', 'test_split')
+shuffle_predictors = eval(cfg.get('training_defaults', 'shuffle_predictors'))
 save_best_model_metric = cfg.get('training_defaults', 'save_best_model_metric')
 save_best_model_mode = cfg.get('training_defaults', 'save_best_model_mode')
 early_stopping = eval(cfg.get('training_defaults', 'early_stopping'))
@@ -151,6 +152,7 @@ except IndexError:
 training_parameters = {'train_split': train_split,
     'validation_split': validation_split,
     'test_split': test_split,
+    'shuffle_predictors': shuffle_predictors,
     'save_best_model_metric': save_best_model_metric,
     'save_best_model_mode': save_best_model_mode,
     'early_stopping': early_stopping,
@@ -312,11 +314,12 @@ def main():
 
         history = locals()['model'].fit_generator(training_generator, validation_data=validation_generator,
                     validation_steps=len(validation_target)/batch_size, callbacks=callbacks_list,
-                    steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs)
+                    steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs, shuffle=shuffle_predictors)
 
     else:  #if loading all dataset to GPU
         history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
-                                validation_data=(validation_predictors,validation_target), callbacks=callbacks_list, batch_size=batch_size)
+                                validation_data=(validation_predictors,validation_target), callbacks=callbacks_list,
+                                batch_size=batch_size, shuffle=shuffle_predictors)
 
     train_loss_hist = history.history['loss']
     val_loss_hist = history.history['val_loss']
