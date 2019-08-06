@@ -343,6 +343,9 @@ def main():
         val_pred = best_model.predict(validation_predictors)
         test_pred = best_model.predict(test_predictors)
 
+    print ('\n CULOOOOOO')
+    print (train_pred.shape)
+
     #save results in temp dict file
     temp_results = {}
 
