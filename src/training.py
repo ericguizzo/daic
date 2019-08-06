@@ -32,7 +32,7 @@ except IndexError:
     #IF IN TEST MODE:no xvalidation, results saved as exp0
     #generator: 11865
     #nogenerator
-    generator = True
+    generator = False
     dataset = 'ravdess'
     architecture = 'simple_CNN'
     parameters = ['niente = 0']
