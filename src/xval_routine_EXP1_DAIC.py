@@ -9,7 +9,7 @@ dataset = 'daic'
 num_experiment = 1  #id of the experiment
 num_folds = 4  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
-experiment_folder = '../resultsdaic'  #where to save results
+experiment_folder = '~/copy/results_daic_prova'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
