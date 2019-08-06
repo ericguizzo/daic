@@ -61,6 +61,7 @@ import loadconfig
 import configparser
 import json
 import keras
+from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
 from keras.layers.normalization import BatchNormalization
