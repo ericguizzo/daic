@@ -424,8 +424,8 @@ def main():
     np.save(results_path, temp_results)
 
     for i in temp_results.keys():
-        if 'history' not in i:
-            print (temp_results[i])
+        if 'hist' not in i:
+            print (str(i) + ': ' + str(temp_results[i]))
 
 if __name__ == '__main__':
     main()
