@@ -102,7 +102,7 @@ TARGET_LOAD = os.path.join(DATASET_FOLDER, target_name)
 train_split = cfg.getfloat('training_defaults', 'train_split')
 validation_split = cfg.getfloat('training_defaults', 'validation_split')
 test_split = cfg.getfloat('training_defaults', 'test_split')
-shuffle_predictors = eval(cfg.get('training_defaults', 'shuffle_predictors'))
+shuffle_training_data = eval(cfg.get('training_defaults', 'shuffle_training_data'))
 save_best_model_metric = cfg.get('training_defaults', 'save_best_model_metric')
 save_best_model_mode = cfg.get('training_defaults', 'save_best_model_mode')
 early_stopping = eval(cfg.get('training_defaults', 'early_stopping'))
@@ -319,7 +319,7 @@ def main():
     else:  #if loading all dataset to GPU
         history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
                                 validation_data=(validation_predictors,validation_target), callbacks=callbacks_list,
-                                batch_size=batch_size, shuffle=shuffle_predictors)
+                                batch_size=batch_size, shuffle=shuffle_training_data)
 
     train_loss_hist = history.history['loss']
     val_loss_hist = history.history['val_loss']
