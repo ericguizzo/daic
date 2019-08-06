@@ -30,7 +30,9 @@ try:
 except IndexError:
     #test parameters
     #IF IN TEST MODE:no xvalidation, results saved as exp0
-    generator = True
+    #generator: 11876
+    #nogenerator
+    generator = False
     dataset = 'daic'
     architecture = 'EXAMPLE_model_regression'
     parameters = ['niente = 0']
