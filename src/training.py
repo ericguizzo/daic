@@ -30,9 +30,9 @@ try:
 except IndexError:
     #test parameters
     #IF IN TEST MODE:no xvalidation, results saved as exp0
-    #generator: 11876
+    #generator: 11865
     #nogenerator
-    generator = False
+    generator = True
     dataset = 'ravdess'
     architecture = 'EXAMPLE_model_classification'
     parameters = ['niente = 0']
