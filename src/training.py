@@ -309,7 +309,7 @@ def main():
 
         history = locals()['model'].fit_generator(training_generator, validation_data=validation_generator,
                     validation_steps=len(validation_target)/batch_size, callbacks=callbacks_list,
-                    steps_per_epoch=len(training_target)/batch_size, nb_epochs=num_epochs)
+                    steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs)
 
     else:  #if loading all dataset to GPU
         history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
