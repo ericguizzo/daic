@@ -355,6 +355,7 @@ def main():
 
     print ('\n CULOOOOOO')
     print (train_pred.shape)
+    print (training_target.shape)
 
     #save results in temp dict file
     temp_results = {}
