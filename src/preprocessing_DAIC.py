@@ -22,9 +22,9 @@ SR = cfg.getint('sampling', 'sr_target')
 SEQUENCE_LENGTH = cfg.getfloat('preprocessing', 'sequence_length')
 SEQUENCE_OVERLAP = cfg.getfloat('preprocessing', 'sequence_overlap')
 #in
-INPUT_AUDIO_FOLDER =  cfg.get('preprocessing', 'input_audio_folder')
-INPUT_LABELS_FOLDER =  cfg.get('preprocessing', 'input_labels_folder')
-INPUT_TRANSCRIPTS_FOLDER =  cfg.get('preprocessing', 'input_transcripts_folder')
+INPUT_AUDIO_FOLDER =  cfg.get('preprocessing', 'input_audio_folder_daic')
+INPUT_LABELS_FOLDER =  cfg.get('preprocessing', 'input_labels_folder_daic')
+INPUT_TRANSCRIPTS_FOLDER =  cfg.get('preprocessing', 'input_transcripts_folder_daic')
 #out
 OUTPUT_PREDICTORS_PATH = cfg.get('preprocessing', 'output_predictors')
 OUTPUT_TARGET_PATH = cfg.get('preprocessing', 'output_target')
