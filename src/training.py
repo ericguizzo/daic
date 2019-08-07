@@ -284,12 +284,14 @@ def main():
         test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
         time_dim = training_predictors.shape[1]
         features_dim = training_predictors.shape[2]
-    if reshaping_type == 'rnn':
+    elif reshaping_type == 'rnn':
         time_dim = training_predictors.shape[1]
         features_dim = training_predictors.shape[2]
-    if reshaping_type == 'none':
+    elif reshaping_type == 'none':
         time_dim = training_predictors.shape[1]
         features_dim = training_predictors.shape[2]
+    else:
+        raise ValueError('wrong reshaping type')
 
 
     #load and compile model (model is in locals()['model'])
