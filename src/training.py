@@ -356,6 +356,10 @@ def main():
     print ('\n CULOOOOOO')
     print (train_pred.shape)
     print (training_target.shape)
+    print ('k')
+    print (np.argmax(test_pred, axis=1))
+    print ('o')
+    print (np.argmax(test_pred, axis=1))
 
     #save results in temp dict file
     temp_results = {}
