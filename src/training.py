@@ -317,7 +317,7 @@ def main():
 
         history = locals()['model'].fit_generator(training_generator, validation_data=validation_generator,
                                 validation_steps=len(validation_target)/batch_size, callbacks=callbacks_list,
-                                steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs, shuffle=False)
+                                steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs, shuffle=shuffle_training_data)
 
     else:  #if loading all dataset to GPU
         history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
@@ -337,13 +337,14 @@ def main():
     if generator:
         #del training_generator  #delete shuffled generator
         #build non shuffled generator
-        training_generator = training_generator.reset()
+        training_generator.reset()
         validation_generator.reset()
         test_generator.reset()
         train_score = best_model.evaluate_generator(training_generator, steps=len(training_target)/batch_size)
         val_score = best_model.evaluate_generator(validation_generator, steps=len(validation_target)/batch_size)
         test_score = best_model.evaluate_generator(test_generator, steps=len(test_target)/batch_size)
-        train_pred = best_model.predict_generator(training_generator, steps=len(training_target)/batch_size)
+        train_pred = best_model.predict_generator(datagen.flow(training_predictors, training_target, batch_size=batch_size,
+                                                shuffle=False), steps=len(training_target)/batch_size)
         val_pred = best_model.predict_generator(validation_generator, steps=len(validation_target)/batch_size)
         test_pred = best_model.predict_generator(test_generator, steps=len(test_target)/batch_size)
     else:
