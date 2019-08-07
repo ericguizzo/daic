@@ -26,16 +26,16 @@ experiment_folder = '../results'  #where to save results
 #-architecture: one of the models defined in the models_API script
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
-experiment[1] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="conv"',
+experiment[1] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.001"']
-experiment[2] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="conv"',
+experiment[2] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.01"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.01"']
-experiment[3] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="conv"',
+experiment[3] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.1"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.1"']
-experiment[4] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="conv"',
+experiment[4] = ['architecture="EXAMPLE_model_classification"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.3"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.3"']
 
