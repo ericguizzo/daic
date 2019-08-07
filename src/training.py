@@ -32,7 +32,7 @@ except IndexError:
     #IF IN TEST MODE:no xvalidation, results saved as exp0
     #generator: 11865
     #nogenerator
-    generator = False
+    generator = True
     dataset = 'daic'
     architecture = 'EXAMPLE_model_regression'
     parameters = ['niente = 0']
@@ -273,6 +273,7 @@ def main():
     '''
 
     #reshape tensors
+    #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
     training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
     validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
     test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
@@ -351,13 +352,6 @@ def main():
         val_pred = best_model.predict(validation_predictors)
         test_pred = best_model.predict(test_predictors)
 
-    print ('\n CULOOOOOO')
-    print (train_pred.shape)
-    print (training_target.shape)
-    print ('k')
-    print (np.argmax(test_pred, axis=1))
-    print ('o')
-    print (np.argmax(test_pred, axis=1))
 
     #save results in temp dict file
     temp_results = {}
