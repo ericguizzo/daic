@@ -17,6 +17,8 @@ try:
         num_folds = int(sys.argv[11])
         task_type = sys.argv[12]
         parameters_path = sys.argv[13]
+        task_type = sys.argv[14]
+        generator = eval(sys.argv[15])
         SAVE_MODEL = model_path
 
         print('crossvalidation mode: I/O from crossvalidation script')
@@ -274,11 +276,19 @@ def main():
 
     #reshape tensors
     #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
-    training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
-    validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
-    test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
-    time_dim = training_predictors.shape[1]
-    features_dim = training_predictors.shape[2]
+    if reshaping_type == 'cnn':
+        training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
+        validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
+        test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
+        time_dim = training_predictors.shape[1]
+        features_dim = training_predictors.shape[2]
+    if reshaping_type == 'rnn':
+        time_dim = training_predictors.shape[1]
+        features_dim = training_predictors.shape[2]
+    if reshaping_type == 'none':
+        time_dim = training_predictors.shape[1]
+        features_dim = training_predictors.shape[2]
+
 
     #load and compile model (model is in locals()['model'])
     print('\n loading model...')

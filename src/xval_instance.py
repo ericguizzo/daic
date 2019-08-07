@@ -19,7 +19,7 @@ def save_code(output_code_path):
     copy2.communicate()
 
 
-def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folder, parameters, gpu_ID):
+def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folder, parameters, gpu_ID, task_type, generator):
     '''
     run the crossvalidation
     '''
@@ -94,7 +94,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                      'crossvalidation', str(num_experiment), str(num_run),
                                       str(num_fold), parameters, model_name, results_name,
                                       output_temp_data_path, dataset, str(gpu_ID),
-                                      str(num_folds), locals()['task_type'],parameters_name])
+                                      str(num_folds), locals()['task_type'],parameters_name,
+                                      task_type, str(generator)])
         training.communicate()
         training.wait()
 

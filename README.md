@@ -31,22 +31,31 @@ In each experiment it is mandatory to define the following macro parameters:
 * experiment_folder: path in which save all result files. Different experiments for the same dataset are saved in the same macro-directory.
 * overwrite_results: (bool) False if you want to avoid to overwrite previous results
 * debug_mode: (bool) if False, when en error occurs the script will pass to the next instance without stopping.
+* task_type: should be 'classification' or 'regression'
+* generator: (bool) if True trains with generator
+
+
 
 For each experiment, you should define a dictionary containing the instances of the experiment (the keys should be progressive integers). Each key/instance has to be a list of strings and each element of the list should be a parameter declaration statement.
 
 Example:
 ```python
-experiment_dict[1] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
-                 'comment_1="reg base 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.001"']
-experiment_dict[2] = ['task_type= "classification"', 'architecture="EXAMPLE_model"',
-                 'comment_1="reg increased 0.01"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.01"']
+experiment[1] = ['architecture="EXAMPLE_model"', 'reshaping type="conv"',
+                 'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"',
+                 'regularization_lambda="0.001"']
+experiment[2] = ['architecture="EXAMPLE_model"', 'reshaping type="conv"',
+                 'comment_1="reg 0.01"', 'comment_2="EXAMPLE_architecture"',
+                 'regularization_lambda="0.01"']
+experiment[3] = ['architecture="EXAMPLE_model"', 'reshaping type="conv"',
+                 'comment_1="reg 0.1"', 'comment_2="EXAMPLE_architecture"',
+                 'regularization_lambda="0.1"']
 
 ```
 
 The parameters you insert will overwrite the default ones, which are declared in the config.ini file (parameters related to the training) and the define_models script (parameters related to the very models). In each instance (each key of the dict) it is mandatory to declare at least these parameters (See previous example):
 * comment_1 and comment_2: comments that are plotted in the spreadsheet.
-* task_type: should be 'classification' or 'regression'
 * architecture: the model you want to use. Should be the name of a model function present in models_API script.
+* reshaping_type: matrix reshaping before being fed into the models. It can be: 'conv', 'rnn' or 'none'. It is coherent with TensorFlow backend.
 
 For a quicker usage, it is possible to run an xval_routine script from command line with 3 positional parameters:
 1. first instance to run
