@@ -40,13 +40,13 @@ For each experiment, you should define a dictionary containing the instances of 
 
 Example:
 ```python
-experiment[1] = ['architecture="EXAMPLE_model"', 'reshaping type="conv"',
+experiment[1] = ['architecture="EXAMPLE_model"', 'reshaping_type="conv"',
                  'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.001"']
-experiment[2] = ['architecture="EXAMPLE_model"', 'reshaping type="conv"',
+experiment[2] = ['architecture="EXAMPLE_model"', 'reshaping_type="conv"',
                  'comment_1="reg 0.01"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.01"']
-experiment[3] = ['architecture="EXAMPLE_model"', 'reshaping type="conv"',
+experiment[3] = ['architecture="EXAMPLE_model"', 'reshaping_type="conv"',
                  'comment_1="reg 0.1"', 'comment_2="EXAMPLE_architecture"',
                  'regularization_lambda="0.1"']
 
