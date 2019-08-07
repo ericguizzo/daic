@@ -339,7 +339,7 @@ def main():
     if generator:
         del training_generator  #delete shuffled generator
         #build non shuffled generator
-        training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size,
+        training_generator = datagen.flow(training_predictors, training_target, batch_size=len(training_target),
                                                 shuffle=False)
         train_score = best_model.evaluate_generator(training_generator, steps=len(training_target)/batch_size)
         val_score = best_model.evaluate_generator(validation_generator, steps=len(validation_target)/batch_size)
