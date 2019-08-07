@@ -276,6 +276,8 @@ def main():
 
     #reshape tensors
     #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
+    print ('CULO')
+    print (reshaping_type)
     if reshaping_type == 'cnn':
         training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
         validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
