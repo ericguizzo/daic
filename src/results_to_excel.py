@@ -13,6 +13,7 @@ except:
 contents = os.listdir(in_folder)
 num_exps = len(contents)
 out_name = os.path.join(in_folder, out_name)
+contents = list(filter(lambda x: '.npy' in x, contents))
 temp_path = os.path.join(in_folder, contents[0])
 dict = np.load(temp_path)
 dict = dict.item()
