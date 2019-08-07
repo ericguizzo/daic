@@ -32,13 +32,12 @@ except IndexError:
     #IF IN TEST MODE:no xvalidation, results saved as exp0
     #generator: 11865
     #nogenerator
-    generator = True
-    dataset = 'ravdess'
+    generator = False
+    dataset = 'daic'
     architecture = 'simple_CNN'
     parameters = ['niente = 0']
-    task_type = 'classification'
+    task_type = 'regression'
     SAVE_MODEL = '../models/prova'
-    dataset_test = 'daic'
     results_path = '../results/provisional'
     parameters_path = results_path + '/parameters'
     SAVE_RESULTS = results_path
