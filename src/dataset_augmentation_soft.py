@@ -5,7 +5,7 @@ from scipy.signal import iirfilter, lfilter, convolve
 #from librosa.core import load as audio_load
 #import librosa.effects as eff
 from shutil import copyfile
-import os, random
+import os, random, sys
 import loadconfig
 import essentia.standard as ess
 import ConfigParser
@@ -17,11 +17,16 @@ cfg.read(config)
 
 #get values from config file
 SR =  cfg.getint('sampling', 'sr')
+AUGMENTATION_IN = sys.argv[1]
+AUGMENTATION_OUT = sys.argv[2]
+NUM_EXTENSIONS = sys.argv[3]
+'''
 AUGMENTATION_IN = cfg.get('augmentation', 'augmentation_in')
 AUGMENTATION_OUT = cfg.get('augmentation', 'augmentation_out')
 NUM_EXTENSIONS = cfg.getint('augmentation', 'num_extensions')
-IR_FOLDER = cfg.get('augmentation', 'IR_folder')
-NOISE_SAMPLE = cfg.get('augmentation', 'noise_sample')
+'''
+IR_FOLDER = cfg.get('augmentation', 'augmentation_IRs_path')
+NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_noisefloor_path')
 #get samples length
 temp_contents = os.listdir(AUGMENTATION_IN)
 in_file_name = AUGMENTATION_IN + '/' + temp_contents[0]
