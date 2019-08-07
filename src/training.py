@@ -337,7 +337,7 @@ def main():
     if generator:
         #del training_generator  #delete shuffled generator
         #build non shuffled generator
-        training_generator.reset()
+        training_generator = training_generator.reset()
         validation_generator.reset()
         test_generator.reset()
         train_score = best_model.evaluate_generator(training_generator, steps=len(training_target)/batch_size)
