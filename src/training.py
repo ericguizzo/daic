@@ -34,7 +34,7 @@ except IndexError:
     #nogenerator
     generator = False
     dataset = 'daic'
-    architecture = 'simple_CNN'
+    architecture = 'EXAMPLE_model_regression'
     parameters = ['niente = 0']
     task_type = 'regression'
     SAVE_MODEL = '../models/prova'
