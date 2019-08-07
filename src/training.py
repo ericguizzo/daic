@@ -307,9 +307,14 @@ def main():
     #if training with generator
     if generator:  #if loading one batch at time to GPU
         datagen = ImageDataGenerator()
-        training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size)
-        validation_generator = datagen.flow(validation_predictors, validation_target, batch_size=batch_size)
-        test_generator = datagen.flow(test_predictors, test_target, batch_size=batch_size)
+
+        training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size,
+                                                shuffle=shuffle_training_data)
+
+        validation_generator = datagen.flow(validation_predictors, validation_target, batch_size=batch_size,
+                                            shuffle=False)
+        test_generator = datagen.flow(test_predictors, test_target, batch_size=batch_size,
+                                      shuffle=False)
 
 
         history = locals()['model'].fit_generator(training_generator, validation_data=validation_generator,
@@ -332,6 +337,10 @@ def main():
     best_model = load_model(SAVE_MODEL)  #load best saved model
 
     if generator:
+        del training_generator  #delete shuffled generator
+        #build non shuffled generator
+        training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size,
+                                                shuffle=False)
         train_score = best_model.evaluate_generator(training_generator, steps=len(training_target)/batch_size)
         val_score = best_model.evaluate_generator(validation_generator, steps=len(validation_target)/batch_size)
         test_score = best_model.evaluate_generator(test_generator, steps=len(test_target)/batch_size)

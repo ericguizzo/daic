@@ -2,11 +2,11 @@ from __future__ import print_function
 from scipy.signal import iirfilter, butter, filtfilt, lfilter
 import essentia.standard as ess
 import essentia
-import configparser
 import librosa
 import numpy as np
 import os, sys
 import pandas
+import configparser
 import loadconfig
 
 config = loadconfig.load()
@@ -29,26 +29,7 @@ INPUT_TRANSCRIPTS_FOLDER =  cfg.get('preprocessing', 'input_transcripts_folder')
 OUTPUT_PREDICTORS_PATH = cfg.get('preprocessing', 'output_predictors')
 OUTPUT_TARGET_PATH = cfg.get('preprocessing', 'output_target')
 
-def preemphasis(input_vector, fs):
-    '''
-    2 simple high pass FIR filters in cascade to emphasize high frequencies
-    and cut unwanted low-frequencies
-    '''
-    #first gentle high pass
-    alpha=0.5
-    present = input_vector
-    zero = [0]
-    past = input_vector[:-1]
-    past = np.concatenate([zero,past])
-    past = np.multiply(past, alpha)
-    filtered1 = np.subtract(present,past)
-    #second 30 hz high pass
-    fc = 100.  # Cut-off frequency of the filter
-    w = fc / (fs / 2.) # Normalize the frequency
-    b, a = butter(8, w, 'high')
-    output = filtfilt(b, a, filtered1)
 
-    return output
 
 def extract_features(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE, fs=SR, window_type=WINDOW_TYPE):
     '''
@@ -70,7 +51,7 @@ def extract_features(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE, fs=SR, window_typ
 
     SP = essentia.array(SP)
     SP = np.power(SP, 2./3.)  #power law compression
-    SP = SP[:,:int(FFT_SIZE/4+1)]  #cut upper spectrum (above 4 khz)
+    SP = SP[:,:int(FFT_SIZE/2+1)]  #cut upper spectrum (above 4 khz)
 
     return SP
 
