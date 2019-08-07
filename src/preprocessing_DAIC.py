@@ -2,6 +2,7 @@ from __future__ import print_function
 from scipy.signal import iirfilter, butter, filtfilt, lfilter
 import essentia.standard as ess
 import essentia
+import utility_functions as uf
 import librosa
 import numpy as np
 import os, sys
@@ -284,7 +285,7 @@ def build_preprocessing_dicts(audio_folder, labels_dict, transcripts_dict):
             segments = cut_sound_file(sound_file, bounds_list, SEQUENCE_LENGTH, SEQUENCE_OVERLAP)
             #iterare every cut segment
             for cut in segments:
-                feats = preemphasis(cut, SR) #apply preemphasis
+                feats = uf.preemphasis(cut, SR) #apply preemphasis
                 feats = extract_features(feats)  #extract features
                 predictors[participant_ID].append(feats)
                 target[participant_ID].append(label)
