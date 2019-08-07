@@ -331,9 +331,12 @@ def main():
     if generator:
         #del training_generator  #delete shuffled generator
         #build non shuffled generator
-        train_score = best_model.evaluate_generator(training_generator, steps=len(training_target)/batch_size)
-        val_score = best_model.evaluate_generator(validation_generator, steps=len(validation_target)/batch_size)
-        test_score = best_model.evaluate_generator(test_generator, steps=len(test_target)/batch_size)
+        train_score = best_model.evaluate_generator(datagen.flow(training_predictors, training_target,
+                        batch_size=batch_size, shuffle=False), steps=len(training_target)/batch_size)
+        val_score = best_model.evaluate_generator(datagen.flow(validation_predictors, validation_target,
+                        batch_size=batch_size, shuffle=False), steps=len(validation_target)/batch_size)
+        test_score = best_model.evaluate_generator(datagen.flow(test_predictors, test_target,
+                        batch_size=batch_size, shuffle=False), steps=len(test_target)/batch_size)
 
         train_pred = best_model.predict_generator(datagen.flow(training_predictors, training_target,
                         batch_size=batch_size, shuffle=False), steps=len(training_target)/batch_size)
