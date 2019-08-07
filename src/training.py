@@ -307,21 +307,17 @@ def main():
     #if training with generator
     if generator:  #if loading one batch at time to GPU
         datagen = ImageDataGenerator()
-        '''
+
         training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size,
                                                 shuffle=shuffle_training_data)
-
         validation_generator = datagen.flow(validation_predictors, validation_target, batch_size=batch_size,
                                             shuffle=False)
         test_generator = datagen.flow(test_predictors, test_target, batch_size=batch_size,
                                       shuffle=False)
-        '''
 
-
-        history = locals()['model'].fit_generator(datagen.flow(training_predictors, training_target, batch_size=batch_size,
-                    shuffle=shuffle_training_data), validation_data=datagen.flow(validation_predictors, validation_target, batch_size=batch_size,
-                    shuffle=False), validation_steps=len(validation_target)/batch_size, callbacks=callbacks_list,
-                    steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs, shuffle=shuffle_training_data)
+        history = locals()['model'].fit_generator(training_generator, validation_data=validation_generator,
+                                validation_steps=len(validation_target)/batch_size, callbacks=callbacks_list,
+                                steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs, shuffle=False)
 
     else:  #if loading all dataset to GPU
         history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
@@ -339,7 +335,7 @@ def main():
     best_model = load_model(SAVE_MODEL)  #load best saved model
 
     if generator:
-        del training_generator  #delete shuffled generator
+        #del training_generator  #delete shuffled generator
         #build non shuffled generator
         training_generator = datagen.flow(training_predictors, training_target, batch_size=batch_size,
                                                 shuffle=False)
