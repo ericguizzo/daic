@@ -100,6 +100,6 @@ To augment a dataset run the augmentation script with the following arguments:
 
 Example:
 ```python
-run dataset_augmentation_soft.py 'dataset/original' '/dataset/augmented' 5  
+run augmentation.py 'dataset/original' '/dataset/augmented' 5  
 ```
 This code takes all mono wav files present in '/dataset/original/', generates 5 augmented samples for each file and saves them, alongside with a normalized copy of the original, in '/dataset/augmented'
