@@ -85,11 +85,14 @@ target_dict['1': matrix with all labels of actor 1,
 ```
 
 ## AUGMENTATION
-The augmentation script applies random transformations in random order to audio files. The transformations are:
+The augmentation script applies random transformations in random order to audio files. Audio files should be mono '.wav' sounds of any sample rate. This script loads 1 audio file containing a background noise sample (wav) and 1 folder containing reverb impuls responses (also (wav). The path to these information should be defined in the config.ini file in the [augmentation] section
+
+The transformations are:
 * Adding background noise
 * Random eq
 * Random reverb
 * Random time stretch
+
 To augment a dataset run the augmentation script with the following arguments:
 1. input folder
 2. output folder
