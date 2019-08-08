@@ -18,6 +18,42 @@ cfg.read(config)
 
 SR = cfg.getint('sampling', 'sr_target')
 
+tol = 1e-14    # threshold used to compute phase
+
+INT16_FAC = (2**15)-1
+INT32_FAC = (2**31)-1
+INT64_FAC = (2**63)-1
+norm_fact = {'int16':INT16_FAC, 'int32':INT32_FAC, 'int64':INT64_FAC,'float32':1.0,'float64':1.0}
+
+def isPower2(num):
+    #taken from Xavier Serra's sms tools
+    """
+    Check if num is power of two
+    """
+    return ((num & (num - 1)) == 0) and num > 0
+
+def wavread(file_name):
+    #taken from Xavier Serra's sms tools
+    '''
+    read wav file and converts it from int16 to float32
+    '''
+    sr, samples = read(file_name)
+    samples = np.float32(samples)/norm_fact[samples.dtype.name] #float conversion
+
+    return sr, samples
+
+def wavwrite(y, fs, filename):
+    #taken from Xavier Serra's sms tools
+    """
+    Write a sound file from an array with the sound and the sampling rate
+    y: floating point array of one dimension, fs: sampling rate
+    filename: name of file to create
+    """
+    x = copy.deepcopy(y)                         # copy array
+    x *= INT16_FAC                               # scaling floating point -1 to 1 range signal to int16 range
+    x = np.int16(x)                              # converting to int16 type
+    write(filename, fs, x)
+
 def print_bar(index, total):
     perc = int(index / total * 20)
     perc_progress = int(np.round((float(index)/total) * 100))

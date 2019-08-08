@@ -1,44 +1,58 @@
 import numpy as np
-import utilities_func as uf
+import utility_functions as uf
 from scipy import signal
 from scipy.signal import iirfilter, lfilter, convolve
 #from librosa.core import load as audio_load
 #import librosa.effects as eff
+import librosa
 from shutil import copyfile
 import os, random, sys
 import loadconfig
 import essentia.standard as ess
-import ConfigParser
+import configparser
 import matplotlib.pyplot as plt
 
 config = loadconfig.load()
-cfg = ConfigParser.ConfigParser()
+cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
-SR =  cfg.getint('sampling', 'sr')
+SR =  cfg.getint('sampling', 'sr_target')
 AUGMENTATION_IN = sys.argv[1]
 AUGMENTATION_OUT = sys.argv[2]
-NUM_EXTENSIONS = sys.argv[3]
+NUM_EXTENSIONS = int(sys.argv[3])
 '''
 AUGMENTATION_IN = cfg.get('augmentation', 'augmentation_in')
 AUGMENTATION_OUT = cfg.get('augmentation', 'augmentation_out')
 NUM_EXTENSIONS = cfg.getint('augmentation', 'num_extensions')
 '''
 IR_FOLDER = cfg.get('augmentation', 'augmentation_IRs_path')
-NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_noisefloor_path')
+NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_backgroundnoise_path')
 #get samples length
 temp_contents = os.listdir(AUGMENTATION_IN)
+temp_contents = list(filter(lambda x: '.wav' in x, temp_contents))
 in_file_name = AUGMENTATION_IN + '/' + temp_contents[0]
-global_sr, temp_wav = uf.wavread(in_file_name)
+global_sr, dummy = uf.wavread(in_file_name)
+
 
 #load background noise sample
 print ("loading background noise sample...")
 
 #background_noise1, nsr = audio_load(NOISE_SAMPLE, sr=SR)
-noise_loader = ess.EasyLoader(filename=NOISE_SAMPLE, sampleRate=SR)
+noise_loader = ess.EasyLoader(filename=NOISE_SAMPLE, sampleRate=global_sr)
 background_noise = noise_loader()
 
+def notch_filter(band, cutoff, ripple, rs, sr=global_sr, order=2, filter_type='cheby2'):
+    #creates chebyshev polynomials for a notch filter with given parameters
+    nyq  = sr/2.0
+    low  = cutoff - band/2.0
+    high = cutoff + band/2.0
+    low  = low/nyq
+    high = high/nyq
+    w0 = cutoff/(sr/2)
+    a, b = iirfilter(order, [low, high], rp=ripple, rs=rs, btype='bandstop', analog=False, ftype=filter_type)
+
+    return a, b
 
 def bg_noise(vector_signal, dur):
     tmp_noise = np.array([])
@@ -51,14 +65,14 @@ def bg_noise(vector_signal, dur):
     rand_start = np.random.randint(max_bound)  #random position in noise sample
     noise_chunk = np.array(tmp_noise[:dur])  #extract noise chunk
 
-    wet_gain = ((np.random.random_sample()*0.5)+0.5) * 0.3
+    wet_gain = ((np.random.random_sample()*0.5)+0.5) * 0.25
     dry_gain = 1.0 - wet_gain
     mix_output = np.add(vector_signal*dry_gain, noise_chunk*wet_gain)
 
     return mix_output
 
 
-def random_eq(vector_signal, dur, sr=SR):
+def random_eq(vector_signal, dur, sr=global_sr):
     #applies random filtering to an input vetor using chebyshev notch filters
     num_filters = np.random.randint(1,4)
 
@@ -118,10 +132,10 @@ def random_eq(vector_signal, dur, sr=SR):
     rs = 10
 
     #construct chebyshev notch filters
-    a, b = uf.notch_filter(band1,cutoff1,ripple, rs, order=order1)
-    c, d = uf.notch_filter(band2,cutoff2,ripple, rs, order=order2)
-    e, f = uf.notch_filter(band3,cutoff3,ripple, rs, order=order3)
-    g, h = uf.notch_filter(band4,cutoff4,ripple, rs, order=order4)
+    a, b = notch_filter(band1,cutoff1,ripple, rs, order=order1)
+    c, d = notch_filter(band2,cutoff2,ripple, rs, order=order2)
+    e, f = notch_filter(band3,cutoff3,ripple, rs, order=order3)
+    g, h = notch_filter(band4,cutoff4,ripple, rs, order=order4)
 
     #randomly concatenate 1,2,3 or 4 filters
     if num_filters == 1:
@@ -183,11 +197,11 @@ def random_rev(vector_signal, dur):
     convoluted = convoluted/np.max(np.abs(convoluted))  #normalization
     convoluted_signal = convoluted[:dur]  #cut the tail of the convoluted sound
     #mix dry and wet signals
-    wet_gain = ((np.random.random_sample()*0.5)+0.5) * 0.15
+    wet_gain = ((np.random.random_sample()*0.5)+0.5) * 0.08
     dry_gain = 1.0 - wet_gain
     mix_output = np.add(vector_signal*dry_gain, convoluted_signal*wet_gain)
 
-    return convoluted_signal
+    return mix_output
 
 
 
@@ -230,16 +244,16 @@ def extend_datapoint(file_name, output_dir=AUGMENTATION_OUT, num_extensions=1, s
 
         if num_nodes == 1:
             exec(node1)
-            vector_output = node1_out
+            vector_output = locals()['node1_out']
         if num_nodes == 2:
             exec(node1)
             exec(node2)
-            vector_output = node2_out
+            vector_output = locals()['node2_out']
         if num_nodes == 3:
             exec(node1)
             exec(node2)
             exec(node3)
-            vector_output = node3_out
+            vector_output = locals()['node3_out']
 
         if rev_prob == 1:
             vector_output = random_rev(vector_output, dur=DUR)
@@ -249,7 +263,8 @@ def extend_datapoint(file_name, output_dir=AUGMENTATION_OUT, num_extensions=1, s
         '''
 
         #output_normalization
-        vactor_output = np.divide(vector_output, np.max(vector_output))
+        vector_output = np.divide(vector_output, np.max(vector_output))
+        vector_output = np.multiply(vector_output, 0.99)
         #formatting strings to print
         success_string = sound_string + ' augmented: ' + str(new_sound+1)  #describe last prcessed sound
         infolder_num_files = status[0]  #number of input files to extend
@@ -260,35 +275,32 @@ def extend_datapoint(file_name, output_dir=AUGMENTATION_OUT, num_extensions=1, s
         status_string = 'status: ' + str(perc_progress) + '% | ' + 'processed files: ' + str(current_processed_file) + '/' + str(total_num_files)  #format progress string
 
         sound_name = sound_name.split('.')[0]
-        output_file_name = output_dir + '/' + sound_name + '.' + str(random_appendix) + '_augmented_' + str(new_sound+1) + '.mp4.wav'  #build output file name
+        output_file_name = output_dir + '/' + sound_name + '.' + '.augmented_' + str(new_sound+1) + '.mp4.wav'  #build output file name
         uf.wavwrite(vector_output, global_sr, output_file_name)   #create output file
         #print progress and status strings
         print(success_string)
         print(status_string)
 
 
-def extend_dataset(num_extensions, input_dir=AUGMENTATION_IN, output_dir=AUGMENTATION_OUT):
+def main(num_extensions, input_dir, output_dir):
     #creates alternative versions of sounds of an entire dataset trying to keep the chaos/order feature
     contents = os.listdir(input_dir)
-    num_sounds = []
-    for file in contents:
-        if file[-3:] == "wav":
-            num_sounds.append(file)
+
+    num_sounds = len(list(filter(lambda x: x[-3:] == "wav", contents)))
 
     count = 0  #processed input files count
     for file in os.listdir(input_dir):
-
         if file[-3:] == "wav": #takes just .wav files
-            orig_ID = np.random.randint(1,len(num_sounds))
-            copyfile(input_dir + '/' + file, output_dir + file)
-            file_name = input_dir + '/' + file  #construct file_name string
-            status = [len(num_sounds), count]  #pass to extend_datapoint() input folder numsounds and current precessei infiles count
-
-            extend_datapoint(file_name=file_name, output_dir=output_dir, num_extensions=num_extensions, status=status)  #create extension files
+            in_file = os.path.join(input_dir, file )
+            output_filename = file.split('.')[0] + '.original.wav'
+            out_file = os.path.join(output_dir, output_filename)
+            copyfile(in_file, out_file)
+            status = [num_sounds, count]  #pass to extend_datapoint() input folder numsounds and current precessei infiles count
+            extend_datapoint(file_name=in_file, output_dir=output_dir, num_extensions=num_extensions, status=status)  #create extension files
 
             count = count + 1  #progress input files count
 
-    print('Dataset successfully augmented from ' + str(len(num_sounds)) + ' to ' + str((len(num_sounds) * num_extensions)+len(num_sounds)) + ' sounds')
+    print('Dataset successfully augmented from ' + str(num_sounds) + ' to ' + str(num_sounds * num_extensions + num_sounds) + ' sounds')
 
 if __name__ == '__main__':
-    extend_dataset(num_extensions=NUM_EXTENSIONS)
+    main(NUM_EXTENSIONS, AUGMENTATION_IN, AUGMENTATION_OUT)
