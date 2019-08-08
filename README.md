@@ -17,6 +17,7 @@ of multiple keras/pytorch trainings and automatically collect the results in a c
 * results_to_excel: computes the spreadsheets.
 * preprocessing_DATASET: processes audio data building the features matrices calling the script feat_analysis.
 * feat_analysis: contains the feature extraction functions: STFT and MFCC.
+* augmentation: applies augmentation to audio data
 * config.ini: This config file contains mainly I/O folder paths and defaults parameters for the training.
 
 
@@ -82,3 +83,20 @@ predictors_dict['1': matrix with all spectra of actor 1,
 target_dict['1': matrix with all labels of actor 1,
             '2': matrix with all labels of actor 1]
 ```
+
+## AUGMENTATION
+The augmentation script applies random transformations in random order to audio files. The transformations are:
+* Adding background noise
+* Random eq
+* Random reverb
+* Random time stretch
+To augment a dataset run the augmentation script with the following arguments:
+1. input folder
+2. output folder
+3. number of generated augmented samples for every input file
+
+Example:
+```python
+run dataset_augmentation_soft.py 'dataset/original' '/dataset/augmented' 5  
+```
+This code takes all mono wav files present in '/dataset/original/', generates 5 augmented samples for each file and saves them, alongside with a normalized copy of the original, in '/dataset/augmented'
