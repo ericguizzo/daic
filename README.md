@@ -115,10 +115,30 @@ The data description algorithm computes the following audio descriptors for ever
 * Duration cutting initial and final silence
 * Yell factor (describes hou much a person is speaking loud)
 
-To use this script run it with the following 2 arguments:
+To use this script run it with the following 2 positional arguments:
 1. Input folder
 2. Output name of the generated dictionary
+
 Example:
 ```python
 run data_description.py '..dataset/ravdess/audio_data' '../dataset/dataset_descriptions/ravdess_description.npy'  
+```
+
+The output dictionary will have one key for each audio file, containing all descriptors.
+
+Example
+```python
+{'03-01-01-01-01-02-08.wav': {'mean_hfc': 0.0663644,
+  'std_hfc': 0.083298385,
+  'mean_centroid': 1102.4412,
+  'std_centroid': 1137.6855,
+  'mean_energy': 0.00010976361,
+  'std_energy': 0.00012627964,
+  'mean_F0': 358.17438,
+  'std_F0': 47.01472,
+  'mean_yell_factor': 0.041032843,
+  'std_yell_factor': 0.063268915,
+  'perc_salience': 0.9390243902439024,
+  'dur': 88794,
+  'dur_stripped': 42496}}  
 ```
