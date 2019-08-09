@@ -110,7 +110,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
     #FINALLY, ALWAYS RETURN BOTH THE MODEL AND THE PARAMETERS DICT
     return model, p
-```python
+```
 
 
 ## PREPROCESSING
