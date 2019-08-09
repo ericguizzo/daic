@@ -11,8 +11,11 @@ config = loadconfig.load()
 cfg = configparser.ConfigParser()
 cfg.read(config)
 
-in_folder = sys.argv[1]
-out_file = sys.argv[2]
+try:
+    in_folder = sys.argv[1]
+    out_file = sys.argv[2]
+except IndexError:
+    pass
 
 #get values from config file
 WINDOW_SIZE = cfg.getint('stft', 'window_size')
@@ -167,7 +170,7 @@ def process_sound(soundfile):
 
     return description
 
-def main(in_folder):
+def main(in_folder, out_file):
     contents = os.listdir(in_folder)
     contents = list(filter(lambda x: '.wav' in x, contents))
     dataset_description = {}
@@ -183,4 +186,4 @@ def main(in_folder):
 
 
 if __name__ == '__main__':
-    main(in_folder)
+    main(in_folder, out_file)
