@@ -78,7 +78,7 @@ To define a model simply write a function containing the model and put in in the
 #time_dim
 #features_dim
 #user_parameters
-def EXAMPLE_model_classification(time_dim, features_dim, user_parameters=['niente = 0']):
+def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
     to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the xval_routine script
