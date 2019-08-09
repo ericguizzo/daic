@@ -7,7 +7,6 @@ from scipy.io.wavfile import read, write
 from scipy.fftpack import fft
 from scipy.signal import iirfilter, butter, filtfilt, lfilter
 from shutil import copyfile
-from librosa.effects import split
 import librosa
 import configparser
 import loadconfig
@@ -136,6 +135,14 @@ def find_longest_audio(input_folder):
     max_file_length = (max_file_length + 10 )/ float(sr)
 
     return max_file_length, sr
+
+def strip_silence(input_vector, threshold=35):
+    split_vec = librosa.effects.split(input_vector, top_db = threshold)
+    onset = split_vec[0][0]
+    offset = split_vec[-1][-1]
+    cut = input_vector[onset:offset]
+
+    return cut
 
 def preemphasis(input_vector, fs):
     '''
