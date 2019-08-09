@@ -127,17 +127,8 @@ elif task_type == 'regression':
 else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
 
-
 #path for saving best val loss and best val acc models
 BVL_model_path = SAVE_MODEL + '.hdf5'
-
-#define optimizer ADD HERE DIFFERENT OPTIMIZERS!!!!!!!
-if optimizer == 'adam':
-    opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-elif optimizer == 'sgd':
-    opt.optimizers.SGD(lr=learning_rate)
-else:
-    raise ValueError('Bad optimizer chosen')
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
@@ -148,6 +139,15 @@ try:
 
 except IndexError:
     pass
+
+
+#define optimizer ADD HERE DIFFERENT OPTIMIZERS!!!!!!!
+if optimizer == 'adam':
+    opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+elif optimizer == 'sgd':
+    opt.optimizers.SGD(lr=learning_rate)
+else:
+    raise ValueError('Bad optimizer chosen')
 
 #build dict with all UPDATED training parameters
 training_parameters = {'train_split': train_split,
