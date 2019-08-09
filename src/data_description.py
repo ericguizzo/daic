@@ -174,10 +174,15 @@ def main(in_folder, out_file):
     contents = os.listdir(in_folder)
     contents = list(filter(lambda x: '.wav' in x, contents))
     dataset_description = {}
+    num_sounds = len(contents)
+    i = 1
+    print ('Computing dataset description:')
     for sound in contents:
         soundfile = os.path.join(in_folder, sound)
         description = process_sound(soundfile)
         dataset_description[sound] = description
+        uf.print_bar(i, num_sounds)
+        i += 1
 
     np.save(out_file, dataset_description)
 
