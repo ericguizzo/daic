@@ -18,6 +18,7 @@ of multiple keras/pytorch trainings and automatically collect the results in a c
 * preprocessing_DATASET: processes audio data building the features matrices calling the script feat_analysis.
 * feat_analysis: contains the feature extraction functions: STFT and MFCC.
 * augmentation: applies augmentation to audio data
+* gen_data_description: computes a dictionary containing audio descriptors of every sample of a dataset.
 * config.ini: This config file contains mainly I/O folder paths and defaults parameters for the training.
 
 
@@ -103,3 +104,21 @@ Example:
 run augmentation.py 'dataset/original' '/dataset/augmented' 5  
 ```
 This code takes all mono wav files present in '/dataset/original/', generates 5 augmented samples for each file and saves them, alongside with a normalized copy of the original, in '/dataset/augmented'
+
+## GEN_DATA_DESCRIPTION
+The data description algorithm computes the following audio descriptors for every wav file contained in a folder:
+* High frequency content
+* Spectral centroid
+* Pitch
+* Pitch salience percentage (how much is present silence in a file)
+* Duration
+* Duration cutting initial and final silence
+* Yell factor (describes hou much a person is speaking loud)
+
+To use this script run it with the following 2 arguments:
+1. Input folder
+2. Output name of the generated dictionary
+Example:
+```python
+run data_description.py '..dataset/ravdess/audio_data' '../dataset/dataset_descriptions/ravdess_description.npy'  
+```
