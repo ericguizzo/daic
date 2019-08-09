@@ -71,7 +71,45 @@ python3 xval_instance_ravdess_exp1 3 7 1
 The above code runs instances between 3 and 7 of experiment 1 in the GPU number 1
 
 ## CUSTOM MODELS DEFINITION
-To define a model follow the instructions written in define_models.EXAMPLE_model()
+To define a model simply write a function containing the model and put in in the define_models script. Then you can call your custom model as a simple parameter in the xval_routine script. You must use a predefined structure as in the following example:
+
+```python
+#ALL MODEL FUNCTIONS SHOULD HAVE THESE 3 INPUT PARAMETERS:
+#time_dim
+#features_dim
+#user_parameters
+def EXAMPLE_model_classification(time_dim, features_dim, user_parameters=['niente = 0']):
+    '''
+    to use this model, simply call architecture=EXAMPLE_model as a parameter
+    in the xval_routine script
+    '''
+    #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL AS KEYS OF A DICT
+    #default parameters
+    p = {
+    'regularization_lambda': 0.1,
+    'kernel_size_1': [16, 12],
+    'conv1_depth': 20,
+    'hidden_size': 200}
+
+    reg = regularizers.l2(p['regularization_lambda'])
+
+    #THEN CALL PARSE_PAREMETERS TO OVERWRITE DEFAULT PARAMETERS
+    #WITH THE PARAMETERS DEFINED IN THE xval_routine SCRIPT
+    p = parse_parameters(p, user_parameters)
+
+    #DECLARE YOUR ARCHITECTURE
+    input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
+    conv_1 = Convolution2D(p['conv1_depth'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
+    flat = Flatten()(conv_1)
+    drop_1 = Dropout(p['drop_prob'])(flat)
+    hidden = Dense(p['hidden_size'], activation='tanh', kernel_regularizer=reg)(drop_1)
+    out = Dense(8, activation='softmax')(hidden)
+
+    model = Model(inputs=input_data, outputs=out)
+
+    #FINALLY ALWAYS RETURN BOTH THE MODEL AND THE PARAMETERS DICT
+    return model, p
+```python
 
 
 ## PREPROCESSING
@@ -126,7 +164,7 @@ run data_description.py '..dataset/ravdess/audio_data' '../dataset/dataset_descr
 
 The output dictionary will have one key for each audio file, containing all descriptors.
 
-Example
+Example:
 ```python
 {'03-01-01-01-01-02-08.wav': {'mean_hfc': 0.0663644,
   'std_hfc': 0.083298385,
