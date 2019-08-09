@@ -98,6 +98,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
     p = parse_parameters(p, user_parameters)
 
     #DECLARE YOUR ARCHITECTURE
+    #input dims should be time_dim and features_dim
     input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
     conv_1 = Convolution2D(p['conv1_depth'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
     flat = Flatten()(conv_1)
@@ -107,7 +108,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
     model = Model(inputs=input_data, outputs=out)
 
-    #FINALLY ALWAYS RETURN BOTH THE MODEL AND THE PARAMETERS DICT
+    #FINALLY, ALWAYS RETURN BOTH THE MODEL AND THE PARAMETERS DICT
     return model, p
 ```python
 
