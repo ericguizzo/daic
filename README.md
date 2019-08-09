@@ -93,7 +93,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
     reg = regularizers.l2(p['regularization_lambda'])
 
-    #THEN CALL PARSE_PAREMETERS TO OVERWRITE DEFAULT PARAMETERS
+    #THEN CALL parse_parameters() TO OVERWRITE DEFAULT PARAMETERS
     #WITH THE PARAMETERS DEFINED IN THE xval_routine SCRIPT
     p = parse_parameters(p, user_parameters)
 
