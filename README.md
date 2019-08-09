@@ -106,6 +106,7 @@ def EXAMPLE_model(time_dim, features_dim, user_parameters=['niente = 0']):
     hidden = Dense(p['hidden_size'], activation='tanh', kernel_regularizer=reg)(drop_1)
     out = Dense(8, activation='softmax')(hidden)
 
+    #INSTANTIATE THE MODEL
     model = Model(inputs=input_data, outputs=out)
 
     #FINALLY, ALWAYS RETURN BOTH THE MODEL AND THE PARAMETERS DICT
