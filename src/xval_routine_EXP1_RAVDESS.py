@@ -28,25 +28,25 @@ experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 experiment = {}
 experiment[1] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.00001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.00001"', 'output_classes=7']
+                 'regularization_lambda="0.00001"', 'output_classes=8']
 experiment[2] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.0001"', 'output_classes=7']
+                 'regularization_lambda="0.0001"', 'output_classes=8']
 experiment[3] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0003"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.0003"', 'output_classes=7']
+                 'regularization_lambda="0.0003"', 'output_classes=8']
 experiment[4] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0006"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.0006"', 'output_classes=7']
+                 'regularization_lambda="0.0006"', 'output_classes=8']
 experiment[5] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.001"', 'output_classes=7']
+                 'regularization_lambda="0.001"', 'output_classes=8']
 experiment[6] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.003"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.003"', 'output_classes=7']
+                 'regularization_lambda="0.003"', 'output_classes=8']
 experiment[7] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.005"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.005"', 'output_classes=7']
+                 'regularization_lambda="0.005"', 'output_classes=8']
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
