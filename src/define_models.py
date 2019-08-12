@@ -161,6 +161,45 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'output_classes': 7
     }
 
+    input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
+
+    conv_1 = Conv2D(p['depth_1'], kernel_size=p['kernel_size_1'],strides=(4,4), padding='valid', activation='relu')(input_data)
+    norm_1 = BatchNormalization()(conv_1)
+
+    conv_2 = Conv2D(p['depth_2'], kernel_size=p['kernel_size_2'],strides=(1,1), padding='valid', activation='relu')(norm_1)
+    pool_2 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_2)
+    norm_2 = BatchNormalization()(pool_2)
+
+    conv_3 = Conv2D(p['depth_3'], kernel_size=p['kernel_size_3'],strides=(1,1), padding='valid', activation='relu')(norm_2)
+    norm_3 = BatchNormalization()(conv_3)
+
+    conv_4 = Conv2D(p['depth_4'], kernel_size=p['kernel_size_4'],strides=(1,1), padding='valid', activation='relu')(norm_3)
+    norm_4 = BatchNormalization()(conv_4)
+
+    conv_5 = Conv2D(p['depth_5'], kernel_size=p['kernel_size_5'],strides=(1,1), padding='valid', activation='relu')(norm_4)
+    pool_5 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_5)
+    norm_5 = BatchNormalization()(pool_5)
+
+    flat = Flatten()(norm_5)
+
+    hidden_1 = Dense(p['hidden_size_1'], activation='relu')(flat)
+    drop_1 = Dropout(p['drop_prob'])(hidden_1)
+    norm_6 = BatchNormalization()(drop_1)
+
+    hidden_2 = Dense(p['hidden_size_2'], activation='relu')(norm_6)
+    drop_2 = Dropout(p['drop_prob'])(hidden_2)
+    norm_7 = BatchNormalization()(drop_2)
+
+    hidden_3 = Dense(p['hidden_size_3'], activation='relu')(norm_7)
+    drop_3 = Dropout(p['drop_prob'])(hidden_3)
+    norm_8 = BatchNormalization()(drop_3)
+
+    out = Dense(p['output_classes'], activation='softmax')(norm_8)
+
+    model = Model(inputs=input_data, outputs=out)
+
+
+    '''
     # (3) Create a sequential model
     model = Sequential()
 
@@ -186,7 +225,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model.add(Activation('relu'))
     # Batch Normalisation
     model.add(BatchNormalization())
-    '''
+
 
     # 4th Convolutional Layer
     model.add(Conv2D(filters=p['depth_4'], kernel_size=p['kernel_size_4'], strides=(1,1), padding='valid'))
@@ -201,7 +240,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model.add(MaxPooling2D(pool_size=p['pool_size'], strides=p['pool_size'], padding='valid'))
     # Batch Normalisation
     model.add(BatchNormalization())
-    '''
+
 
     # Passing it to a dense layer
     model.add(Flatten())
@@ -233,6 +272,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     # Output Layer
     model.add(Dense(p['output_classes']))
     model.add(Activation('softmax'))
+    '''
 
     return model
 
