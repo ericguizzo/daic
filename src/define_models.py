@@ -4,7 +4,7 @@ import configparser
 import matplotlib.pyplot as plt
 import keras.backend as k
 from keras.models import Model, Sequential
-from keras.layers import Input, Convolution2D, Conv2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
+from keras.layers import Input, Convolution2D, Conv2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape, Concatenate
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint, History
 from keras.utils import np_utils
@@ -268,9 +268,12 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     pool_4 = MaxPooling2D(pool_size=pool_size_4)(conv_4)
     flat_4 = Flatten()(pool_4)
 
+    '''
     X = k.concatenate((flat_1,flat_2))
     X = k.concatenate((X,flat_3))
     X = k.concatenate((X,flat_4))
+    '''
+    X = Concatenate()([flat_1,flat_2,flat_3,flat_4])
 
     drop_1 = Dropout(p['drop_prob'])(X)
     hidden_1 = Dense(p['hidden_size_1'], activation='relu')(drop_1)
