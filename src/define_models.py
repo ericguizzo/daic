@@ -233,10 +233,10 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     F4 = p['kernel_size_4'][0] * p['kernel_size_4'][1]
     K = p['depth']
 
-    p1 = K*((W-F1+(2*P))/S+1)
-    p2 = K*((W-F2+(2*P))/S+1)
-    p3 = K*((W-F3+(2*P))/S+1)
-    p4 = K*((W-F4+(2*P))/S+1)
+    p1 = K*((W-F1+(2*P))/S+1) / 2
+    p2 = K*((W-F2+(2*P))/S+1) / 2
+    p3 = K*((W-F3+(2*P))/S+1) / 2
+    p4 = K*((W-F4+(2*P))/S+1) / 2
 
     pool_size_1 = [p1,p1]
     pool_size_2 = [p2,p2]
