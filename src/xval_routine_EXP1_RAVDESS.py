@@ -28,7 +28,7 @@ experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 experiment = {}
 experiment[1] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.00001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.00001"', 'output_classes=8']
+                 'regularization_lambda="0.00001"', 'output_classes=5']
 experiment[2] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0001"', 'comment_2="AlexNet"',
                  'regularization_lambda="0.0001"', 'output_classes=8']
