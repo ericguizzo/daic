@@ -231,7 +231,7 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     F2 = p['kernel_size_2'][0] * p['kernel_size_2'][1]
     F3 = p['kernel_size_3'][0] * p['kernel_size_3'][1]
     F4 = p['kernel_size_4'][0] * p['kernel_size_4'][1]
-    K = p['depth_1']
+    K = p['depth']
 
     p1 = K*((W-F1+(2*P))/S+1)
     p2 = K*((W-F2+(2*P))/S+1)
