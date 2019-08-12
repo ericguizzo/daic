@@ -225,10 +225,10 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
 
     #compute pooling parameters as in paper
 
-    pool_size_1 = [int((time_dim-p['kernel_size_1'][0])/2), int((time_dim-p['kernel_size_1'][1])/2)]
-    pool_size_2 = [int((time_dim-p['kernel_size_2'][0])/2), int((time_dim-p['kernel_size_2'][1])/2)]
-    pool_size_3 = [int((time_dim-p['kernel_size_3'][0])/2), int((time_dim-p['kernel_size_3'][1])/2)]
-    pool_size_4 = [int((time_dim-p['kernel_size_4'][0])/2), int((time_dim-p['kernel_size_4'][1])/2)]
+    pool_size_1 = [int((time_dim-p['kernel_size_1'][0])/2), int((features_dim-p['kernel_size_1'][1])/2)]
+    pool_size_2 = [int((time_dim-p['kernel_size_2'][0])/2), int((features_dim-p['kernel_size_2'][1])/2)]
+    pool_size_3 = [int((time_dim-p['kernel_size_3'][0])/2), int((features_dim-p['kernel_size_3'][1])/2)]
+    pool_size_4 = [int((time_dim-p['kernel_size_4'][0])/2), int((features_dim-p['kernel_size_4'][1])/2)]
 
     '''
     pool_size_1 = [76,121]
