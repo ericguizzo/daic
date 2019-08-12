@@ -234,6 +234,8 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model.add(Dense(p['output_classes']))
     model.add(Activation('softmax'))
 
+    return model
+
 
 if __name__ == '__main__':
     main()
