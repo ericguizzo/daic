@@ -217,7 +217,7 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     'kernel_size_4': [30,40],
     'depth': 200,
     'hidden_size_1': 400 ,
-    'hidden_size_2': 200,
+    'hidden_size_2': 1,
     'drop_prob': 0.5
 
     }
