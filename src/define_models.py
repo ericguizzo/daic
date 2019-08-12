@@ -237,11 +237,17 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     p2 = K*((W-F2+(2*P))/S+1) / 2
     p3 = K*((W-F3+(2*P))/S+1) / 2
     p4 = K*((W-F4+(2*P))/S+1) / 2
-
+    '''
     pool_size_1 = [p1,p1]
     pool_size_2 = [p2,p2]
     pool_size_3 = [p2,p2]
     pool_size_4 = [p2,p2]
+    '''
+
+    pool_size_1 = [8,8]
+    pool_size_2 = [7,7]
+    pool_size_3 = [6,6]
+    pool_size_4 = [5,5]
 
     input_data = Input(shape=(time_dim, features_dim, 1))
 
