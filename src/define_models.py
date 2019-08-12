@@ -2,6 +2,7 @@ from __future__ import print_function
 import numpy as np
 import configparser
 import matplotlib.pyplot as plt
+import keras.backend as k
 from keras.models import Model, Sequential
 from keras.layers import Input, Convolution2D, Conv2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
 from keras.layers.normalization import BatchNormalization
@@ -201,6 +202,80 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
 
     return model, p
 
+def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
+    '''
+    https://pdfs.semanticscholar.org/810d/2a659a599572825d62dbabf28d233ce0d8b1.pdf
+    '''
+    # K*((W−F+2P)/S+1), where W - input volume size, F the receptive field size of the
+    #Conv Layer neurons, S - the stride with which they are applied,
+    #P - the amount of zero padding used on the border, K - the depth of conv layer.
 
-if __name__ == '__main__':
-    main()
+    p = {
+    'kernel_size_1': [12,16],
+    'kernel_size_2': [18,24],
+    'kernel_size_3': [24,32],
+    'kernel_size_4': [30,40],
+    'depth': 200,
+    'hidden_size_1': 400 ,
+    'hidden_size_2': 200,
+    'drop_prob_1': 0.5
+
+    }
+    p = parse_parameters(p, user_parameters)
+
+    #compute pooling parameters as in paper
+    W = time_dim * features_dim
+    S = 1
+    P = 0
+    F1 = p['kernel_size_1'][0] * p['kernel_size_1'][1]
+    F2 = p['kernel_size_2'][0] * p['kernel_size_2'][1]
+    F3 = p['kernel_size_3'][0] * p['kernel_size_3'][1]
+    F4 = p['kernel_size_4'][0] * p['kernel_size_4'][1]
+    K = p['depth_1']
+
+    p1 = K*((W-F1+2P))/S+1
+    p2 = K*((W-F2+2P))/S+1
+    p3 = K*((W-F3+2P))/S+1
+    p4 = K*((W-F4+2P))/S+1
+
+    pool_size_1 = [p1,p1]
+    pool_size_2 = [p2,p2]
+    pool_size_3 = [p2,p2]
+    pool_size_4 = [p2,p2]
+
+    input_data = Input(shape=(time_dim, features_dim, 1))
+
+    #parallel convs
+    conv_1 = Conv2D(p['depth'], kernel_size=p['kernel_size_1'], activation='relu')(input_data)
+    pool_1 = MaxPooling2D(pool_size=pool_size_1)(conv_1)
+    flat_1 = Flatten()(pool_1)
+
+    conv_2 = Conv2D(p['depth'], kernel_size=p['kernel_size_2'], activation='relu')(input_data)
+    pool_2 = MaxPooling2D(pool_size=pool_size_2)(conv_2)
+    flat_2 = Flatten()(pool_2)
+
+    conv_3 = Conv2D(p['depth'], kernel_size=p['kernel_size_3'], activation='relu')(input_data)
+    pool_3 = MaxPooling2D(pool_size=pool_size_3)(conv_3)
+    flat_3 = Flatten()(pool_3)
+
+    conv_4 = Conv2D(p['depth'], kernel_size=p['kernel_size_4'], activation='relu')(input_data)
+    pool_4 = MaxPooling2D(pool_size=pool_size_4)(conv_4)
+    flat_4 = Flatten()(pool_4)
+
+    X = k.concatenate((flat_1,flat_2))
+    X = k.concatenate((X,flat_3))
+    X = k.concatenate((X,flat_4))
+
+    drop_1 = Dropout(p['drop_prob'])(X)
+    hidden_1 = Dense(p['hidden_size_1'], activation='relu')(drop_1)
+    drop_2 = Dropout(p['drop_prob'])(hidden_1)
+    norm_1 = BatchNormalization()(drop_2)
+
+    hidden_2 = Dense(p['hidden_size_2'], activation='relu')(norm_1)
+    norm_2 = BatchNormalization()(hidden_2)
+
+    out = Dense(p['output_classes'], activation='softmax')(norm_2)
+
+    model = Model(inputs=input_data, outputs=out)
+
+    return model, p

@@ -7,11 +7,11 @@ import xval_instance as xval
 gpu_ID = 0
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'testing learning rate on OMG_model'
+short_description = 'testing learning rate on ParallelConv'
 dataset = 'ravdess'
 task_type = 'classification'
 generator = False
-num_experiment = 2  #id of the experiment
+num_experiment = 3  #id of the experiment
 num_folds = 2  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
 experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
@@ -26,28 +26,28 @@ experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 #-architecture: one of the models defined in the models_API script
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
-experiment[1] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[1] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.000001"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.000001"', 'output_classes=8']
-experiment[2] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[2] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.00001"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.00001"', 'output_classes=8']
-experiment[3] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[3] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0001"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.0001"', 'output_classes=8']
-experiment[4] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[4] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0003"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.0003"', 'output_classes=8']
-experiment[5] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[5] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.0006"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.0006"', 'output_classes=8']
-experiment[6] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[6] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.001"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.001"', 'output_classes=8']
-experiment[7] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[7] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.003"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.003"', 'output_classes=8']
-experiment[8] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
+experiment[8] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="reg 0.005"', 'comment_2="OMG_model"',
                  'regularization_lambda="0.005"', 'output_classes=8']
 
