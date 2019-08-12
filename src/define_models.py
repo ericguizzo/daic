@@ -245,9 +245,9 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
 
     pool_size_1 = [76,121]
-    pool_size_2 = [73,121]
-    pool_size_3 = [70,121]
-    pool_size_4 = [67,121]
+    pool_size_2 = [73,117]
+    pool_size_3 = [70,113]
+    pool_size_4 = [67,109]
 
     input_data = Input(shape=(time_dim, features_dim, 1))
 
