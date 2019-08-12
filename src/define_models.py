@@ -98,7 +98,7 @@ def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
     #always return model AND p!!!
     return model, p
 
-def EXAMPLE_model_regression(time_dim, features_dim, user_parameters=['niente = 0']):
+def OMG_model_regression(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
     to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the UI script
@@ -139,6 +139,99 @@ def EXAMPLE_model_regression(time_dim, features_dim, user_parameters=['niente = 
 
     #always return model AND p!!!
     return model, p
+
+def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
+
+    p = {
+    'regularization_lambda': 0.1,
+    'kernel_size_1': [11,11],
+    'kernel_size_2': [11,11],
+    'kernel_size_3': [3,3],
+    'kernel_size_4': [3,3],
+    'kernel_size_5': [3,3],
+    'depth_1': 96,
+    'depth_2': 256,
+    'depth_3': 384,
+    'depth_4': 384,
+    'depth_5': 256,
+    'pool_size': [2,2],
+    'hidden_size_1': 4096,
+    'hidden_size_2': 4096,
+    'hidden_size_3': 4096,
+    'dropout_prob': 0.4,
+    'output_classes': 7
+    }
+
+    # (3) Create a sequential model
+    model = Sequential()
+
+    # 1st Convolutional Layer
+    model.add(Conv2D(filters=p['depth_1'], input_shape=(time_dim,features_dim,1), kernel_size=p['kernel_size_1'],\
+     strides=(4,4), padding='valid'))
+    model.add(Activation('relu'))
+    # Pooling
+    model.add(MaxPooling2D(pool_size=p['pool_size'], strides=p['pool_size'], padding='valid'))
+    # Batch Normalisation before passing it to the next layer
+    model.add(BatchNormalization())
+
+    # 2nd Convolutional Layer
+    model.add(Conv2D(filters=p['depth_2'], kernel_size=p['kernel_size_2'], strides=(1,1), padding='valid'))
+    model.add(Activation('relu'))
+    # Pooling
+    model.add(MaxPooling2D(pool_size=p['pool_size'], strides=p['pool_size'], padding='valid'))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # 3rd Convolutional Layer
+    model.add(Conv2D(filters=p['depth_3'], kernel_size=p['kernel_size_3'], strides=(1,1), padding='valid'))
+    model.add(Activation('relu'))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # 4th Convolutional Layer
+    model.add(Conv2D(filters=p['depth_4'], kernel_size=p['kernel_size_4'], strides=(1,1), padding='valid'))
+    model.add(Activation('relu'))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # 5th Convolutional Layer
+    model.add(Conv2D(filters=p['depth_5'], kernel_size=p['kernel_size_5'], strides=(1,1), padding='valid'))
+    model.add(Activation('relu'))
+    # Pooling
+    model.add(MaxPooling2D(pool_size=p['pool_size'], strides=p['pool_size'], padding='valid'))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # Passing it to a dense layer
+    model.add(Flatten())
+    # 1st Dense Layer
+    #model.add(Dense(p['hidden_size_1'], input_shape=(224*224*3,)))
+    model.add(Dense(p['hidden_size_1']))
+    model.add(Activation('relu'))
+    # Add Dropout to prevent overfitting
+    model.add(Dropout(p['dropout_prob']))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # 2nd Dense Layer
+    model.add(Dense(p['hidden_size_2']))
+    model.add(Activation('relu'))
+    # Add Dropout
+    model.add(Dropout(p['dropout_prob']))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # 3rd Dense Layer
+    model.add(Dense(p['hidden_size_3']))
+    model.add(Activation('relu'))
+    # Add Dropout
+    model.add(Dropout(p['dropout_prob']))
+    # Batch Normalisation
+    model.add(BatchNormalization())
+
+    # Output Layer
+    model.add(Dense(p['output_classes']))
+    model.add(Activation('softmax'))
 
 
 if __name__ == '__main__':
