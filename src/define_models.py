@@ -215,7 +215,7 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     'kernel_size_2': [18,24],
     'kernel_size_3': [24,32],
     'kernel_size_4': [30,40],
-    'depth': 100,
+    'depth': 200,
     'hidden_size_1': 400 ,
     'hidden_size_2': 200,
     'drop_prob': 0.5
@@ -244,10 +244,10 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     pool_size_4 = [p2,p2]
     '''
 
-    pool_size_1 = [8,8]
-    pool_size_2 = [7,7]
-    pool_size_3 = [6,6]
-    pool_size_4 = [5,5]
+    pool_size_1 = [76,121]
+    pool_size_2 = [73/2,121]
+    pool_size_3 = [70,121]
+    pool_size_4 = [67,121]
 
     input_data = Input(shape=(time_dim, features_dim, 1))
 
@@ -268,11 +268,6 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     pool_4 = MaxPooling2D(pool_size=pool_size_4)(conv_4)
     flat_4 = Flatten()(pool_4)
 
-    '''
-    X = k.concatenate((flat_1,flat_2))
-    X = k.concatenate((X,flat_3))
-    X = k.concatenate((X,flat_4))
-    '''
     X = Concatenate()([flat_1,flat_2,flat_3,flat_4])
 
     drop_1 = Dropout(p['drop_prob'])(X)
