@@ -224,30 +224,17 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     p = parse_parameters(p, user_parameters)
 
     #compute pooling parameters as in paper
-    W = time_dim * features_dim
-    S = 1
-    P = 0
-    F1 = p['kernel_size_1'][0] * p['kernel_size_1'][1]
-    F2 = p['kernel_size_2'][0] * p['kernel_size_2'][1]
-    F3 = p['kernel_size_3'][0] * p['kernel_size_3'][1]
-    F4 = p['kernel_size_4'][0] * p['kernel_size_4'][1]
-    K = p['depth']
 
-    p1 = K*((W-F1+(2*P))/S+1) / 2
-    p2 = K*((W-F2+(2*P))/S+1) / 2
-    p3 = K*((W-F3+(2*P))/S+1) / 2
-    p4 = K*((W-F4+(2*P))/S+1) / 2
+    pool_size_1 = [time_dim-p['kernel_size_1'][0])/2, freq_dim-p['kernel_size_1'][1])/2]
+    pool_size_2 = [time_dim-p['kernel_size_2'][0])/2, freq_dim-p['kernel_size_2'][1])/2]
+    pool_size_3 = [time_dim-p['kernel_size_3'][0])/2, freq_dim-p['kernel_size_3'][1])/2]
+    pool_size_4 = [time_dim-p['kernel_size_4'][0])/2, freq_dim-p['kernel_size_4'][1])/2]
     '''
-    pool_size_1 = [p1,p1]
-    pool_size_2 = [p2,p2]
-    pool_size_3 = [p2,p2]
-    pool_size_4 = [p2,p2]
-    '''
-
     pool_size_1 = [76,121]
     pool_size_2 = [73,117]
     pool_size_3 = [70,113]
     pool_size_4 = [67,109]
+    '''
 
     input_data = Input(shape=(time_dim, features_dim, 1))
 
