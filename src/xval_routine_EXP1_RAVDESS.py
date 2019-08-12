@@ -27,29 +27,29 @@ experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
 experiment[1] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.000001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.000001"', 'output_classes=8']
+                 'comment_1="lr 0.000001"', 'comment_2="AlexNet"',
+                 'learning_rate="0.000001"', 'output_classes=8']
 experiment[2] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.00001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.00001"', 'output_classes=8']
+                 'comment_1="lr 0.00001"', 'comment_2="AlexNet"',
+                 'learning_rate="0.00001"', 'output_classes=8']
 experiment[3] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.0001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.0001"', 'output_classes=8']
+                 'comment_1="lr 0.0001"', 'comment_2="AlexNet"',
+                 'learning_rate="0.0001"', 'output_classes=8']
 experiment[4] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.0003"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.0003"', 'output_classes=8']
+                 'comment_1="lr 0.0003"', 'comment_2="AlexNet"',
+                 'learning_rate="0.0003"', 'output_classes=8']
 experiment[5] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.0006"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.0006"', 'output_classes=8']
+                 'comment_1="lr 0.0006"', 'comment_2="AlexNet"',
+                 'learning_rate="0.0006"', 'output_classes=8']
 experiment[6] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.001"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.001"', 'output_classes=8']
+                 'comment_1="lr 0.001"', 'comment_2="AlexNet"',
+                 'learning_rate="0.001"', 'output_classes=8']
 experiment[7] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.003"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.003"', 'output_classes=8']
+                 'comment_1="lr 0.003"', 'comment_2="AlexNet"',
+                 'learning_rate="0.003"', 'output_classes=8']
 experiment[8] = ['architecture="AlexNet"', 'reshaping_type="cnn"',
-                 'comment_1="reg 0.005"', 'comment_2="AlexNet"',
-                 'regularization_lambda="0.005"', 'output_classes=8']
+                 'comment_1="lr 0.005"', 'comment_2="AlexNet"',
+                 'learning_rate="0.005"', 'output_classes=8']
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#
