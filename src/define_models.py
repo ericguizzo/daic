@@ -274,7 +274,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model.add(Activation('softmax'))
     '''
 
-    return model
+    return model, p
 
 
 if __name__ == '__main__':
