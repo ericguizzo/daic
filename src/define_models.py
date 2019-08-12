@@ -219,8 +219,8 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     'hidden_size_1': 400 ,
     'hidden_size_2': 200,
     'drop_prob': 0.5
-
     }
+
     p = parse_parameters(p, user_parameters)
 
     #compute pooling parameters as in paper
