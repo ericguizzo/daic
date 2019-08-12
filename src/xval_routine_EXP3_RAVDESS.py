@@ -28,28 +28,28 @@ experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 experiment = {}
 experiment[1] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.000001"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.000001"', 'output_classes=8']
+                 'learning_rate=0.000001', 'output_classes=8']
 experiment[2] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00001"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.00001"', 'output_classes=8']
+                 'learning_rate=0.00001', 'output_classes=8']
 experiment[3] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0001"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.0001"', 'output_classes=8']
+                 'learning_rate=0.0001', 'output_classes=8']
 experiment[4] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0003"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.0003"', 'output_classes=8']
+                 'learning_rate=0.0003', 'output_classes=8']
 experiment[5] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0006"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.0006"', 'output_classes=8']
+                 'learning_rate=0.0006', 'output_classes=8']
 experiment[6] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.001"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.001"', 'output_classes=8']
+                 'learning_rate=0.001', 'output_classes=8']
 experiment[7] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.003"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.003"', 'output_classes=8']
+                 'learning_rate=0.003', 'output_classes=8']
 experiment[8] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
                  'comment_1="relrg 0.005"', 'comment_2="ParallelConv"',
-                 'learning_rate="0.005"', 'output_classes=8']
+                 'learning_rate=0.005', 'output_classes=8']
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#

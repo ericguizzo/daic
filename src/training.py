@@ -161,7 +161,6 @@ training_parameters = {'train_split': train_split,
     'batch_size': batch_size,
     'num_epochs': num_epochs,
     'learning_rate': learning_rate,
-    'regularization_lambda': regularization_lambda,
     'optimizer': optimizer
     }
 
