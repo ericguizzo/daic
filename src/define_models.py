@@ -157,7 +157,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'hidden_size_1': 4096,
     'hidden_size_2': 4096,
     'hidden_size_3': 4096,
-    'dropout_prob': 0.4,
+    'drop_prob': 0.4,
     'output_classes': 7
     }
 
