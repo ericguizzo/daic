@@ -186,6 +186,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model.add(Activation('relu'))
     # Batch Normalisation
     model.add(BatchNormalization())
+    '''
 
     # 4th Convolutional Layer
     model.add(Conv2D(filters=p['depth_4'], kernel_size=p['kernel_size_4'], strides=(1,1), padding='valid'))
@@ -200,6 +201,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model.add(MaxPooling2D(pool_size=p['pool_size'], strides=p['pool_size'], padding='valid'))
     # Batch Normalisation
     model.add(BatchNormalization())
+    '''
 
     # Passing it to a dense layer
     model.add(Flatten())
