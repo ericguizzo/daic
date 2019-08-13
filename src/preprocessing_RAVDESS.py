@@ -27,6 +27,11 @@ INPUT_RAVDESS_FOLDER =  cfg.get('preprocessing', 'input_audio_folder_ravdess')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 
 SEGMENTATION = False
+
+try:
+    FEATURES_TYPE = sys.argv[1]
+except:
+    pass
 print ('Segmentation: ' + str(SEGMENTATION))
 print ('Features type: ' + str(FEATURES_TYPE))
 
