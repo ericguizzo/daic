@@ -88,3 +88,15 @@ def mfcc(x, M=WINDOW_SIZE_MFCC, N=FFT_SIZE_MFCC, H=HOP_SIZE_MFCC, fs=SR,
 	MFCC = essentia.array(MFCC)
 
 	return MFCC
+
+def extract_features(input_vector, features_type):
+    if features_type == 'stft':
+        feats = spectrum(input_vector)
+    elif features_type == 'cqt':
+        feats = spectrum_CQ(input_vector)
+    elif features_type == 'mfcc':
+        feats = mfcc(input_vector)
+    else:
+        raise ValueError('Wrong features_type. Possible values: stft, cqt, mfcc')
+
+    return feats

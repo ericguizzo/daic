@@ -17,11 +17,7 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
-#get values from config file
-WINDOW_SIZE = cfg.getint('stft', 'window_size')
-FFT_SIZE = cfg.getint('stft', 'fft_size')
-HOP_SIZE = cfg.getint('stft', 'hop_size')
-WINDOW_TYPE = cfg.get('stft', 'window_type')
+FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
 SR = cfg.getint('sampling', 'sr_target')
 SEQUENCE_LENGTH = cfg.getfloat('preprocessing', 'sequence_length')
 SEQUENCE_OVERLAP = cfg.getfloat('preprocessing', 'sequence_overlap')
@@ -84,8 +80,8 @@ def preprocess_datapoint(input_sound):
         #if not, zero pad all sounds to the same length
         samples = np.zeros(max_file_length)
         samples[:len(raw_samples)] = raw_samples  #zero padding
-    e_samples = uf.preemphasis(samples, sr)  #apply preemphasis
-    feats = fa.extract_features(e_samples, fs=sr)  #extract features
+    #samples = uf.preemphasis(samples, sr)  #apply preemphasis
+    feats = fa.extract_features(samples, FEATURES_TYPE)  #extract features
     #compute one hot label
     label = input_sound.split('/')[-1].split('.')[0].split('-')[2]
     one_hot_label = (uf.onehot(int(label)-1, num_classes_ravdess))
@@ -172,33 +168,7 @@ def preprocess_dataset(sounds_list):
 
     return shuffled_predictors, shuffled_target
 
-def build_matrices(output_predictors_matrix, output_target_matrix, sound_list):
-    '''
-    build matrices and save numpy files
-    '''
-    print ('\n')
-    predictors, target = preprocess_dataset(sound_list)
-    np.save(output_predictors_matrix, predictors)
-    np.save(output_target_matrix, target)
-    print("Matrices saved succesfully")
-    print('predictors shape: ' + str(predictors.shape))
-    print('target shape: ' + str(target.shape))
 
-def crossval_preprocessing(criterion, train_list, val_list, test_list):
-    ''' build matrices for one defined crossvalidation instalce'''
-    #set output matrices as default temp crossvalidation ones
-    OUTPUT_PREDICTORS_XVAL_TR = '../dataset/matrices/crossval_ravdess_predictors_tr.npy'
-    OUTPUT_TARGET_XVAL_TR = '../dataset/matrices/crossval_ravdess_target_tr.npy'
-    OUTPUT_PREDICTORS_XVAL_V = '../dataset/matrices/crossval_ravdess_predictors_v.npy'
-    OUTPUT_TARGET_XVAL_V = '../dataset/matrices/crossval_ravdess_target_v.npy'
-    OUTPUT_PREDICTORS_XVAL_TS = '../dataset/matrices/crossval_ravdess_predictors_ts.npy'
-    OUTPUT_TARGET_XVAL_TS = '../dataset/matrices/crossval_ravdess_target_ts.npy'
-    #substitute config target subject and stories with the ones of the experiment
-    contents = os.listdir(INPUT_RAVDESS_FOLDER)
-    filt_train, filt_val, filt_test = filter_data(contents, 'actor', train_list, val_list, test_list)
-    build_matrices(OUTPUT_PREDICTORS_XVAL_TR, OUTPUT_TARGET_XVAL_TR, filt_train)
-    build_matrices(OUTPUT_PREDICTORS_XVAL_V, OUTPUT_TARGET_XVAL_V, filt_val)
-    build_matrices(OUTPUT_PREDICTORS_XVAL_TS, OUTPUT_TARGET_XVAL_TS, filt_test)
 
 def merged_preprocessing():
     criterion = 'actor'
@@ -206,8 +176,9 @@ def merged_preprocessing():
     contents = os.listdir(INPUT_RAVDESS_FOLDER)
     predictors = {}
     target = {}
-    predictors_save_path = OUTPUT_FOLDER + 'ravdess_predictors.npy'
-    target_save_path = OUTPUT_FOLDER + 'ravdess_target.npy'
+    appendix = '_' + FEATURES_TYPE
+    predictors_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess_predictors' + appendix + '.npy'
+    target_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess_target' + appendix + '.npy'
     for i in ac_list:
         curr_list, dummy, dummy2 = filter_data(contents, criterion, [i+1], [i+1], [i+1])
         curr_predictors, curr_target = preprocess_dataset(curr_list)
@@ -218,27 +189,3 @@ def merged_preprocessing():
 
 if __name__ == '__main__':
     merged_preprocessing()
-    '''
-    build training, validation and test matrices (no crossvalidation)
-    '''
-    '''
-    if len(sys.argv) == 1:
-        ac_list = list(range(1, 25))
-        n_train = 18
-        n_val = 4
-        n_test = 2
-        tr_ac = ac_list[:n_train]
-        val_ac = ac_list[n_train:n_train + n_val]
-        ts_ac = ac_list[n_train + n_val:]
-        contents = os.listdir(INPUT_RAVDESS_FOLDER)
-        filt_train, filt_val, filt_test = filter_data(contents, 'actor', tr_ac, val_ac, ts_ac)
-        build_matrices(OUTPUT_PREDICTORS_RAVDESS_TR, OUTPUT_TARGET_RAVDESS_TR, filt_train)
-        build_matrices(OUTPUT_PREDICTORS_RAVDESS_V, OUTPUT_TARGET_RAVDESS_V, filt_val)
-        build_matrices(OUTPUT_PREDICTORS_RAVDESS_TS, OUTPUT_TARGET_RAVDESS_TS, filt_test)
-    else:
-        criterion = sys.argv[1]
-        tr_list = eval(sys.argv[2])
-        v_list = eval(sys.argv[3])
-        ts_list = eval(sys.argv[4])
-        crossval_preprocessing(criterion, tr_list, v_list, ts_list)
-    '''
