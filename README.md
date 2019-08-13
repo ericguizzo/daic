@@ -59,6 +59,8 @@ The parameters you insert will overwrite the default ones, which are declared in
 * architecture: the model you want to use. Should be the name of a model function present in models_API script.
 * reshaping_type: matrix reshaping before being fed into the models. It can be: 'conv', 'rnn' or 'none'. It is coherent with TensorFlow backend.
 
+It is NOT possible to insert parameters relative to the preprocessing stage.
+
 For a quicker usage, it is possible to run an xval_routine script from command line with 3 positional parameters:
 1. first instance to run
 2. last instance to run
@@ -124,6 +126,35 @@ predictors_dict['1': matrix with all spectra of actor 1,
 target_dict['1': matrix with all labels of actor 1,
             '2': matrix with all labels of actor 1]
 ```
+
+The preprocessing should call the extract_features function contained in the feat_analysis script, providing these 2 arguments:
+1. vector to be processed
+2. type of features to extract: stft (magnitudes spectrum), cqt (log magnitudes spectrum), mfcc
+
+Example:
+```python
+features = feat_analysis.extract_features(x, 'mfcc')
+```
+
+In the end, you should save the predictors and target dicts as:
+```
+nameOfDataset_featuresType_predictors.npy
+nameOfDataset_featuresType_target.npy
+```
+Example:
+```
+ravdess_mfcc_predictors.npy
+ravdess_mfcc_target.npy
+```
+
+Then, you can define nameOfDataset_featuresType as the dataset name in the xval_routine script.
+
+Example:
+```python
+dataset = ravdess_mfcc
+```
+This means that you should treat different preprocessings of the same dataset as they were different datasets in the xval_routine interface
+
 
 ## AUGMENTATION
 The augmentation script applies random transformations in random order to audio files. Audio files should be mono '.wav' sounds of any sample rate. This script loads 1 audio file containing a background noise sample (wav) and 1 folder containing reverb impuls responses (also (wav). The path to these information should be defined in the config.ini file in the [augmentation] section
