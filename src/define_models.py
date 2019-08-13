@@ -279,8 +279,7 @@ def ResNet_50(time_dim, features_dim, user_parameters=['niente = 0']):
     input_data = Input(shape=(time_dim, features_dim, 1))
 
 
-    base_model = ResNet50(include_top=False,
-                       input_tensor=None, input_shape=(time_dim, features_dim, 1))
+    base_model = ResNet50(include_top=False,input_tensor=input_data)
 
     # Add final layers
     x = base_model.output
