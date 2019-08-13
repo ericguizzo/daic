@@ -28,6 +28,8 @@ OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 
 SEGMENTATION = False
 print ('Segmentation: ' + str(SEGMENTATION))
+print ('Features type: ' + str(FEATURES_TYPE))
+
 
 
 num_classes_ravdess = 8
