@@ -135,6 +135,7 @@ Example:
 ```python
 features = feat_analysis.extract_features(x, 'mfcc')
 ```
+All feature extraction parameters are specified in the [feature_extraction] section of the config.ini file.
 
 In the end, you should save the predictors and target dicts as:
 ```
