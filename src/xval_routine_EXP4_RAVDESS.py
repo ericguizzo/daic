@@ -27,29 +27,29 @@ experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 #-architecture: one of the models defined in the models_API script
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
-experiment[1] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.000001"', 'comment_2="ParallelConv"',
+experiment[1] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.000001"', 'comment_2="ResNet_50"',
                  'learning_rate=0.000001', 'output_classes=8']
-experiment[2] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.00001"', 'comment_2="ParallelConv"',
+experiment[2] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.00001"', 'comment_2="ResNet_50"',
                  'learning_rate=0.00001', 'output_classes=8']
-experiment[3] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.0001"', 'comment_2="ParallelConv"',
+experiment[3] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.0001"', 'comment_2="ResNet_50"',
                  'learning_rate=0.0001', 'output_classes=8']
-experiment[4] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.0003"', 'comment_2="ParallelConv"',
+experiment[4] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.0003"', 'comment_2="ResNet_50"',
                  'learning_rate=0.0003', 'output_classes=8']
-experiment[5] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.0006"', 'comment_2="ParallelConv"',
+experiment[5] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.0006"', 'comment_2="ResNet_50"',
                  'learning_rate=0.0006', 'output_classes=8']
-experiment[6] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.001"', 'comment_2="ParallelConv"',
+experiment[6] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.001"', 'comment_2="ResNet_50"',
                  'learning_rate=0.001', 'output_classes=8']
-experiment[7] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.003"', 'comment_2="ParallelConv"',
+experiment[7] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.003"', 'comment_2="ResNet_50"',
                  'learning_rate=0.003', 'output_classes=8']
-experiment[8] = ['architecture="ResNet50"', 'reshaping_type="cnn"',
-                 'comment_1="relrg 0.005"', 'comment_2="ParallelConv"',
+experiment[8] = ['architecture="ResNet_50"', 'reshaping_type="cnn"',
+                 'comment_1="relrg 0.005"', 'comment_2="ResNet_50"',
                  'learning_rate=0.005', 'output_classes=8']
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE

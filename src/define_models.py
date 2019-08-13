@@ -267,7 +267,7 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
 
     return model, p
 
-def ResNet50(time_dim, features_dim, user_parameters=['niente = 0']):
+def ResNet_50(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
     standard resnet50
     '''
@@ -279,12 +279,13 @@ def ResNet50(time_dim, features_dim, user_parameters=['niente = 0']):
     input_data = Input(shape=(time_dim, features_dim, 1))
 
 
-    base_model = ResNet50(input_shape=(time_dim, features_dim, 1))
+    base_model = ResNet50(include_top=False,
+                       input_tensor=None, input_shape=(time_dim, features_dim, 1))
 
     # Add final layers
     x = base_model.output
     x = Flatten()(x)
-    out = Dense(p['output_classes'], activation='softmax')(x)
+    out = Dense(n_classes, activation='softmax', name='fc1000')(x)
 
     model = Model(input=base_model.input, output=out)
 
