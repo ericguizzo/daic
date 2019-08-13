@@ -271,12 +271,14 @@ def ResNet50(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
     standard resnet50
     '''
-    p={}
+    p={
+    'output_classes': 8
+    }
     p = parse_parameters(p, user_parameters)
 
     input_data = Input(shape=(time_dim, features_dim, 1))
 
 
-    model = ResNet50(input_tensor=input_data) 
+    model = ResNet50(input_tensor=input_data, include_top=True, classes=p['output_classes'])
 
     return model, p
