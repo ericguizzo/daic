@@ -177,8 +177,8 @@ def merged_preprocessing():
     predictors = {}
     target = {}
     appendix = '_' + FEATURES_TYPE
-    predictors_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess_predictors' + appendix + '.npy'
-    target_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess_target' + appendix + '.npy'
+    predictors_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess_predictors' + appendix + '.npy')
+    target_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess_target' + appendix + '.npy')
     for i in ac_list:
         curr_list, dummy, dummy2 = filter_data(contents, criterion, [i+1], [i+1], [i+1])
         curr_predictors, curr_target = preprocess_dataset(curr_list)
