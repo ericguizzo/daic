@@ -87,5 +87,4 @@ def mfcc(x, M=WINDOW_SIZE_MFCC, N=FFT_SIZE_MFCC, H=HOP_SIZE_MFCC, fs=SR,
 	#convert into numpy matrices
 	MFCC = essentia.array(MFCC)
 
-
 	return MFCC
