@@ -188,7 +188,7 @@ def main():
     test_target_path = os.path.join(folds_dataset_path, test_target_path)
 
     #compute which actors put in train, val, test for current fold
-    dummy = np.load(TARGET_LOAD)
+    dummy = np.load(TARGET_LOAD,allow_pickle=True)
     dummy = dummy.item()
     #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     #JUST WRITE A FUNCTION TO RE-ORDER foldable_list TO SPLIT
@@ -203,8 +203,8 @@ def main():
     #if tensors of current fold has not been computed:
     if not os.path.exists(test_target_path):
         #load merged dataset, compute and save current tensors
-        predictors_merged = np.load(PREDICTORS_LOAD)
-        target_merged = np.load(TARGET_LOAD)
+        predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
+        target_merged = np.load(TARGET_LOAD,allow_pickle=True)
         predictors_merged = predictors_merged.item()
         target_merged = target_merged.item()
 
@@ -229,12 +229,12 @@ def main():
 
     else:
         #load pre-computed tensors
-        training_predictors = np.load(train_pred_path)
-        training_target = np.load(train_target_path)
-        validation_predictors = np.load(val_pred_path)
-        validation_target = np.load(val_target_path)
-        test_predictors = np.load(test_pred_path)
-        test_target = np.load(test_target_path)
+        training_predictors = np.load(train_pred_path,allow_pickle=True)
+        training_target = np.load(train_target_path,allow_pickle=True)
+        validation_predictors = np.load(val_pred_path,allow_pickle=True)
+        validation_target = np.load(val_target_path,allow_pickle=True)
+        test_predictors = np.load(test_pred_path,allow_pickle=True)
+        test_target = np.load(test_target_path,allow_pickle=True)
 
     #normalize to 0 mean and unity std (according to training set mean and std)
     tr_mean = np.mean(training_predictors)
