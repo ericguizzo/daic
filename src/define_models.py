@@ -279,6 +279,14 @@ def ResNet50(time_dim, features_dim, user_parameters=['niente = 0']):
     input_data = Input(shape=(time_dim, features_dim, 1))
 
 
-    model = ResNet50(input_tensor=input_data, include_top=True, classes=p['output_classes'])
+    base_model = ResNet50(include_top=False,
+                       input_tensor=None, input_shape=(time_dim, features_dim, 1))
+
+    # Add final layers
+    x = base_model.output
+    x = Flatten()(x)
+    out = Dense(p['output_classes'], activation='softmax')(x)
+
+    model = Model(input=base_model.input, output=out)
 
     return model, p
