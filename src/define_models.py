@@ -7,6 +7,7 @@ from keras.models import Model, Sequential
 from keras.layers import Input, Convolution2D, Conv2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape, Concatenate
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint, History
+from keras.applications.resnet50 import ResNet50
 from keras.utils import np_utils
 from keras.backend import int_shape
 from keras import regularizers
@@ -263,5 +264,15 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     out = Dense(p['output_classes'], activation='softmax')(norm_2)
 
     model = Model(inputs=input_data, outputs=out)
+
+    return model, p
+
+def ResNet50(time_dim, features_dim, user_parameters=['niente = 0']):
+    '''
+    standard resnet50
+    '''
+    p={}
+
+    model = ResNet50()
 
     return model, p
