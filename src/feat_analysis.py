@@ -14,6 +14,7 @@ cfg.read(config)
 
 #get values from config file
 SR = cfg.getint('sampling', 'sr_target')
+COMPRESSION = eval(cfg.get('feature_extraction', 'power_law_compression'))
 #spectrum
 WINDOW_SIZE = cfg.getint('feature_extraction', 'window_size')
 FFT_SIZE = cfg.getint('feature_extraction', 'fft_size')
@@ -41,7 +42,8 @@ def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=W
     '''
     SP = librosa.core.stft(x, n_fft=N, hop_length=H, window=window_type)
     SP = np.abs(SP)
-    SP = np.power(SP, 2./3.)  #power law compression
+    if COMPRESSION:
+        SP = np.power(SP, 2./3.)  #power law compression
     SP = np.rot90(SP)
 
     return SP
@@ -53,7 +55,8 @@ def spectrum_CQ(x, H=HOP_SIZE_CQT, fs=SR, bins_per_octave=BINS_PER_OCTAVE, n_bin
     '''
     CQT = librosa.core.cqt(x, hop_length=H, sr=fs, bins_per_octave=24, n_bins=168, fmin=55)
     CQT = np.abs(CQT)
-    CQT = np.power(CQT, 2./3.)  #power law compression
+    if COMPRESSION:
+        CQT = np.power(CQT, 2./3.)  #power law compression
     CQT = np.rot90(CQT)
 
     return CQT
@@ -62,12 +65,13 @@ def spectrum_mel(x, H=HOP_SIZE_MEL, fs=SR, N=FFT_SIZE_MEL):
     '''
     magnitudes constant-q transform (log spectrum)
     '''
-    CQT = librosa.feature.melspectrogram(x, hop_length=H, sr=fs, n_fft=N, )
-    CQT = np.abs(CQT)
-    CQT = np.power(CQT, 2./3.)  #power law compression
-    CQT = np.rot90(CQT)
+    MEL = librosa.feature.melspectrogram(x, hop_length=H, sr=fs, n_fft=N, hop_length=H)
+    MEL = np.abs(MEL)
+    if COMPRESSION:
+        MEL = np.power(MEL, 2./3.)  #power law compression
+    MEL = np.rot90(MEL)
 
-    return CQT
+    return MEL
 
 
 def mfcc(x, M=WINDOW_SIZE_MFCC, N=FFT_SIZE_MFCC, H=HOP_SIZE_MFCC, fs=SR,
@@ -108,10 +112,10 @@ def extract_features(input_vector, features_type):
         feats = spectrum(input_vector)
     elif features_type == 'cqt':
         feats = spectrum_CQ(input_vector)
-    elif features_type == 'mfcc':
-        feats = mfcc(input_vector)
     elif features_type == 'mel':
         feats = spectrum_mel(input_vector)
+    elif features_type == 'mfcc':
+        feats = mfcc(input_vector)
     else:
         raise ValueError('Wrong features_type. Possible values: stft, cqt, mfcc')
 
