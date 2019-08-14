@@ -1,6 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import essentia.standard as ess
+from scipy.io.wavfile import read, write
 import librosa
 import essentia
 import essentia
@@ -13,8 +14,13 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
+#global
 SR = cfg.getint('sampling', 'sr_target')
 COMPRESSION = eval(cfg.get('feature_extraction', 'power_law_compression'))
+FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
+SEQUENCE_LENGTH = cfg.getfloat('feature_extraction', 'sequence_length')
+SEQUENCE_OVERLAP = cfg.getfloat('feature_extraction', 'sequence_overlap')
+SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 #spectrum
 WINDOW_SIZE = cfg.getint('feature_extraction', 'window_size')
 FFT_SIZE = cfg.getint('feature_extraction', 'fft_size')
@@ -122,13 +128,13 @@ def extract_features(input_vector, features_type):
     return feats
 
 
-def preprocess_datapoint(input_filename, segmentation=SEGMENTATION, features_type=FEATURES_TYPE):
+def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
     '''
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
     raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
-    if segmentation:
+    if SEGMENTATION:
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
     else:
@@ -136,15 +142,17 @@ def preprocess_datapoint(input_filename, segmentation=SEGMENTATION, features_typ
         samples = np.zeros(max_file_length)
         samples[:len(raw_samples)] = raw_samples  #zero padding
     #samples = uf.preemphasis(samples, sr)  #apply preemphasis
-    feats = extract_features(samples, features_type)  #extract features
+    feats = extract_features(samples, FEATURES_TYPE)  #extract features
 
     return feats
 
-def segment_datapoint(features, label, segmentation=SEGMENTATION):
+def segment_datapoint(features, label):
     '''
     segment features of one long audio file
     into smaller matrices of length "sequence_length"
     and overlapped by "sequence_overlap"
+    This function applies the same label to every segmented datapoint!!
+    -- label_function is the function that extracts the label
     '''
     num_frames = features.shape[0]
     step = SEQUENCE_LENGTH*SEQUENCE_OVERLAP  #segmentation overlap step
@@ -152,7 +160,7 @@ def segment_datapoint(features, label, segmentation=SEGMENTATION):
     predictors = []
     target = []
     #slice arrays and append datapoints to vectors
-    if segmentation:
+    if SEGMENTATION:
         for start in pointer:
             stop = int(start + SEQUENCE_LENGTH)
             #print start_annotation, stop_annotation, start_features, stop_features
@@ -168,6 +176,44 @@ def segment_datapoint(features, label, segmentation=SEGMENTATION):
     else:
         predictors.append(features)
         target.append(label)
+    predictors = np.array(predictors)
+    target = np.array(target)
+
+    return predictors, target
+
+def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
+    '''
+    compute predictors and target of all sounds in sound list
+    sound_list should contain all filenames of 1 single foldable item
+    '''
+
+    predictors = np.array([])
+    target = np.array([])
+    #librosa sr is None if no resampling is required (speed up)
+    sr, dummy = read(sounds_list[0])
+    if sr == SR:
+        librosa_SR = None
+    else:
+        librosa_SR = SR
+    #process all files in sound_list
+    index = 0
+    for sound_file in sounds_list:
+        label = get_label_function(sound_file)
+        try:
+            long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR)  #compute features
+            cut_predictors, cut_target = segment_datapoint(long_predictors, label)   #segment feature maps
+            if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
+                if predictors.shape == (0,):
+                    predictors = cut_predictors
+                    target = cut_target
+                else:
+                    predictors = np.append(predictors, cut_predictors, axis=0)
+                    target = np.append(target, cut_target, axis=0)
+        except ValueError as e:
+            if str(e) == 'File format b\'FORM\'... not understood.':
+                pass
+
+        #uf.print_bar(index, num_sounds)
     predictors = np.array(predictors)
     target = np.array(target)
 

@@ -16,7 +16,7 @@ of multiple keras/pytorch trainings and automatically collect the results in a c
 * utility_functions: some utilities.
 * results_to_excel: computes the spreadsheets.
 * preprocessing_DATASET: processes audio data building the features matrices calling the script feat_analysis.
-* feat_analysis: contains the feature extraction functions: STFT and MFCC.
+* preprocessing_utils: contains the feature extraction and other general utilities to preprocess audio datasets.
 * augmentation: applies augmentation to audio data
 * gen_data_description: computes a dictionary containing audio descriptors of every sample of a dataset.
 * config.ini: This config file contains mainly I/O folder paths and defaults parameters for the training.
@@ -127,16 +127,6 @@ target_dict['1': matrix with all labels of actor 1,
             '2': matrix with all labels of actor 1]
 ```
 
-The preprocessing should call the extract_features function contained in the feat_analysis script, providing these 2 arguments:
-1. vector to be processed
-2. type of features to extract: stft (magnitudes spectrum), cqt (log magnitudes spectrum), mfcc
-
-Example:
-```python
-features = feat_analysis.extract_features(x, 'mfcc')
-```
-All feature extraction parameters are specified in the [feature_extraction] section of the config.ini file.
-
 In the end, you should save the predictors and target dicts as:
 ```
 nameOfDataset_featuresType_predictors.npy
@@ -154,7 +144,9 @@ Example:
 ```python
 dataset = ravdess_mfcc
 ```
-This means that you should treat different preprocessings of the same dataset as they were different datasets in the xval_routine interface
+This means that you should treat different preprocessings of the same dataset as they were different datasets in the xval_routine interface.
+
+The preprocessing_utils script contains useful function to help the development of the custom preprocessing for a dataset. See the preprocessing_RAVDESS script for a detailed example.
 
 
 ## AUGMENTATION
