@@ -30,6 +30,9 @@ FFT_SIZE_MFCC = cfg.getint('feature_extraction', 'fft_size_mfcc')
 HOP_SIZE_MFCC = cfg.getint('feature_extraction', 'hop_size_mfcc')
 WINDOW_TYPE_MFCC = str(cfg.get('feature_extraction', 'window_type_mfcc'))
 N_MFCC = cfg.getint('feature_extraction', 'n_mfcc')
+#melspectrogram
+HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
+FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
 
 
 def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=WINDOW_TYPE):
@@ -49,6 +52,17 @@ def spectrum_CQ(x, H=HOP_SIZE_CQT, fs=SR, bins_per_octave=BINS_PER_OCTAVE, n_bin
     magnitudes constant-q transform (log spectrum)
     '''
     CQT = librosa.core.cqt(x, hop_length=H, sr=fs, bins_per_octave=24, n_bins=168, fmin=55)
+    CQT = np.abs(CQT)
+    CQT = np.power(CQT, 2./3.)  #power law compression
+    CQT = np.rot90(CQT)
+
+    return CQT
+
+def spectrum_mel(x, H=HOP_SIZE_MEL, fs=SR, N=FFT_SIZE_MEL):
+    '''
+    magnitudes constant-q transform (log spectrum)
+    '''
+    CQT = librosa.feature.melspectrogram(x, hop_length=H, sr=fs, n_fft=N, )
     CQT = np.abs(CQT)
     CQT = np.power(CQT, 2./3.)  #power law compression
     CQT = np.rot90(CQT)
@@ -96,6 +110,8 @@ def extract_features(input_vector, features_type):
         feats = spectrum_CQ(input_vector)
     elif features_type == 'mfcc':
         feats = mfcc(input_vector)
+    elif features_type == 'mel':
+        feats = spectrum_mel(input_vector)
     else:
         raise ValueError('Wrong features_type. Possible values: stft, cqt, mfcc')
 
