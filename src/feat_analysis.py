@@ -36,38 +36,38 @@ HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
 FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
 
 
-def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=WINDOW_TYPE):
+def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=WINDOW_TYPE, compression=COMPRESSION):
     '''
     magnitudes spectrum
     '''
     SP = librosa.core.stft(x, n_fft=N, hop_length=H, window=window_type)
     SP = np.abs(SP)
-    if COMPRESSION:
+    if compression:
         SP = np.power(SP, 2./3.)  #power law compression
     SP = np.rot90(SP)
 
     return SP
 
 
-def spectrum_CQ(x, H=HOP_SIZE_CQT, fs=SR, bins_per_octave=BINS_PER_OCTAVE, n_bins=N_BINS, fmin=FMIN):
+def spectrum_CQ(x, H=HOP_SIZE_CQT, fs=SR, bins_per_octave=BINS_PER_OCTAVE, n_bins=N_BINS, fmin=FMIN, compression=COMPRESSION):
     '''
     magnitudes constant-q transform (log spectrum)
     '''
     CQT = librosa.core.cqt(x, hop_length=H, sr=fs, bins_per_octave=24, n_bins=168, fmin=55)
     CQT = np.abs(CQT)
-    if COMPRESSION:
+    if compression:
         CQT = np.power(CQT, 2./3.)  #power law compression
     CQT = np.rot90(CQT)
 
     return CQT
 
-def spectrum_mel(x, H=HOP_SIZE_MEL, fs=SR, N=FFT_SIZE_MEL):
+def spectrum_mel(x, H=HOP_SIZE_MEL, fs=SR, N=FFT_SIZE_MEL, compression=COMPRESSION):
     '''
     magnitudes constant-q transform (log spectrum)
     '''
     MEL = librosa.feature.melspectrogram(x, sr=fs, n_fft=N, hop_length=H)
     MEL = np.abs(MEL)
-    if COMPRESSION:
+    if compression:
         MEL = np.power(MEL, 2./3.)  #power law compression
     MEL = np.rot90(MEL)
 
