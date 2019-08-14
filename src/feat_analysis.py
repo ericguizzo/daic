@@ -65,7 +65,7 @@ def spectrum_mel(x, H=HOP_SIZE_MEL, fs=SR, N=FFT_SIZE_MEL):
     '''
     magnitudes constant-q transform (log spectrum)
     '''
-    MEL = librosa.feature.melspectrogram(x, hop_length=H, sr=fs, n_fft=N, hop_length=H)
+    MEL = librosa.feature.melspectrogram(x, sr=fs, n_fft=N, hop_length=H)
     MEL = np.abs(MEL)
     if COMPRESSION:
         MEL = np.power(MEL, 2./3.)  #power law compression
