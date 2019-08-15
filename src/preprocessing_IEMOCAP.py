@@ -84,7 +84,7 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
             #iterate utterance files
             for utterance in utterances:
                 utterance_path = os.path.join(dialog_path, utterance)
-                path.append(utterance_path)
+                paths.append(utterance_path)
 
     return paths
 
