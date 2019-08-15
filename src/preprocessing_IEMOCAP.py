@@ -127,7 +127,7 @@ def filter_data_IEMOCAP(sound_file):
     we only xfold and tr/val/test split in order to not have segments of the
     same recordings divided in different sets
     '''
-    output = list(sound_file)
+    output = [sound_file]
 
     return output
 
