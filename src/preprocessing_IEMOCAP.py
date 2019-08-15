@@ -88,5 +88,5 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
 
 
 
-#get_sounds_list()
+get_sounds_list()
 #get_label_IEMOCAP(wavname)
