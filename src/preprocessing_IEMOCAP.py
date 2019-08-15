@@ -36,6 +36,8 @@ label_to_int = {'neu':0,
 
 num_classes_IEMOCAP = 10
 wavname = 'Ses01F_impro01_F001.wav'
+#wavname = 'Ses01M_script01_2_F003.wav'
+
 
 def get_label_IEMOCAP(wavname):
     '''
@@ -43,12 +45,11 @@ def get_label_IEMOCAP(wavname):
     '''
     wavname = wavname.split('/')[-1]
     session = int(wavname.split('_')[0][3:5])
-    trans_file = '_'.join(wavname.split('_')[:-2]) + '.txt'
+    trans_file = '_'.join(wavname.split('_')[:-1]) + '.txt'
     ID = wavname.split('.')[0]
     trans_path = os.path.join(INPUT_IEMOCAP_FOLDER, 'Session' + str(session),
                             'dialog/EmoEvaluation', trans_file)
-    print (trans_path)
-
+    sys.exit(0)
     #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
     with open(trans_path) as f:
         contents = f.readlines()
@@ -87,5 +88,5 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
 
 
 
-get_sounds_list()
+#get_sounds_list()
 #get_label_IEMOCAP(wavname)
