@@ -68,7 +68,14 @@ def get_label_IEMOCAP(wavname):
 def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
     contents = os.listdir(input_folder)
     contents = list(filter(lambda x: 'Session' in x, contents))
-    print (contents)
+    #iterate sessions
+    for session in contents:
+        temp_path = os.path.join(input_folder, session, 'sentences/wav')
+        utterances = os.listdir(temp_path)
+        print ('CULO')
+        print (temp_path)
+        print (utterances)
+
 
 
 get_sounds_list()
