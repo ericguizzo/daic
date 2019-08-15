@@ -164,7 +164,7 @@ def main():
             predictors[i] = curr_predictors
             target[i] = curr_target
         except Exception as e:
-            print (e):  #PROBABLY SOME FILES ARE CORRUPTED
+            print (e)  #PROBABLY SOME FILES ARE CORRUPTED
 
 
         index +=1
