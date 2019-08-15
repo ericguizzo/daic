@@ -79,6 +79,8 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
             #iterate utterance files
             for utterance in utterances:
                 utterance_path = os.path.join(dialog_path, utterance)
+                print ('culo')
+                print (utterance_path)
                 label = get_label_IEMOCAP(utterance_path)
                 print (label)
 
