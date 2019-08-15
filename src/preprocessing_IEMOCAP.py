@@ -43,7 +43,7 @@ def get_label_IEMOCAP(wavname):
     '''
     wavname = wavname.split('/')[-1]
     session = int(wavname.split('_')[0][3:5])
-    trans_file = '_'.join(wavname.split('_')[:2]) + '.txt'
+    trans_file = '_'.join(wavname.split('_')[:-2]) + '.txt'
     ID = wavname.split('.')[0]
     trans_path = os.path.join(INPUT_IEMOCAP_FOLDER, 'Session' + str(session),
                             'dialog/EmoEvaluation', trans_file)
