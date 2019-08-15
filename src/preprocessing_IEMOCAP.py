@@ -163,8 +163,9 @@ def main():
             #append preprocessed predictors and target to the dict
             predictors[i] = curr_predictors
             target[i] = curr_target
-        except ValueError:  #PROBABLY SOME FILES ARE CORRUPTED
-            pass
+        except Exception as e:
+            print (e):  #PROBABLY SOME FILES ARE CORRUPTED
+
 
         index +=1
     #save dicts
