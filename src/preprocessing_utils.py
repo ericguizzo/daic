@@ -150,7 +150,8 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
         samples[:len(raw_samples)] = raw_samples  #zero padding
     #samples = uf.preemphasis(samples, sr)  #apply preemphasis
     feats = extract_features(samples, FEATURES_TYPE)  #extract features
-
+    print ('colonn')
+    print (len(samples))
     return feats
 
 def segment_datapoint(features, label, seq_len_frames):
