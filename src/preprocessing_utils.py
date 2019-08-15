@@ -190,11 +190,15 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
     predictors = np.array([])
     target = np.array([])
     #librosa sr is None if no resampling is required (speed up)
-    sr, dummy = read(sounds_list[0])
-    if sr == SR:
-        librosa_SR = None
+    if len(sounds_list) > 1:
+        sr, dummy = read(sounds_list[0])
+        if sr == SR:
+            librosa_SR = None
+        else:
+            librosa_SR = SR
     else:
         librosa_SR = SR
+
     #process all files in sound_list
     index = 0
     for sound_file in sounds_list:
