@@ -62,7 +62,6 @@ def get_label_IEMOCAP(wavname):
     else:
         output = None
 
-    print (output)
 
     return output
 
@@ -99,7 +98,7 @@ def filter_labels(sounds_list):
     filtered_list = []
     for sound in sounds_list:
         label = get_label_IEMOCAP(sound)
-        if type(label) == list:
+        if type(label) == numpy.ndarray:
             filtered_list.append(sound)
 
     return filtered_list
