@@ -99,7 +99,7 @@ def filter_labels(sounds_list):
     filtered_list = []
     for sound in sounds_list:
         label = get_label_IEMOCAP(sound)
-        if label != None:
+        if label.any() != None:
             filtered_list.append(sound)
 
     return filtered_list
