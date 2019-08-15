@@ -70,11 +70,15 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
     contents = list(filter(lambda x: 'Session' in x, contents))
     #iterate sessions
     for session in contents:
-        temp_path = os.path.join(input_folder, session, 'sentences/wav')
-        utterances = os.listdir(temp_path)
-        print ('CULO')
-        print (temp_path)
-        print (utterances)
+        session_path = os.path.join(input_folder, session, 'sentences/wav')
+        dialogs = os.listdir(session_path)
+        #iterate dialogs files
+        for dialog in dialogs:
+            dialog_path = os.path.join(session_path, dialog)
+            utterances = os.listdir(dialog_path)
+            print (utterances)
+            #utterance_path = os.path.join(session_path, utterance)
+
 
 
 
