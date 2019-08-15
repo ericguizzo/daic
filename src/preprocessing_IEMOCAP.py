@@ -1,6 +1,18 @@
 import utility_functions as uf
+import os, sys
+import configparser
+import loadconfig
 
-label_to_int = {'neu':0,
+
+config = loadconfig.load()
+cfg = configparser.ConfigParser()
+cfg.read(config)
+
+#get values from config file
+INPUT_IEMOCAP_FOLDER = cfg.get('preprocessing', 'input_iemocap_folder')
+OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
+
+label_to_int_complete = {'neu':0,
                 'ang':1,
                 'fru':2,
                 'hap':3,
@@ -10,23 +22,45 @@ label_to_int = {'neu':0,
                 'sur':7,
                 'dis':8,
                 'xxx':9}
+
+label_to_int = {'neu':0,
+                'ang':1,
+                'hap':2,
+                'exc':2,
+                'sad':3,
+                'fru':None,
+                'fea':None,
+                'sur':None,
+                'dis':None,
+                'xxx':None}
+
 num_classes_IEMOCAP = 10
 wavname = 'Ses01F_impro01_F001.wav'
 
 def get_label_IEMOCAP(wavname):
+    wavname = wavname.split('/')[-1]
     session = int(wavname.split('_')[0][3:5])
     trans_file = '_'.join(wavname.split('_')[:2]) + '.txt'
     ID = wavname.split('.')[0]
-    print (ID)
+    trans_path = os.path.join(INPUT_IEMOCAP_FOLDER, 'Session' + str(session),
+                            'dialog/EmoEvaluation', trans_file)
+    print (trans_path)
 
-    trans_file = '/home/eric/Desktop/Ses01F_impro01.txt'
-    with open(trans_file) as f:
+    #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
+    with open(trans_path) as f:
         contents = f.readlines()
 
     str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
     int_label = label_to_int[str_label]
-    one_hot_label = uf.onehot(int_label, num_classes_IEMOCAP)
-    print (one_hot_label)
+
+    if int_label != None:
+        output = uf.onehot(int_label, num_classes_IEMOCAP)
+    else:
+        output = None
+
+    print (output)
+
+    return output
 
 
 
