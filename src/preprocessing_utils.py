@@ -163,7 +163,7 @@ def segment_datapoint(features, label, seq_len_frames):
     -- label_function is the function that extracts the label
     '''
     num_frames = features.shape[0]
-    step = int(seq_len_frames*SEQUENCE_OVERLAP)  #segmentation overlap step
+    step = int(np.round(seq_len_frames*SEQUENCE_OVERLAP))  #segmentation overlap step
     pointer = np.arange(0, num_frames, step, dtype='int')  #initail positions of segments
     predictors = []
     target = []
