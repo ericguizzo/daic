@@ -155,6 +155,8 @@ def main():
         uf.print_bar(index, num_files)
         #get foldable item """NOT DIVIDING BY ACTORS!!!
         curr_list = filter_data_IEMOCAP(i)
+        print ('culo')
+        print (curr_list)
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
