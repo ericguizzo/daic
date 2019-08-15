@@ -158,10 +158,14 @@ def main():
 
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
-        #append preprocessed predictors and target to the dict
-        predictors[i] = curr_predictors
-        target[i] = curr_target
+        try:
+            curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
+            #append preprocessed predictors and target to the dict
+            predictors[i] = curr_predictors
+            target[i] = curr_target
+        except ValueError:
+            pass
+
         index +=1
     #save dicts
     np.save(predictors_save_path, predictors)
