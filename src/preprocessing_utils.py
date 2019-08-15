@@ -135,7 +135,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     '''
     raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
     if SEGMENTATION:
-        seq_len_samps = int(SEQUENCE_LENGTH * SR)
+        seq_len_samps = int(SEQUENCE_LENGTH * sr)
         #librosa does not compute last frame (zeropadding) if
         #len(samples) is not multiple of hop_size
         #librosa is shit
