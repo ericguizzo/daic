@@ -164,6 +164,7 @@ def segment_datapoint(features, label, seq_len_frames):
     '''
     num_frames = features.shape[0]
     step = int(seq_len_frames*SEQUENCE_OVERLAP)  #segmentation overlap step
+    print (step)
     pointer = np.arange(0, num_frames, step, dtype='int')  #initail positions of segments
     predictors = []
     target = []
