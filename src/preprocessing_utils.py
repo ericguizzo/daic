@@ -140,7 +140,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
         if len(samples) < seq_len_samps:
-            pad = np.zeros(seq_len_samps+10)
+            pad = np.zeros(seq_len_samps+)
             pad[:len(raw_samples)] = raw_samples
             samples = pad
 
@@ -171,6 +171,7 @@ def segment_datapoint(features, label, seq_len_frames):
     if SEGMENTATION:
         for start in pointer:
             stop = int(start + seq_len_frames)
+            print (start, stop, num_frames)
             if stop <= num_frames:
                 temp_predictors = features[start:stop]
                 predictors.append(temp_predictors)
