@@ -38,6 +38,9 @@ num_classes_IEMOCAP = 10
 wavname = 'Ses01F_impro01_F001.wav'
 
 def get_label_IEMOCAP(wavname):
+    '''
+    compute one hot label starting from wav filename
+    '''
     wavname = wavname.split('/')[-1]
     session = int(wavname.split('_')[0][3:5])
     trans_file = '_'.join(wavname.split('_')[:2]) + '.txt'
@@ -62,6 +65,11 @@ def get_label_IEMOCAP(wavname):
 
     return output
 
+def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
+    contents = os.listdir(input_folder)
+    contents = list(filter(lambda x: 'Session' in x, contents))
+    print (contents)
 
 
-get_label_IEMOCAP(wavname)
+get_sounds_list()
+#get_label_IEMOCAP(wavname)
