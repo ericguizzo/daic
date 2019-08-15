@@ -136,6 +136,22 @@ def find_longest_audio(input_folder):
 
     return max_file_length, sr
 
+def find_longest_audio_list(input_list):
+    '''
+    look for all .wav files in a folder and
+    return the duration (in samples) of the longest one
+    '''
+    file_sizes = []
+    for file in input_list:
+        if file[-3:] == "wav": #selects just wav files
+            samples, sr = librosa.core.load(file, sr=None)  #read audio file
+            file_sizes.append(len(samples))
+
+    max_file_length = max(file_sizes)
+    max_file_length = (max_file_length + 10 )/ float(sr)
+
+    return max_file_length, sr
+
 def strip_silence(input_vector, threshold=35):
     split_vec = librosa.effects.split(input_vector, top_db = threshold)
     onset = split_vec[0][0]

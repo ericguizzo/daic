@@ -109,6 +109,9 @@ def filter_labels(sounds_list):
 
 sounds_list = get_sounds_list()
 filtered_list = filter_labels(sounds_list)
-print (len(sounds_list))
-print (len(filtered_list))
+max_file_length, sr = uf.find_longest_audio_list(filtered_list)
+
+print (max_file_length, sr)
+
+
 #get_label_IEMOCAP(wavname)
