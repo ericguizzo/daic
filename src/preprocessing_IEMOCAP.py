@@ -40,6 +40,14 @@ num_classes_IEMOCAP = 4
 wavname = 'Ses01F_impro01_F001.wav'
 #wavname = 'Ses01M_script01_2_F003.wav'
 
+def get_max_length_IEMOCAP(input_list):
+    '''
+    get longest audio file (insamples) for eventual zeropadding
+    '''
+    max_file_length, sr = uf.find_longest_audio_list(input_folder)
+    max_file_length = int(max_file_length * sr)
+
+    return max_file_length
 
 def get_label_IEMOCAP(wavname):
     '''
@@ -109,9 +117,11 @@ def filter_labels(sounds_list):
 
 sounds_list = get_sounds_list()
 filtered_list = filter_labels(sounds_list)
-max_file_length, sr = uf.find_longest_audio_list(filtered_list)
+max_file_length=get_max_length_IEMOCAP(filtered_list)
+print (max_file_length)
+max_file_length2=get_max_length_IEMOCAP(sounds_list)
+print (max_file_length)
 
-print (max_file_length, sr)
 
 
 #get_label_IEMOCAP(wavname)
