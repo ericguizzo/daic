@@ -99,7 +99,7 @@ def filter_labels(sounds_list):
     filtered_list = []
     for sound in sounds_list:
         label = get_label_IEMOCAP(sound)
-        if type(label) == numpy.ndarray:
+        if type(label) == np.ndarray:
             filtered_list.append(sound)
 
     return filtered_list
