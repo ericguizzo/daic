@@ -137,8 +137,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
     if SEGMENTATION:
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
-        print ('\nculo')
-        print (len(samples))
+
     else:
         #if not, zero pad all sounds to the same length
         samples = np.zeros(max_file_length)
@@ -148,7 +147,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
 
     return feats
 
-def segment_datapoint(features, label):
+def segment_datapoint(features, label, seq_len_frames):
     '''
     segment features of one long audio file
     into smaller matrices of length "sequence_length"
@@ -157,22 +156,20 @@ def segment_datapoint(features, label):
     -- label_function is the function that extracts the label
     '''
     num_frames = features.shape[0]
-    step = SEQUENCE_LENGTH*SEQUENCE_OVERLAP  #segmentation overlap step
+    step = seq_len_frames*SEQUENCE_OVERLAP  #segmentation overlap step
     pointer = np.arange(0, num_frames, step, dtype='int')  #initail positions of segments
     predictors = []
     target = []
     #slice arrays and append datapoints to vectors
     if SEGMENTATION:
         for start in pointer:
-            stop = int(start + SEQUENCE_LENGTH)
-            #print start_annotation, stop_annotation, start_features, stop_features
+            stop = int(start + seq_len_frames)
             if stop <= num_frames:
                 temp_predictors = features[start:stop]
-
                 predictors.append(temp_predictors)
                 target.append(label)
             else:  #last datapoint has a different overlap
-                temp_predictors = features[-int(SEQUENCE_LENGTH):]
+                temp_predictors = features[-int(seq_len_frames):]
                 predictors.append(temp_predictors)
                 target.append(label)
     else:
@@ -180,6 +177,8 @@ def segment_datapoint(features, label):
         target.append(label)
     predictors = np.array(predictors)
     target = np.array(target)
+    print ('culo')
+    print (predictors.shape)
 
     return predictors, target
 
@@ -191,6 +190,11 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
 
     predictors = np.array([])
     target = np.array([])
+
+    #compute correct SEQUENCE_LENGTH
+    hop_str = 'hop_size = HOP_SIZE_' + FEATURES_TYPE.upper()
+    exec(hop_str)
+
     #librosa sr is None if no resampling is required (speed up)
     if len(sounds_list) > 1:
         sr, dummy = read(sounds_list[0])
@@ -207,7 +211,7 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
         label = get_label_function(sound_file)
         try:
             long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR)  #compute features
-            cut_predictors, cut_target = segment_datapoint(long_predictors, label)   #segment feature maps
+            cut_predictors, cut_target = segment_datapoint(long_predictors, label, locals()['hop_size'])   #segment feature maps
             if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
                 if predictors.shape == (0,):
                     predictors = cut_predictors
