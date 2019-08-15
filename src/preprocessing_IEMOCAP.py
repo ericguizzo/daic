@@ -72,12 +72,15 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
     for session in contents:
         session_path = os.path.join(input_folder, session, 'sentences/wav')
         dialogs = os.listdir(session_path)
-        #iterate dialogs files
+        #iterate dialogs
         for dialog in dialogs:
             dialog_path = os.path.join(session_path, dialog)
             utterances = os.listdir(dialog_path)
-            print (utterances)
-            #utterance_path = os.path.join(session_path, utterance)
+            #iterate utterance files
+            for utterance in utterances:
+            utterance_path = os.path.join(dialog_path, utterance)
+            label = get_label_IEMOCAP(utterance_path)
+            print (label)
 
 
 
