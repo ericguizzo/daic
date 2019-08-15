@@ -141,7 +141,7 @@ def main():
     sounds_list = get_sounds_list(INPUT_IEMOCAP_FOLDER)  #get list of all soundfile paths
     filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
     max_file_length=get_max_length_IEMOCAP(filtered_list)  #get longest file in samples
-    num_files = len(sounds_list)
+    num_files = len(filtered_list)
     #init predictors and target dicts
     predictors = {}
     target = {}

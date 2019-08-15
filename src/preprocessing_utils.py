@@ -137,6 +137,8 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
     if SEGMENTATION:
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
+        print ('\nculo')
+        print (len(samples))
     else:
         #if not, zero pad all sounds to the same length
         samples = np.zeros(max_file_length)
