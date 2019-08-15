@@ -10,6 +10,9 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
+FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
+SR = cfg.getint('sampling', 'sr_target')
+SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 INPUT_IEMOCAP_FOLDER = cfg.get('preprocessing', 'input_iemocap_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 
@@ -112,16 +115,67 @@ def filter_labels(sounds_list):
 
     return filtered_list
 
+def filter_data_IEMOCAP(sound_file):
+    '''
+    this function simply returns the input string as a list
+    NOTE THAT DOING THIS WE DO NOT SPLIT DATASET ACCORDING TO
+    DIFFERENT ACTORS!!!
+    we only xfold and tr/val/test split in order to not have segments of the
+    same recordings divided in different sets
+    '''
+    output = list(sound_file)
+
+    return output
+
+def main():
+    '''
+    custom preprocessing routine for the iemocap dataset
+    '''
+    print ('')
+    print ('Setting up preprocessing...')
+    print('')
+    sounds_list = get_sounds_list(INPUT_IEMOCAP_FOLDER)  #get list of all soundfile paths
+    filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
+    max_file_length=get_max_length_IEMOCAP(filtered_list)  #get longest file in samples
+    num_files = len(sounds_list)
+    #init predictors and target dicts
+    predictors = {}
+    target = {}
+    #create output paths for the npy matrices
+    appendix = '_' + FEATURES_TYPE
+    predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap' + appendix + '_predictors.npy')
+    target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap' + appendix + '_target.npy')
+    index = 1  #index for progress bar
+    for i in filtered_list:
+        #print progress bar
+        uf.print_bar(index, num_files)
+        #get foldable item """NOT DIVIDING BY ACTORS!!!
+        curr_list = filter_data_IEMOCAP(i)
+        #preprocess all sounds of the current actor
+        #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
+        #append preprocessed predictors and target to the dict
+        predictors[i] = curr_predictors
+        target[i] = curr_target
+        index +=1
+    #save dicts
+    np.save(predictors_save_path, predictors)
+    np.save(target_save_path, target)
+    #print dimensions
+    count = 0
+    predictors_dims = 0
+    keys = list(predictors.keys())
+    for i in keys:
+        count += predictors[i].shape[0]
+    pred_shape = np.array(predictors[keys[0]]).shape[1:]
+    tg_shape = np.array(target[keys[0]]).shape[1:]
+    print ('')
+    print ('MATRICES SUCCESFULLY COMPUTED')
+    print ('')
+    print ('Total number of datapoints: ' + str(count))
+    print (' Predictors shape: ' + str(pred_shape))
+    print (' Target shape: ' + str(tg_shape))
 
 
-
-sounds_list = get_sounds_list()
-filtered_list = filter_labels(sounds_list)
-max_file_length=get_max_length_IEMOCAP(filtered_list)
-print (max_file_length)
-max_file_length2=get_max_length_IEMOCAP(sounds_list)
-print (max_file_length)
-
-
-
-#get_label_IEMOCAP(wavname)
+if __name__ == '__main__':
+    main()

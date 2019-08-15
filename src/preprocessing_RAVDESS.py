@@ -81,7 +81,7 @@ def main():
     actors_list = list(range(25))
     contents = os.listdir(INPUT_RAVDESS_FOLDER)  #get list of filepaths
     contents = list(filter(lambda x: '.wav' in x, contents))  #keep only wav files
-    actors_list = actors_list[:2]
+    #actors_list = actors_list[:2]
     num_files = len(actors_list)
     #init predictors and target dicts
     predictors = {}
