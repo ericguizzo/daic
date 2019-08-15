@@ -67,6 +67,10 @@ def get_label_IEMOCAP(wavname):
     return output
 
 def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
+    '''
+    get list of all sound paths in the dataset
+    '''
+    paths = []
     contents = os.listdir(input_folder)
     contents = list(filter(lambda x: 'Session' in x, contents))
     #iterate sessions
@@ -80,13 +84,31 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
             #iterate utterance files
             for utterance in utterances:
                 utterance_path = os.path.join(dialog_path, utterance)
-                print ('culo')
-                print (utterance_path)
-                label = get_label_IEMOCAP(utterance_path)
-                print (label)
+                path.append(utterance_path)
+
+    return paths
+
+def filter_labels(sounds_list):
+    '''
+    filter only sounds with desired labels:
+    -neutral
+    -happy (excited)
+    -angry
+    -sad
+    '''
+    filtered_list = []
+    for sound in sounds_list:
+        label = get_label_IEMOCAP(sound)
+        if label != None:
+            filtered_list.append(sound)
+
+    return filtered_list
 
 
 
 
-get_sounds_list()
+sounds_list = get_sounds_list()
+filtered_list = filter_labels(sounds_list)
+print (len(sounds_list))
+print (len(filtered_list))
 #get_label_IEMOCAP(wavname)
