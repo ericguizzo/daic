@@ -1,4 +1,5 @@
 import utility_functions as uf
+import preprocessing_utils as pre
 import numpy as np
 import os, sys
 import configparser
@@ -15,6 +16,9 @@ SR = cfg.getint('sampling', 'sr_target')
 SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 INPUT_IEMOCAP_FOLDER = cfg.get('preprocessing', 'input_iemocap_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
+
+print ('Segmentation: ' + str(SEGMENTATION))
+print ('Features type: ' + str(FEATURES_TYPE))
 
 label_to_int_complete = {'neu':0,
                 'ang':1,
