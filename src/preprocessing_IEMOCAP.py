@@ -32,9 +32,10 @@ label_to_int = {'neu':0,
                 'fea':None,
                 'sur':None,
                 'dis':None,
+                'oth':None,
                 'xxx':None}
 
-num_classes_IEMOCAP = 10
+num_classes_IEMOCAP = 4
 wavname = 'Ses01F_impro01_F001.wav'
 #wavname = 'Ses01M_script01_2_F003.wav'
 
