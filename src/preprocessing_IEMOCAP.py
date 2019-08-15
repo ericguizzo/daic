@@ -1,4 +1,5 @@
 import utility_functions as uf
+import numpy as np
 import os, sys
 import configparser
 import loadconfig
