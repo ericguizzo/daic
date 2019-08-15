@@ -44,7 +44,7 @@ def get_max_length_IEMOCAP(input_list):
     '''
     get longest audio file (insamples) for eventual zeropadding
     '''
-    max_file_length, sr = uf.find_longest_audio_list(input_folder)
+    max_file_length, sr = uf.find_longest_audio_list(input_list)
     max_file_length = int(max_file_length * sr)
 
     return max_file_length
