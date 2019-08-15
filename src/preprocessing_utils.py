@@ -128,19 +128,23 @@ def extract_features(input_vector, features_type):
     return feats
 
 
-def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
+def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     '''
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
     raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
-
     if SEGMENTATION:
         seq_len_samps = int(SEQUENCE_LENGTH * SR)
+        #librosa does not compute last frame (zeropadding) if
+        #len(samples) is not multiple of hop_size
+        #librosa is shit
+        missing_samples = int(np.ceil(hop_size / seq_len_samps * seq_len_samps))
+        pad_length = seq_len_samps + missing_samples
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
-        if len(samples) < seq_len_samps:
-            pad = np.zeros(seq_len_samps)
+        if len(samples) < pad_length:
+            pad = np.zeros(pad_length)
             pad[:len(raw_samples)] = raw_samples
             samples = pad
 
@@ -219,7 +223,7 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
     for sound_file in sounds_list:
         label = get_label_function(sound_file)
         try:
-            long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR)  #compute features
+            long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR, locals()['hop_size'])  #compute features
             cut_predictors, cut_target = segment_datapoint(long_predictors, label, locals()['hop_size'])   #segment feature maps
             if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
                 if predictors.shape == (0,):
