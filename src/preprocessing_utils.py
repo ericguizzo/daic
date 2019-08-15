@@ -134,9 +134,15 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
     of one sound file from the OMG dataset
     '''
     raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
+
     if SEGMENTATION:
+        seq_len_samps = int(SEQUENCE_LENGTH * SR)
         # if segment cut initial and final silence if present
         samples = uf.strip_silence(raw_samples)
+        if len(samples) < seq_len_samps:
+            pad = np.zeros(seq_len_samps)
+            pad[:len(raw_samples)] = raw_samples
+            samples = pad
 
     else:
         #if not, zero pad all sounds to the same length
