@@ -135,7 +135,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     '''
     raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
     #audioloader = ess.EasyLoader(sampleRate=SR)
-    raw_samples = audioloader(input_filename)
+    #raw_samples = audioloader(input_filename)
     if SEGMENTATION:
         seq_len_samps = int(SEQUENCE_LENGTH * sr)
         #librosa does not compute last frame (zeropadding) if
@@ -240,7 +240,7 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
                 else:
                     predictors = np.append(predictors, cut_predictors, axis=0)
                     target = np.append(target, cut_target, axis=0)
-        except (ValueError, NoBackendError):
+        except (ValueError):
             if str(e) == 'File format b\'FORM\'... not understood.':
                 pass
 
