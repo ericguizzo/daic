@@ -2,6 +2,7 @@ from __future__ import print_function
 import numpy as np
 import essentia.standard as ess
 from scipy.io.wavfile import read, write
+import sys
 import librosa
 import essentia
 import essentia
@@ -17,10 +18,13 @@ cfg.read(config)
 #global
 SR = cfg.getint('sampling', 'sr_target')
 COMPRESSION = eval(cfg.get('feature_extraction', 'power_law_compression'))
+SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
+AUGMENTATION = eval(cfg.get('feature_extraction', 'augmentation'))
+NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
+NORMALIZATION = eval(cfg.get('feature_extraction', 'normalization'))
 FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
 SEQUENCE_LENGTH = cfg.getfloat('feature_extraction', 'sequence_length')
 SEQUENCE_OVERLAP = cfg.getfloat('feature_extraction', 'sequence_overlap')
-SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 #spectrum
 WINDOW_SIZE = cfg.getint('feature_extraction', 'window_size')
 FFT_SIZE = cfg.getint('feature_extraction', 'fft_size')
@@ -40,6 +44,9 @@ N_MFCC = cfg.getint('feature_extraction', 'n_mfcc')
 #melspectrogram
 HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
 FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
+
+if AUGMENTATION:
+    import augmentation
 
 
 def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=WINDOW_TYPE, compression=COMPRESSION):
@@ -128,30 +135,28 @@ def extract_features(input_vector, features_type):
     return feats
 
 
-def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
+def preprocess_datapoint(input_vector, max_file_length):
     '''
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
-    samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
-    #samples = uf.preemphasis(samples, sr)  #apply preemphasis
     if SEGMENTATION:
 
         seq_len_samps = int(SEQUENCE_LENGTH * SR)
         # if segment cut initial and final silence if present
         #samples = uf.strip_silence(raw_samples)
-        if len(samples) < seq_len_samps:
+        if len(input_vector) < seq_len_samps:
             pad = np.zeros(seq_len_samps)
-            pad[:len(samples)] = samples
-            samples = pad
+            pad[:len(input_vector)] = input_vector
+            input_vector = pad
 
     else:
         #if not, zero pad all sounds to the same length
         pad = np.zeros(max_file_length)
-        pad[:len(samples)] = samples  #zero padding
-        samples = pad
+        pad[:len(input_vector)] = input_vector  #zero padding
+        input_vector = pad
 
-    feats = extract_features(samples, FEATURES_TYPE)  #extract features
+    feats = extract_features(input_vector, FEATURES_TYPE)  #extract features
 
     return feats
 
@@ -199,8 +204,6 @@ def segment_datapoint(features, label):
         target.append(label)
     predictors = np.array(predictors)
     target = np.array(target)
-    print ('\nculo')
-    print (predictors.shape)
 
     return predictors, target
 
@@ -230,21 +233,37 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
     index = 0
     for sound_file in sounds_list:
         label = get_label_function(sound_file)
-        try:
-            long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR)  #compute features
-            cut_predictors, cut_target = segment_datapoint(long_predictors, label)   #segment feature maps
-            if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
-                if predictors.shape == (0,):
-                    predictors = cut_predictors
-                    target = cut_target
-                else:
-                    predictors = np.append(predictors, cut_predictors, axis=0)
-                    target = np.append(target, cut_target, axis=0)
-        except (ValueError):
-            if str(e) == 'File format b\'FORM\'... not understood.':
-                pass
+        samples, sr = librosa.core.load(sound_file, sr=librosa_SR)  #read audio
+        if NORMALIZATION:
+            samples = np.divide(samples, np.max(samples))
+            samples = np.multiply(samples, 0.8)
+        if AUGMENTATION:
+            sounds_list = [samples]
+            for i in range(NUM_AUG_SAMPLES):
+                temp_aug = augmentation.gen_datapoint(samples)
+                sounds_list.append(temp_aug)
+
+        else:
+            sounds_list = [samples]
+
+        for sound in sounds_list:
+            try:
+                long_predictors = preprocess_datapoint(sound, max_file_length)  #compute features
+                cut_predictors, cut_target = segment_datapoint(long_predictors, label)   #segment feature maps
+                if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
+                    if predictors.shape == (0,):
+                        predictors = cut_predictors
+                        target = cut_target
+                    else:
+                        predictors = np.append(predictors, cut_predictors, axis=0)
+                        target = np.append(target, cut_target, axis=0)
+            except (ValueError):
+                if str(e) == 'File format b\'FORM\'... not understood.':
+                    pass
+        #print ('\n | shape:' + str(predictors.shape))
 
         #uf.print_bar(index, num_sounds)
+
     predictors = np.array(predictors)
     target = np.array(target)
 

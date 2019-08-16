@@ -8,7 +8,7 @@ import librosa
 from shutil import copyfile
 import os, random, sys
 import loadconfig
-import essentia.standard as ess
+#import essentia.standard as ess
 import configparser
 import matplotlib.pyplot as plt
 
@@ -18,29 +18,35 @@ cfg.read(config)
 
 #get values from config file
 SR =  cfg.getint('sampling', 'sr_target')
-AUGMENTATION_IN = sys.argv[1]
-AUGMENTATION_OUT = sys.argv[2]
-NUM_EXTENSIONS = int(sys.argv[3])
-'''
-AUGMENTATION_IN = cfg.get('augmentation', 'augmentation_in')
-AUGMENTATION_OUT = cfg.get('augmentation', 'augmentation_out')
-NUM_EXTENSIONS = cfg.getint('augmentation', 'num_extensions')
-'''
+NORMALIZATION = eval(cfg.get('feature_extraction', 'normalization'))
 IR_FOLDER = cfg.get('augmentation', 'augmentation_IRs_path')
 NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_backgroundnoise_path')
-#get samples length
-temp_contents = os.listdir(AUGMENTATION_IN)
-temp_contents = list(filter(lambda x: '.wav' in x, temp_contents))
-in_file_name = AUGMENTATION_IN + '/' + temp_contents[0]
-global_sr, dummy = uf.wavread(in_file_name)
+
+if __name__ == '__main__':
+    AUGMENTATION_IN = sys.argv[1]
+    AUGMENTATION_OUT = sys.argv[2]
+    NUM_EXTENSIONS = int(sys.argv[3])
+    '''
+    AUGMENTATION_IN = cfg.get('augmentation', 'augmentation_in')
+    AUGMENTATION_OUT = cfg.get('augmentation', 'augmentation_out')
+    NUM_EXTENSIONS = cfg.getint('augmentation', 'num_extensions')
+    '''
+    #get samples length
+    temp_contents = os.listdir(AUGMENTATION_IN)
+    temp_contents = list(filter(lambda x: '.wav' in x, temp_contents))
+    in_file_name = AUGMENTATION_IN + '/' + temp_contents[0]
+    global_sr, dummy = uf.wavread(in_file_name)
+else:
+    global_sr = 44100
 
 
 #load background noise sample
 print ("loading background noise sample...")
 
 #background_noise1, nsr = audio_load(NOISE_SAMPLE, sr=SR)
-noise_loader = ess.EasyLoader(filename=NOISE_SAMPLE, sampleRate=global_sr)
-background_noise = noise_loader()
+#noise_loader = ess.EasyLoader(filename=NOISE_SAMPLE, sampleRate=global_sr)
+#background_noise = noise_loader()
+background_noise, dummy = librosa.core.load(NOISE_SAMPLE, sr=SR)
 
 def notch_filter(band, cutoff, ripple, rs, sr=global_sr, order=2, filter_type='cheby2'):
     #creates chebyshev polynomials for a notch filter with given parameters
@@ -75,7 +81,6 @@ def bg_noise(vector_signal, dur):
 def random_eq(vector_signal, dur, sr=global_sr):
     #applies random filtering to an input vetor using chebyshev notch filters
     num_filters = np.random.randint(1,4)
-
     #transition bands for cheby2 filter order
     low_edge = 80
     hi_edge = 8000
@@ -187,8 +192,9 @@ def random_rev(vector_signal, dur):
             IR_random = IR_choice
 
     IR_filename = IR_FOLDER + '/' + IR_random  #reconstruct IR path
-    IR_loader = ess.EasyLoader(filename=IR_filename, sampleRate=SR, downmix='left')
-    IR = IR_loader()
+    #IR_loader = ess.EasyLoader(filename=IR_filename, sampleRate=SR, downmix='left')
+    #IR = IR_loader()
+    IR, dummy = librosa.core.load(IR_filename, sr=SR)
     #sr, IR = uf.wavread(IR_filename)  #read IR file
     #IR, srate = audio_load(IR_filename, sr=global_sr)  #read and resample
     #IR = IR[:,0]  #take just left channel of the stereo file
@@ -218,7 +224,7 @@ def random_samples(vector_signal, dur, sr=SR):
     return vector_signal
 
 
-def extend_datapoint(file_name, output_dir=AUGMENTATION_OUT, num_extensions=1, status = [1,0]):
+def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
     #creates alternative versions of sounds of a single sound trying to keep the chaos/order feature
 
     sound_name = file_name.split('/')[-1]
@@ -261,9 +267,11 @@ def extend_datapoint(file_name, output_dir=AUGMENTATION_OUT, num_extensions=1, s
             vector_output = random_samples(vector_output, dur=DUR)
         '''
 
+        '''
         #output_normalization
         vector_output = np.divide(vector_output, np.max(vector_output))
         vector_output = np.multiply(vector_output, 0.8)
+        '''
         #formatting strings to print
         success_string = sound_string + ' augmented: ' + str(new_sound+1)  #describe last prcessed sound
         infolder_num_files = status[0]  #number of input files to extend
@@ -279,6 +287,56 @@ def extend_datapoint(file_name, output_dir=AUGMENTATION_OUT, num_extensions=1, s
         #print progress and status strings
         print(success_string)
         print(status_string)
+
+def gen_datapoint(vector_input):
+    #creates alternative versions of sounds of a single sound trying to keep the chaos/order feature
+    #resample to have better filters
+    global_sr = 44100
+    vector_input = librosa.core.resample(vector_input, SR, global_sr)
+
+    DUR = len(vector_input)
+    funcs = ['random_stretch','bg_noise','random_eq']
+
+    np.random.shuffle(funcs) #scramble order of functions
+    rev_prob = np.random.randint(1,3)  #1/3 files will have reverb
+    rand_samp_prob = np.random.randint(1,3)  #1/3 files will have random samples
+    num_nodes = np.random.randint(1,3)  #nodes probability
+    random_appendix = np.random.randint(10000)  #random number to append to filename (so.. validation split of dataset will be composed of random sounds)
+
+    node1 = 'node1_out = ' + funcs[0] + '(vector_input, dur=DUR)'
+    node2 = 'node2_out = ' + funcs[1] + '(node1_out, dur=DUR)'
+    node3 = 'node3_out = ' + funcs[2] + '(node2_out, dur=DUR)'
+
+    if num_nodes == 1:
+        exec(node1)
+        vector_output = locals()['node1_out']
+    if num_nodes == 2:
+        exec(node1)
+        exec(node2)
+        vector_output = locals()['node2_out']
+    if num_nodes == 3:
+        exec(node1)
+        exec(node2)
+        exec(node3)
+        vector_output = locals()['node3_out']
+
+    if rev_prob == 1:
+        vector_output = random_rev(vector_output, dur=DUR)
+    '''
+    if rand_samp_prob == 1:
+        vector_output = random_samples(vector_output, dur=DUR)
+    '''
+
+    if NORMALIZATION:
+        #output_normalization
+        vector_output = np.divide(vector_output, np.max(vector_output))
+        vector_output = np.multiply(vector_output, 0.8)
+
+
+    vector_output = librosa.core.resample(vector_output, global_sr, SR)
+
+    return vector_output
+
 
 
 def main(num_extensions, input_dir, output_dir):
