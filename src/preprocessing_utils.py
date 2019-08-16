@@ -147,7 +147,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
         pad_length = seq_len_samps
         # if segment cut initial and final silence if present
         #samples = uf.strip_silence(raw_samples)
-        if len(samples) < pad_length:
+        if len(raw_samples) < pad_length:
             pad = np.zeros(pad_length)
             pad[:len(raw_samples)] = raw_samples
             samples = pad
