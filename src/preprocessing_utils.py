@@ -133,8 +133,9 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
-    raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
-
+    #raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
+    audioloader = ess.EasyLoader(sampleRate=SR)
+    raw_samples = audioloader(input_filename)
     if SEGMENTATION:
         seq_len_samps = int(SEQUENCE_LENGTH * sr)
         #librosa does not compute last frame (zeropadding) if
@@ -142,7 +143,8 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
         #librosa is shit
         missing_samples = int(np.ceil(hop_size / seq_len_samps * seq_len_samps))
         pad_length = seq_len_samps + missing_samples
-        pad_length = 64801
+        #pad_length = 64
+        pad_length = seq_len_samps
         # if segment cut initial and final silence if present
         #samples = uf.strip_silence(raw_samples)
         if len(samples) < pad_length:
