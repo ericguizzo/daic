@@ -133,7 +133,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
     '''
-    raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
+    samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
     #audioloader = ess.EasyLoader(sampleRate=SR)
     #raw_samples = audioloader(input_filename)
     if SEGMENTATION:
@@ -147,9 +147,9 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
         pad_length = seq_len_samps
         # if segment cut initial and final silence if present
         #samples = uf.strip_silence(raw_samples)
-        if len(raw_samples) < pad_length:
+        if len(samples) < pad_length:
             pad = np.zeros(pad_length)
-            pad[:len(raw_samples)] = raw_samples
+            pad[:len(raw_samples)] = samples
             samples = pad
 
     else:
