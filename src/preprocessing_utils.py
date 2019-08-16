@@ -134,35 +134,28 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     of one sound file from the OMG dataset
     '''
     samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
-    #audioloader = ess.EasyLoader(sampleRate=SR)
-    #raw_samples = audioloader(input_filename)
+    #samples = uf.preemphasis(samples, sr)  #apply preemphasis
     if SEGMENTATION:
-        seq_len_samps = int(SEQUENCE_LENGTH * sr)
-        #librosa does not compute last frame (zeropadding) if
-        #len(samples) is not multiple of hop_size
-        #librosa is shit
-        missing_samples = int(np.ceil(hop_size / seq_len_samps * seq_len_samps))
-        pad_length = seq_len_samps + missing_samples
-        #pad_length = 64
-        pad_length = seq_len_samps
+
+        seq_len_samps = int(SEQUENCE_LENGTH * SR)
         # if segment cut initial and final silence if present
         #samples = uf.strip_silence(raw_samples)
-        if len(samples) < pad_length:
-            pad = np.zeros(pad_length)
+        if len(samples) < seq_len_samps:
+            pad = np.zeros(seq_len_samps)
             pad[:len(samples)] = samples
             samples = pad
 
     else:
         #if not, zero pad all sounds to the same length
-        samples = np.zeros(max_file_length)
-        samples[:len(raw_samples)] = raw_samples  #zero padding
-    #samples = uf.preemphasis(samples, sr)  #apply preemphasis
-    print (len(samples))
+        pad = np.zeros(max_file_length)
+        pad[:len(samples)] = samples  #zero padding
+        samples = pad
+
     feats = extract_features(samples, FEATURES_TYPE)  #extract features
 
     return feats
 
-def segment_datapoint(features, label, seq_len_frames):
+def segment_datapoint(features, label):
     '''
     segment features of one long audio file
     into smaller matrices of length "sequence_length"
@@ -170,13 +163,22 @@ def segment_datapoint(features, label, seq_len_frames):
     This function applies the same label to every segmented datapoint!!
     -- label_function is the function that extracts the label
     '''
+    #compute how many frames per sequence
+    seq_len_samps = int(SEQUENCE_LENGTH * SR)
+    dummy_samps = np.zeros(seq_len_samps)
+    dummy_feats = feats = extract_features(dummy_samps, FEATURES_TYPE)
+    seq_len_frames = dummy_feats.shape[0]
     num_frames = features.shape[0]
+
+    #create pointer for segmentation
     step = int(np.round(seq_len_frames*SEQUENCE_OVERLAP))  #segmentation overlap step
     pointer = np.arange(0, num_frames, step, dtype='int')  #initail positions of segments
 
+    #init vectors
     predictors = []
     target = []
-    #slice arrays and append datapoints to vectors
+
+    #segment arrays and append datapoints to vectors
     if SEGMENTATION:
         for start in pointer:
             stop = int(start + seq_len_frames)
@@ -186,9 +188,11 @@ def segment_datapoint(features, label, seq_len_frames):
                 predictors.append(temp_predictors)
                 target.append(label)
             else:  #last datapoint has a different overlap
-                #temp_predictors = features[-int(seq_len_frames):]
-                #predictors.append(temp_predictors)
-                #target.append(label)
+                #compute last datapoint only i vector is enough big
+                if num_frames > seq_len_frames + (seq_len_frames*SEQUENCE_OVERLAP):
+                    #temp_predictors = features[-int(seq_len_frames):]
+                    #predictors.append(temp_predictors)
+                    #target.append(label)
                 pass
     else:
         predictors.append(features)
