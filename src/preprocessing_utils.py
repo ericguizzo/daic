@@ -157,6 +157,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
         samples = np.zeros(max_file_length)
         samples[:len(raw_samples)] = raw_samples  #zero padding
     #samples = uf.preemphasis(samples, sr)  #apply preemphasis
+    print (len(samples))
     feats = extract_features(samples, FEATURES_TYPE)  #extract features
 
     return feats
