@@ -128,7 +128,7 @@ def extract_features(input_vector, features_type):
     return feats
 
 
-def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
+def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
     '''
     generate predictors (stft) and target (valence sequence)
     of one sound file from the OMG dataset
@@ -213,9 +213,11 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
     predictors = np.array([])
     target = np.array([])
 
+    '''
     #compute correct SEQUENCE_LENGTH
     hop_str = 'hop_size = HOP_SIZE_' + FEATURES_TYPE.upper()
     exec(hop_str)
+    '''
 
     #librosa sr is None if no resampling is required (speed up)
     '''
@@ -235,8 +237,8 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
     for sound_file in sounds_list:
         label = get_label_function(sound_file)
         try:
-            long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR, locals()['hop_size'])  #compute features
-            cut_predictors, cut_target = segment_datapoint(long_predictors, label, locals()['hop_size'])   #segment feature maps
+            long_predictors = preprocess_datapoint(sound_file, max_file_length, librosa_SR)  #compute features
+            cut_predictors, cut_target = segment_datapoint(long_predictors, label)   #segment feature maps
             if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
                 if predictors.shape == (0,):
                     predictors = cut_predictors
