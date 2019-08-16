@@ -190,17 +190,15 @@ def segment_datapoint(features, label):
             else:  #last datapoint has a different overlap
                 #compute last datapoint only i vector is enough big
                 if num_frames > seq_len_frames + (seq_len_frames*SEQUENCE_OVERLAP):
-                    #temp_predictors = features[-int(seq_len_frames):]
-                    #predictors.append(temp_predictors)
-                    #target.append(label)
+                    temp_predictors = features[-int(seq_len_frames):]
+                    predictors.append(temp_predictors)
+                    target.append(label)
                     pass
     else:
         predictors.append(features)
         target.append(label)
     predictors = np.array(predictors)
     target = np.array(target)
-    print ('culo')
-    print (predictors.shape)
 
     return predictors, target
 
