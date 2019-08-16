@@ -199,6 +199,8 @@ def segment_datapoint(features, label):
         target.append(label)
     predictors = np.array(predictors)
     target = np.array(target)
+    print ('\nculo')
+    print (predictors.shape)
 
     return predictors, target
 
