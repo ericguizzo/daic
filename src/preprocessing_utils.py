@@ -172,15 +172,14 @@ def segment_datapoint(features, label, seq_len_frames):
     num_frames = features.shape[0]
     step = int(np.round(seq_len_frames*SEQUENCE_OVERLAP))  #segmentation overlap step
     pointer = np.arange(0, num_frames, step, dtype='int')  #initail positions of segments
-    print ('\npointer')
-    print (pointer)
+
     predictors = []
     target = []
     #slice arrays and append datapoints to vectors
     if SEGMENTATION:
         for start in pointer:
             stop = int(start + seq_len_frames)
-            print (start, stop, num_frames)
+            #print (start, stop, num_frames)
             if stop <= num_frames:
                 temp_predictors = features[start:stop]
                 predictors.append(temp_predictors)
