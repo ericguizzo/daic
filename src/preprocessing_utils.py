@@ -134,6 +134,8 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
     of one sound file from the OMG dataset
     '''
     raw_samples, sr = librosa.core.load(input_filename, sr=librosa_SR)  #read audio
+    print (culo)
+    print (sr)
     if SEGMENTATION:
         seq_len_samps = int(SEQUENCE_LENGTH * sr)
         #librosa does not compute last frame (zeropadding) if
