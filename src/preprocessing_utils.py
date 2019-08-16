@@ -149,7 +149,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR, hop_size):
         #samples = uf.strip_silence(raw_samples)
         if len(samples) < pad_length:
             pad = np.zeros(pad_length)
-            pad[:len(raw_samples)] = samples
+            pad[:len(samples)] = samples
             samples = pad
 
     else:
