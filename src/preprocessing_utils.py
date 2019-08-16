@@ -214,6 +214,7 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
     exec(hop_str)
 
     #librosa sr is None if no resampling is required (speed up)
+    '''
     if len(sounds_list) > 1:
         sr, dummy = read(sounds_list[0])
         if sr == SR:
@@ -222,6 +223,8 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
             librosa_SR = SR
     else:
         librosa_SR = SR
+    '''
+    librosa_SR = SR
 
     #process all files in sound_list
     index = 0
