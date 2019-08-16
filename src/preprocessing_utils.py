@@ -157,7 +157,7 @@ def preprocess_datapoint(input_filename, max_file_length, librosa_SR):
 
 def segment_datapoint(features, label):
     '''
-    segment features of one long audio file
+    segment features of one long features vector
     into smaller matrices of length "sequence_length"
     and overlapped by "sequence_overlap"
     This function applies the same label to every segmented datapoint!!

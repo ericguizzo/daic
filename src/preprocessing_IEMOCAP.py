@@ -161,11 +161,15 @@ def main():
 
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
+        try:
+            curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
+            #append preprocessed predictors and target to the dict
+            predictors[i] = curr_predictors
+            target[i] = curr_target
+        except Exception as e:
+            print ('')
+            print (e)  #PROBABLY SOME FILES ARE CORRUPTED
 
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
-        #append preprocessed predictors and target to the dict
-        predictors[i] = curr_predictors
-        target[i] = curr_target
 
         index +=1
     #save dicts
