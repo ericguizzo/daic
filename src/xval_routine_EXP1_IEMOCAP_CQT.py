@@ -13,7 +13,6 @@ task_type = 'classification'
 generator = False
 num_experiment = 1  #id of the experiment
 num_folds = 2  #number of k-folds for cross-validation
-#experiment_folder = '../../../copy/prova_API'  #where to save results
 experiment_folder = '../../../copy/consultancy/iemocap_cqt'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
