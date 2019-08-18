@@ -8,13 +8,13 @@ gpu_ID = 0
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'testing learning rate on OMG_model, ParallelConv and AlexNet. No Augmentation'
-dataset = 'iemocap_cqt'
+dataset = 'iemocap_cqt°_aug2'
 task_type = 'classification'
 generator = False
 num_experiment = 1  #id of the experiment
 num_folds = 2  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
-experiment_folder = '../../../copy/consultancy/iemocap_cqt'  #where to save results
+experiment_folder = '../../../copy/consultancy/iemocap_cqt_aug2'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
