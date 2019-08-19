@@ -146,13 +146,15 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     if p['load_weights']:
         num_layers = len([layer.name for layer in model.layers])
         pretrained = load_model(p['pretrained_path'])
+        shared_weights = []
         for layer in range(num_layers): #cut output layer
-            print (model.layers[layer].name)
+            shared_weights.append(model.layers[layer].name)
             try:
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
             except ValueError:
                 print ('Warning: weights shared from: ' + str(model.layers[0].name) + ' to: ' + str(model.layers[layer-1].name))
                 break
+        p['layers_with_shared_weights'] = shared_weights
     return model, p
 
 def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
