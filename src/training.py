@@ -35,13 +35,13 @@ except IndexError:
     #generator: 11865
     #nogenerator
     generator = True
-    dataset = 'daic'
-    architecture = 'EXAMPLE_model_regression'
+    dataset = 'ravdess'
+    architecture = 'OMG_model'
     parameters = ['niente = 0']
-    task_type = 'regression'
+    task_type = 'classification'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
-    parameters_path = results_path + '/parameters'
+    parameters_path = results_path + '/psarameters'
     SAVE_RESULTS = results_path
     num_fold = 0
     num_exp = 0
