@@ -152,7 +152,7 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
             except ValueError:
                 break
-                print ('Warning: cant transfer weights for layer: ' + str(model.layers[layer].name))
+                print ('Warning: weights shared from: ' + str(model.layers[0].name) + ' to: 'str(model.layers[layer-1].name))
     return model, p
 
 def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
