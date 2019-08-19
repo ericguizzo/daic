@@ -186,9 +186,6 @@ for i in actors:
 
 save_predictors()
 save_target()
-
-
-
 ```
 
 
