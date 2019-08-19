@@ -146,7 +146,7 @@ dataset = ravdess_mfcc
 ```
 This means that you should treat different preprocessings of the same dataset as they were different datasets in the xval_routine interface.
 
-The preprocessing_utils script contains useful function to help the development of the custom preprocessing for a dataset. See the preprocessing_RAVDESS and preprocessing_IEMOCAP scripts for detailed examples.
+The preprocessing_utils script contains useful functions to help the development of the custom preprocessing for a dataset. See the preprocessing_RAVDESS and preprocessing_IEMOCAP scripts for detailed examples.
 
 In particular, in your preprocessing script you can call the function prepreocessing_utils.preprocess_foldable_item(), which takes these 3 parameters:
 1. List of soundpath of current foldable item (example: all paths to sounds of one actor)
@@ -188,6 +188,8 @@ save_predictors()
 save_target()
 ```
 
+In the [feature_extraction] of the config.ini file you can set all important parameters for feature extraction.
+
 
 ## AUGMENTATION
 The augmentation script applies random transformations in random order to audio files. Audio files should be mono '.wav' sounds of any sample rate. This script loads 1 audio file containing a background noise sample (wav) and 1 folder containing room impulse responses (also wav). The path to these information should be defined in the config.ini file in the [augmentation] section
@@ -198,7 +200,12 @@ The transformations are:
 * Random reverb
 * Random time stretch
 
-To augment a dataset run the augmentation script with the following arguments:
+To augment a dataset you can:
+1. Run a routine that creates new audiofiles (and copies the original ones) in a new folder. This is convenient if you want to listen to the augmented samples
+2. Call a function that does this 'in place' during the preprocessing. This is convenient if you want to save space and is also simpler.
+
+### Option 1:
+Run the augmentation script with the following arguments:
 1. input folder
 2. output folder
 3. number of generated augmented samples for every input file
@@ -208,6 +215,15 @@ Example:
 run augmentation.py 'dataset/original' '/dataset/augmented' 5  
 ```
 This code takes all mono wav files present in '/dataset/original/', generates 5 augmented samples for each file and saves them, alongside with a normalized copy of the original, in '/dataset/augmented'
+
+### Option 2:
+When you call the prepreocessing_utils.preprocess_foldable_item() in your preprocessing script, you can set these parameters in the config.ini file:
+```
+[feature_extraction]
+augmentation = True
+num_aug_samples = 2  #this int describes how many augmented samples are created for every original sound of the dataset. 2 means that the size of the dataset it triplicated.
+```
+
 
 ## GEN_DATA_DESCRIPTION
 The data description algorithm computes the following audio descriptors for every wav file contained in a folder:
