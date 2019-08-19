@@ -146,7 +146,50 @@ dataset = ravdess_mfcc
 ```
 This means that you should treat different preprocessings of the same dataset as they were different datasets in the xval_routine interface.
 
-The preprocessing_utils script contains useful function to help the development of the custom preprocessing for a dataset. See the preprocessing_RAVDESS script for a detailed example.
+The preprocessing_utils script contains useful function to help the development of the custom preprocessing for a dataset. See the preprocessing_RAVDESS and preprocessing_IEMOCAP scripts for detailed examples.
+
+In particular, in your preprocessing script you can call the function prepreocessing_utils.preprocess_foldable_item(), which takes these 3 parameters:
+1. List of soundpath of current foldable item (example: all paths to sounds of one actor)
+2. integer describing the maximum file length (in samples) of the current dataset. This serves to zeropad sounds to the same dimension (only if segmentation parameter is False).
+3. Python function that takes as input the path of a soundfile and outputs its label (this should be custom for every dataset)
+
+So, for the custom preprocessing of a dataset you could simply create a for loop that iterates the foldable items and calls the above function.
+
+Example in pseudo-code:
+
+Example:
+```python
+#this is the basic structure to preprocess a new dataset
+foldable_items = {1: ["paths to actor 1's sounds"],
+                  2: ["paths to actor 2's sounds"],
+                  3: ["paths to actor 3's sounds"],
+                  ...
+                  ...
+                  }
+
+def get_label(wavname):
+  #func to extract label from file path
+  return label
+
+max_file_length = #function that computes this value (you can use utility_functions.find_longest_audio_list(input_list))
+
+#iterate foldable items
+actors = list(foldable_items.keys())
+predictors = {}
+target = {}
+
+for i in actors:
+  curr_list = foldable_items[i]
+  curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label)
+  predictors[i] = curr_predictors
+  target[i] = curr_target
+
+save_predictors()
+save_target()
+
+
+
+```
 
 
 ## AUGMENTATION
