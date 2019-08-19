@@ -114,7 +114,7 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     'drop_prob': 0.3,
     'hidden_size': 200,
     'output_classes': 8,
-    'load_weights': False,
+    'load_weights': True,
     'pretrained_path': '../models/model_xval_ravdess_cqt_exp1_run3_fold0'}
 
     reg = regularizers.l2(p['regularization_lambda'])
