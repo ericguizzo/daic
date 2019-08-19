@@ -4,16 +4,16 @@ import sys, os
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
-gpu_ID = 0
+gpu_ID = 1
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = False  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'testing learning rate on OMG_model, NO Augmentation, PRETRAINED ON RAVDESS'
-dataset = 'iemocap_cqt'
+short_description = 'testing learning rate on OMG_model, Augmentation, PRETRAINED ON RAVDESS'
+dataset = 'iemocap_aug2_cqt'
 task_type = 'classification'
 generator = False
 num_experiment = 2  #id of the experiment
 num_folds = 2  #number of k-folds for cross-validation
-experiment_folder = '../../../copy/consultancy/iemocap_cqt'  #where to save results
+experiment_folder = '../../../copy/consultancy/iemocap_aug2_cqt'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict

@@ -114,8 +114,8 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     'drop_prob': 0.3,
     'hidden_size': 200,
     'output_classes': 8,
-    'load_weights': True,
-    'pretrained_path': '../models/model_xval_ravdess_cqt_exp1_run3_fold0'}
+    'load_weights': False,
+    'pretrained_path': '../models/model_xval_ravdess_cqt_exp1_run2_fold0'}
 
     reg = regularizers.l2(p['regularization_lambda'])
 
@@ -152,9 +152,14 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
             try:
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
             except ValueError:
+                print ('')
+                print ('')
                 print ('Warning: weights shared from: ' + str(model.layers[0].name) + ' to: ' + str(model.layers[layer-1].name))
+                print ('')
+                print ('')
                 break
         p['layers_with_shared_weights'] = shared_weights
+
     return model, p
 
 def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
@@ -221,9 +226,22 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     model = Model(inputs=input_data, outputs=out)
 
     #load pretrained weights if desired
-    if load_weights:
-        pretrained = load_model(p['pretrained_path'], include_top=False)
-        model.set_weights(pretrained.get_weights())
+    if p['load_weights']:
+        num_layers = len([layer.name for layer in model.layers])
+        pretrained = load_model(p['pretrained_path'])
+        shared_weights = []
+        for layer in range(num_layers): #cut output layer
+            shared_weights.append(model.layers[layer].name)
+            try:
+                model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
+            except ValueError:
+                print ('')
+                print ('')
+                print ('Warning: weights shared from: ' + str(model.layers[0].name) + ' to: ' + str(model.layers[layer-1].name))
+                print ('')
+                print ('')
+                break
+        p['layers_with_shared_weights'] = shared_weights
 
     return model, p
 
@@ -292,9 +310,23 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     model = Model(inputs=input_data, outputs=out)
 
     #load pretrained weights if desired
-    if load_weights:
-        pretrained = load_model(p['pretrained_path'], include_top=False)
-        x = pretrained.out
+    if p['load_weights']:
+        num_layers = len([layer.name for layer in model.layers])
+        pretrained = load_model(p['pretrained_path'])
+        shared_weights = []
+        for layer in range(num_layers): #cut output layer
+            shared_weights.append(model.layers[layer].name)
+            try:
+                model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
+            except ValueError:
+                print ('')
+                print ('')
+                print ('Warning: weights shared from: ' + str(model.layers[0].name) + ' to: ' + str(model.layers[layer-1].name))
+                print ('')
+                print ('')
+                break
+        p['layers_with_shared_weights'] = shared_weights
+
     return model, p
 
 def ResNet_50(time_dim, features_dim, user_parameters=['niente = 0']):

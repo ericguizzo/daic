@@ -7,7 +7,7 @@ import xval_instance as xval
 gpu_ID = 0
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'testing learning rate on OMG_model, ParallelConv and AlexNet. No Augmentation'
+short_description = 'testing learning rate on OMG_model, ParallelConv and AlexNet. Augmentation'
 dataset = 'iemocap_cqt_aug2'
 task_type = 'classification'
 generator = False
