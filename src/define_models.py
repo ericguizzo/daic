@@ -143,10 +143,10 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
 
     #load pretrained weights if desired
-    layers_list = [layer.name for layer in model.layers]
     if p['load_weights']:
+        num_layers = len([layer.name for layer in model.layers])
         pretrained = load_model(p['pretrained_path'])
-        for layer in layers_list[:-1]:  #cut output layer
+        for layer in range(num_layers-1):  #cut output layer
             if layer != 'out':
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
                 print ('culo')
