@@ -115,7 +115,7 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     'hidden_size': 200,
     'output_classes': 8,
     'load_weights': False,
-    'pretrained_path': '../models/OMG_model_pretrained_ravdess.hdf5'}
+    'pretrained_path': '../models/model_xval_ravdess_cqt_exp1_run3_fold0'}
 
     reg = regularizers.l2(p['regularization_lambda'])
 
@@ -141,16 +141,14 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
     model = Model(inputs=input_data, outputs=out)
 
-    layers_list = [layer.name for layer in model.layers]
-    print ('cyulo')
-    print (layers_list)
+
     #load pretrained weights if desired
-    if load_weights:
+    layers_list = [layer.name for layer in model.layers]
+    if p['load_weights']:
         pretrained = load_model(p['pretrained_path'])
-        for layer in layers_list:
+        for layer in layers_list[:-1]:  #cut output layer
             if layer != 'out':
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
-
 
     return model, p
 
