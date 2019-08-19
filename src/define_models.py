@@ -151,6 +151,7 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
             try:
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
             except ValueError:
+                break
                 print ('Warning: cant transfer weights for layer: ' + str(model.layers[layer].name))
     return model, p
 
