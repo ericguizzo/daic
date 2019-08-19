@@ -111,8 +111,7 @@ patience = cfg.getint('training_defaults', 'patience')
 batch_size = cfg.getint('training_defaults', 'batch_size')
 num_epochs = cfg.getint('training_defaults', 'num_epochs')
 learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
-reshaping_type = cfg.getfloat('training_defaults', 'reshaping_type')
-
+reshaping_type = cfg.get('training_defaults', 'reshaping_type')
 optimizer = cfg.get('training_defaults', 'optimizer')
 
 
