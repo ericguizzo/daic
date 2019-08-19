@@ -28,7 +28,7 @@ experiment = {}
 experiment[1] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00000001"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00000001', 'output_classes=4',
-                 'load_weights=True', "pretrained_path='../models/model_xval_ravdess_cqt_exp1_run3_fold0'"]
+                 'load_weights=True', "pretrained_path='model_xval_ravdess_cqt_exp1_run3_fold0'"]
 
 experiment[2] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00000003"', 'comment_2="OMG_model, pretrain RAVDESS"',
