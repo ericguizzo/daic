@@ -8,6 +8,7 @@ from keras.layers import Input, Convolution2D, Conv2D, MaxPooling2D, Dense, Drop
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint, History
 from keras.applications.resnet50 import ResNet50
+from keras.models import load_model
 from keras.utils import np_utils
 from keras.backend import int_shape
 from keras import regularizers
@@ -112,7 +113,9 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     'conv3_depth': 40,
     'drop_prob': 0.3,
     'hidden_size': 200,
-    'output_classes': 8}
+    'output_classes': 8,
+    'load_weights': False,
+    'pretrained_path': '../models/OMG_model_pretrained_ravdess.hdf5'}
 
     reg = regularizers.l2(p['regularization_lambda'])
 
@@ -138,6 +141,17 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
     model = Model(inputs=input_data, outputs=out)
 
+    layers_list = [layer.name for layer in model.layers]
+    print ('cyulo')
+    print (layers_list)
+    #load pretrained weights if desired
+    if load_weights:
+        pretrained = load_model(p['pretrained_path'])
+        for layer in layers_list:
+            if layer != 'out'
+            model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
+
+
     return model, p
 
 def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
@@ -159,7 +173,9 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'hidden_size_2': 4096,
     'hidden_size_3': 1000,
     'drop_prob': 0.4,
-    'output_classes': 8
+    'output_classes': 8,
+    'load_weights': False,
+    'pretrained_path': '../models/AlexNet_pretrained_ravdess.hdf5'
     }
 
     p = parse_parameters(p, user_parameters)
@@ -201,6 +217,11 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
 
     model = Model(inputs=input_data, outputs=out)
 
+    #load pretrained weights if desired
+    if load_weights:
+        pretrained = load_model(p['pretrained_path'], include_top=False)
+        model.set_weights(pretrained.get_weights())
+
     return model, p
 
 def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
@@ -221,6 +242,8 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     'hidden_size_2': 200,
     'drop_prob': 0.5,
     'p_divider': 2,
+    'load_weights': False,
+    'pretrained_path': '../models/ParallelConv_pretrained_ravdess.hdf5'
     }
 
     p = parse_parameters(p, user_parameters)
@@ -265,6 +288,10 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
 
     model = Model(inputs=input_data, outputs=out)
 
+    #load pretrained weights if desired
+    if load_weights:
+        pretrained = load_model(p['pretrained_path'], include_top=False)
+        x = pretrained.out
     return model, p
 
 def ResNet_50(time_dim, features_dim, user_parameters=['niente = 0']):

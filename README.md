@@ -156,8 +156,6 @@ In particular, in your preprocessing script you can call the function prepreoces
 So, for the custom preprocessing of a dataset you could simply create a for loop that iterates the foldable items and calls the above function.
 
 Example in pseudo-code:
-
-Example:
 ```python
 #this is the basic structure to preprocess a new dataset
 foldable_items = {1: ["paths to actor 1's sounds"],

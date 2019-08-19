@@ -17,7 +17,6 @@ cfg = configparser.ConfigParser()
 cfg.read(config)
 
 #get values from config file
-SR =  cfg.getint('sampling', 'sr_target')
 NORMALIZATION = eval(cfg.get('feature_extraction', 'normalization'))
 IR_FOLDER = cfg.get('augmentation', 'augmentation_IRs_path')
 NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_backgroundnoise_path')
@@ -35,9 +34,9 @@ if __name__ == '__main__':
     temp_contents = os.listdir(AUGMENTATION_IN)
     temp_contents = list(filter(lambda x: '.wav' in x, temp_contents))
     in_file_name = AUGMENTATION_IN + '/' + temp_contents[0]
-    global_sr, dummy = uf.wavread(in_file_name)
+    SR, dummy = uf.wavread(in_file_name)
 else:
-    global_sr = 44100
+    SR = 44100
 
 
 #load background noise sample
@@ -227,11 +226,16 @@ def random_samples(vector_signal, dur, sr=SR):
 def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
     #creates alternative versions of sounds of a single sound trying to keep the chaos/order feature
 
+    global_sr = 44100
     sound_name = file_name.split('/')[-1]
     sound_string = sound_name[:-4]
     label_string = sound_name[-4:]
     label = label_string[1]
     sr, vector_input = uf.wavread(file_name)
+
+    #resample to 44100 for better filters
+    vector_input = librosa.core.resample(vector_input, SR, global_sr)
+
     DUR = len(vector_input)
     funcs = ['random_stretch','bg_noise','random_eq']
 
@@ -267,11 +271,14 @@ def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
             vector_output = random_samples(vector_output, dur=DUR)
         '''
 
-        '''
-        #output_normalization
-        vector_output = np.divide(vector_output, np.max(vector_output))
-        vector_output = np.multiply(vector_output, 0.8)
-        '''
+        if NORMALIZATION:
+            #output_normalization
+            vector_output = np.divide(vector_output, np.max(vector_output))
+            vector_output = np.multiply(vector_output, 0.8)
+
+        #resample to original sr
+        vector_output = librosa.core.resample(vector_output, global_sr, SR)
+
         #formatting strings to print
         success_string = sound_string + ' augmented: ' + str(new_sound+1)  #describe last prcessed sound
         infolder_num_files = status[0]  #number of input files to extend
