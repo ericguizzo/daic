@@ -13,7 +13,7 @@ from keras.utils import np_utils
 from keras.backend import int_shape
 from keras import regularizers
 from keras import optimizers
-import sys
+import sys, os
 import configparser
 import loadconfig
 
