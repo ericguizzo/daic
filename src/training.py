@@ -135,7 +135,7 @@ try:
     a = sys.argv[5]
     parameters = parameters.split('/')
     for param in parameters:
-        print (param)
+        #print (param)
         exec(param)
 
 except IndexError:
