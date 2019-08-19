@@ -35,7 +35,7 @@ except IndexError:
     #generator: 11865
     #nogenerator
     generator = True
-    dataset = 'iemocap_cqt'
+    dataset = 'ravdess'
     architecture = 'OMG_model'
     parameters = ['niente = 0']
     task_type = 'classification'
