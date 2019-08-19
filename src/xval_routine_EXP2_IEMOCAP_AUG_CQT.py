@@ -28,67 +28,67 @@ experiment = {}
 experiment[1] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00000001"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00000001', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[2] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00000003"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00000003', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[3] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00000005"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00000005', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[4] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0000001"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.0000001', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[5] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0000003"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.0000003', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[6] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0000005"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.0000005', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[7] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.000001"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.000001', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[8] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.000003"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.000003', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[9] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.000005"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.000005', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[10] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00001"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00001', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[11] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00003"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00003', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[12] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.00005"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.00005', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 experiment[13] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
                  'comment_1="lr 0.0001"', 'comment_2="OMG_model, pretrain RAVDESS"',
                  'learning_rate=0.0001', 'output_classes=4',
-                 'load_weights=True', 'pretrained_path="""../models/model_xval_ravdess_cqt_exp1_run3_fold0"""']
+                 'load_weights=True', 'pretrained_path="../models/model_xval_ravdess_cqt_exp1_run3_fold0"']
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#
