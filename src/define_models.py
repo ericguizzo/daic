@@ -146,11 +146,12 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     if p['load_weights']:
         num_layers = len([layer.name for layer in model.layers])
         pretrained = load_model(p['pretrained_path'])
-        for layer in range(num_layers):  #cut output layer
+        for layer in range(num_layers):
             print (model.layers[layer].name)
-            if layer != 'out':
+            try:
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
-                print ('culo')
+            except ValueError:
+                print ('cant transfer weights for layer: ' + str(model.layers[layer].name))
     return model, p
 
 def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
