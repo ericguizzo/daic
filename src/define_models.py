@@ -149,7 +149,7 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
         for layer in layers_list[:-1]:  #cut output layer
             if layer != 'out':
                 model.layers[layer].set_weights(pretrained.layers[layer].get_weights())
-
+                print ('culo')
     return model, p
 
 def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
