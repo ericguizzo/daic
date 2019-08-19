@@ -14,6 +14,16 @@ from keras.backend import int_shape
 from keras import regularizers
 from keras import optimizers
 import sys
+import configparser
+import loadconfig
+
+
+config = loadconfig.load()
+cfg = configparser.ConfigParser()
+cfg.read(config)
+
+#get values from config file
+PRETRAINED_MODELS_FOLDER = cfg.get('training_defaults', 'pretrained_models_folder')
 
 def parse_parameters(defaults, parameters):
     for param in parameters:
@@ -115,7 +125,7 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
     'hidden_size': 200,
     'output_classes': 8,
     'load_weights': False,
-    'pretrained_path': '../models/model_xval_ravdess_cqt_exp1_run2_fold0'}
+    'pretrained_model': 'model_xval_ravdess_cqt_exp1_run2_fold0'}
 
     reg = regularizers.l2(p['regularization_lambda'])
 
@@ -144,8 +154,10 @@ def OMG_model(time_dim, features_dim, user_parameters=['niente = 0']):
 
     #load pretrained weights if desired
     if p['load_weights']:
+        model
+        pretrained_path = os.path.join(PRETRAINED_MODELS_FOLDER, p['pretrained_model'])
         num_layers = len([layer.name for layer in model.layers])
-        pretrained = load_model(p['pretrained_path'])
+        pretrained = load_model(pretrained_path)
         shared_weights = []
         for layer in range(num_layers): #cut output layer
             shared_weights.append(model.layers[layer].name)
@@ -183,7 +195,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'drop_prob': 0.4,
     'output_classes': 8,
     'load_weights': False,
-    'pretrained_path': '../models/AlexNet_pretrained_ravdess.hdf5'
+    'pretrained_model': 'AlexNet_pretrained_ravdess.hdf5'
     }
 
     p = parse_parameters(p, user_parameters)
@@ -227,8 +239,10 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
 
     #load pretrained weights if desired
     if p['load_weights']:
+        model
+        pretrained_path = os.path.join(PRETRAINED_MODELS_FOLDER, p['pretrained_model'])
         num_layers = len([layer.name for layer in model.layers])
-        pretrained = load_model(p['pretrained_path'])
+        pretrained = load_model(pretrained_path)
         shared_weights = []
         for layer in range(num_layers): #cut output layer
             shared_weights.append(model.layers[layer].name)
@@ -264,7 +278,7 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
     'drop_prob': 0.5,
     'p_divider': 2,
     'load_weights': False,
-    'pretrained_path': '../models/ParallelConv_pretrained_ravdess.hdf5'
+    'pretrained_model': 'ParallelConv_pretrained_ravdess.hdf5'
     }
 
     p = parse_parameters(p, user_parameters)
@@ -311,8 +325,10 @@ def ParallelConv(time_dim, features_dim, user_parameters=['niente = 0']):
 
     #load pretrained weights if desired
     if p['load_weights']:
+        model
+        pretrained_path = os.path.join(PRETRAINED_MODELS_FOLDER, p['pretrained_model'])
         num_layers = len([layer.name for layer in model.layers])
-        pretrained = load_model(p['pretrained_path'])
+        pretrained = load_model(pretrained_path)
         shared_weights = []
         for layer in range(num_layers): #cut output layer
             shared_weights.append(model.layers[layer].name)
