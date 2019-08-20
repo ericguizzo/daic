@@ -41,7 +41,7 @@ except IndexError:
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
-    parameters_path = results_path + '/psarameters'
+    parameters_path = results_path + '/parameters'
     SAVE_RESULTS = results_path
     num_fold = 0
     num_exp = 0
@@ -113,6 +113,7 @@ num_epochs = cfg.getint('training_defaults', 'num_epochs')
 learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
 reshaping_type = cfg.get('training_defaults', 'reshaping_type')
 optimizer = cfg.get('training_defaults', 'optimizer')
+recompute_matrices = eval(cfg.get('training_defaults', 'recompute_matrices'))
 
 
 percs = [train_split, validation_split, test_split]
