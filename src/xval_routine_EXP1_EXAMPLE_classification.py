@@ -66,7 +66,7 @@ except IndexError:
     end = keys[-1]
 
 for num_run in range(begin,end+1):
-    results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+    results_name = results_name + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     temp_params = '/'.join(experiment[num_run])
 
     if overwrite_results:

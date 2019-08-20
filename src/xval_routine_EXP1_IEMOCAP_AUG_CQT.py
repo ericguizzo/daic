@@ -140,7 +140,7 @@ for num_run in range(begin,end+1):
             xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID, task_type, generator)
 
     else:  #if not overwrite results
-        if not os.path.exists(output_path):  #not overwrite experiments
+        if not os.path.exists(results_name):  #not overwrite experiments
             if debug_mode == False:
                 try:
                     xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID, task_type, generator)
