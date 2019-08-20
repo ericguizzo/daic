@@ -18,7 +18,8 @@ NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
 SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 INPUT_IEMOCAP_FOLDER = cfg.get('preprocessing', 'input_iemocap_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
-
+if not os.path.exists(OUTPUT_FOLDER):
+    os.makedirs(OUTPUT_FOLDER)
 print ('Augmentation: ' + str(SEGMENTATION) + ' | num_aug_samples: ' + str(NUM_AUG_SAMPLES) )
 print ('Segmentation: ' + str(SEGMENTATION))
 print ('Features type: ' + str(FEATURES_TYPE))
