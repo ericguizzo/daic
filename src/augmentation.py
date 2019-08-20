@@ -20,6 +20,7 @@ cfg.read(config)
 NORMALIZATION = eval(cfg.get('feature_extraction', 'normalization'))
 IR_FOLDER = cfg.get('augmentation', 'augmentation_IRs_path')
 NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_backgroundnoise_path')
+internal_sr = 44100
 
 if __name__ == '__main__':
     AUGMENTATION_IN = sys.argv[1]
@@ -34,9 +35,9 @@ if __name__ == '__main__':
     temp_contents = os.listdir(AUGMENTATION_IN)
     temp_contents = list(filter(lambda x: '.wav' in x, temp_contents))
     in_file_name = AUGMENTATION_IN + '/' + temp_contents[0]
-    SR, dummy = uf.wavread(in_file_name)
-else:
-    SR = 44100
+    #SR, dummy = uf.wavread(in_file_name)
+
+
 
 
 #load background noise sample
@@ -45,9 +46,9 @@ print ("loading background noise sample...")
 #background_noise1, nsr = audio_load(NOISE_SAMPLE, sr=SR)
 #noise_loader = ess.EasyLoader(filename=NOISE_SAMPLE, sampleRate=global_sr)
 #background_noise = noise_loader()
-background_noise, dummy = librosa.core.load(NOISE_SAMPLE, sr=SR)
+background_noise, dummy = librosa.core.load(NOISE_SAMPLE, sr=internal_sr)
 
-def notch_filter(band, cutoff, ripple, rs, sr=global_sr, order=2, filter_type='cheby2'):
+def notch_filter(band, cutoff, ripple, rs, sr=internal_sr, order=2, filter_type='cheby2'):
     #creates chebyshev polynomials for a notch filter with given parameters
     nyq  = sr/2.0
     low  = cutoff - band/2.0
@@ -77,7 +78,7 @@ def bg_noise(vector_signal, dur):
     return mix_output
 
 
-def random_eq(vector_signal, dur, sr=global_sr):
+def random_eq(vector_signal, dur, sr=internal_sr):
     #applies random filtering to an input vetor using chebyshev notch filters
     num_filters = np.random.randint(1,4)
     #transition bands for cheby2 filter order
@@ -159,7 +160,7 @@ def random_eq(vector_signal, dur, sr=global_sr):
 
     return filtered_data
 
-def random_stretch(vector_signal, dur, sr=SR):
+def random_stretch(vector_signal, dur, sr=internal_sr):
     #applies random time stretch to signal
 
     #dur_samps = int(sr*dur)
@@ -210,7 +211,7 @@ def random_rev(vector_signal, dur):
 
 
 
-def random_samples(vector_signal, dur, sr=SR):
+def random_samples(vector_signal, dur, sr=internal_sr):
     '''
     num_rand_samps = np.random.randint(1,3)
     #dur_samps = int(sr*dur)
@@ -226,7 +227,7 @@ def random_samples(vector_signal, dur, sr=SR):
 def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
     #creates alternative versions of sounds of a single sound trying to keep the chaos/order feature
 
-    global_sr = 44100
+    internal_sr = 44100
     sound_name = file_name.split('/')[-1]
     sound_string = sound_name[:-4]
     label_string = sound_name[-4:]
@@ -234,7 +235,7 @@ def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
     sr, vector_input = uf.wavread(file_name)
 
     #resample to 44100 for better filters
-    vector_input = librosa.core.resample(vector_input, SR, global_sr)
+    vector_input = librosa.core.resample(vector_input, SR, internal_sr)
 
     DUR = len(vector_input)
     funcs = ['random_stretch','bg_noise','random_eq']
@@ -277,7 +278,7 @@ def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
             vector_output = np.multiply(vector_output, 0.8)
 
         #resample to original sr
-        vector_output = librosa.core.resample(vector_output, global_sr, SR)
+        vector_output = librosa.core.resample(vector_output, internal_sr, SR)
 
         #formatting strings to print
         success_string = sound_string + ' augmented: ' + str(new_sound+1)  #describe last prcessed sound
@@ -298,8 +299,8 @@ def extend_datapoint(file_name, output_dir, num_extensions=1, status = [1,0]):
 def gen_datapoint(vector_input):
     #creates alternative versions of sounds of a single sound trying to keep the chaos/order feature
     #resample to have better filters
-    global_sr = 44100
-    vector_input = librosa.core.resample(vector_input, SR, global_sr)
+    internal_sr = 44100
+    vector_input = librosa.core.resample(vector_input, SR, internal_sr)
 
     DUR = len(vector_input)
     funcs = ['random_stretch','bg_noise','random_eq']
@@ -340,7 +341,7 @@ def gen_datapoint(vector_input):
         vector_output = np.multiply(vector_output, 0.8)
 
 
-    vector_output = librosa.core.resample(vector_output, global_sr, SR)
+    vector_output = librosa.core.resample(vector_output, internal_sr, SR)
 
     return vector_output
 
