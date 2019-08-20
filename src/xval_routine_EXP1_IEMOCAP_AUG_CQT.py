@@ -4,15 +4,15 @@ import sys, os
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
-gpu_ID = 0
-overwrite_results = True  #if true overwrite existing experiment instances
+gpu_ID = 1
+overwrite_results = False  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'testing learning rate on OMG_model, ParallelConv and AlexNet. Augmentation'
 dataset = 'iemocap_cqt_aug2'
 task_type = 'classification'
-generator = False
+generator = True
 num_experiment = 1  #id of the experiment
-num_folds = 2  #number of k-folds for cross-validation
+num_folds = 1  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
 experiment_folder = '../../../copy/consultancy/iemocap_cqt_aug2'  #where to save results
 
