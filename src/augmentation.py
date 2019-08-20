@@ -20,7 +20,7 @@ cfg.read(config)
 NORMALIZATION = eval(cfg.get('feature_extraction', 'normalization'))
 IR_FOLDER = cfg.get('augmentation', 'augmentation_IRs_path')
 NOISE_SAMPLE = cfg.get('augmentation', 'augmentation_backgroundnoise_path')
-SR = cfg.getint('sampling', 'sr')
+SR = cfg.getint('sampling', 'sr_target')
 
 internal_sr = 44100
 

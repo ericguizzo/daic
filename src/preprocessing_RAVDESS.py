@@ -20,6 +20,7 @@ INPUT_RAVDESS_FOLDER =  cfg.get('preprocessing', 'input_audio_folder_ravdess')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)
+
 print ('Segmentation: ' + str(SEGMENTATION))
 print ('Features type: ' + str(FEATURES_TYPE))
 
