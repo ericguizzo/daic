@@ -12,7 +12,7 @@ dataset = 'iemocap_cqt_aug2'
 task_type = 'classification'
 generator = False
 num_experiment = 2  #id of the experiment
-num_folds = 2  #number of k-folds for cross-validation
+num_folds = 1  #number of k-folds for cross-validation
 experiment_folder = '../../../copy/consultancy/iemocap_cqt_aug2'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
