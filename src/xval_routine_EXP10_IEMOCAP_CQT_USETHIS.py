@@ -5,7 +5,7 @@ import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
 gpu_ID = 1
-overwrite_results = False  #if true overwrite existing experiment instances
+overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = False  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'pretraining on ravdess, training on iemocap'
 dataset = 'iemocap_cqt_aug2'
