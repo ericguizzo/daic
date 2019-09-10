@@ -242,8 +242,6 @@ def main():
     #normalize to 0 mean and unity std (according to training set mean and std)
     tr_mean = np.mean(training_predictors)
     tr_std = np.std(training_predictors)
-    print ('culo')
-    print (tr_mean, tr_std)
     training_predictors = np.subtract(training_predictors, tr_mean)
     training_predictors = np.divide(training_predictors, tr_std)
     validation_predictors = np.subtract(validation_predictors, tr_mean)
