@@ -19,6 +19,8 @@ labels_iemocap = {0: 'neutral',
 
 def gen_prediction(sound_path, model=MODEL, preprocessing_type='cqt', normalization=True,
                     sequence_length=4, sr=16000):
+    tr_mean = 0.019471053231644147
+    tr_std = 0.09932460200125745
     dur = int(sequence_length * sr)
     #load
     samples, sr = librosa.core.load(sound_path, sr=sr)
@@ -36,6 +38,10 @@ def gen_prediction(sound_path, model=MODEL, preprocessing_type='cqt', normalizat
         samples = samples[:dur]
     #feature extraction
     features = pre.extract_features(samples, preprocessing_type)
+    #normalize features
+    features = np.subtract(features, tr_mean)
+    features = np.divide(features, tr_std)
+    
     features = features.reshape(1, features.shape[0],features.shape[1], 1)
     prediction = model.predict(features)
 
