@@ -394,15 +394,15 @@ def main():
                 torch.save(model.state_dict(), BVL_model_path)
                 print ('\nsaved_BVL')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
-        utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
-        print ('')
-        print (utilstring)
 
 
         print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
         if task_type == 'classification':
             print ('  Train acc: ' + str(np.round(train_epoch_acc.item(), decimals=5)) + ' | Val acc: ' + str(np.round(val_epoch_acc.item(), decimals=5)))
 
+        utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
+        print ('')
+        print (utilstring)
         #AS LAST THING, AFTER OPTIMIZER.STEP AND EVENTUAL MODEL SAVING
         #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
         if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
