@@ -71,7 +71,6 @@ import torch.utils.data as utils
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import numpy as np
-from multiscale_convlayer2 import MultiscaleConv2d
 import define_models_torch as choose_model
 import utility_functions as uf
 import define_models_torch as choose_model
@@ -107,6 +106,7 @@ learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
 reshaping_type = cfg.get('training_defaults', 'reshaping_type')
 optimizer = cfg.get('training_defaults', 'optimizer')
 recompute_matrices = eval(cfg.get('training_defaults', 'recompute_matrices'))
+regularization_lambda = cfg.getfloat('training_defaults', 'regularization_lambda')
 
 percs = [train_split, validation_split, test_split]
 
