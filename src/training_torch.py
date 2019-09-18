@@ -355,7 +355,7 @@ def main():
                 temp_loss = loss_function(outputs, truth)
                 train_batch_losses.append(temp_loss.item())
                 if task_type == 'classification':
-                    temp_acc = accuracy_score(np.argmax(outputs.cpu(), axis=1), truth.cpu())
+                    temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     train_batch_accs.append(temp_acc)
 
             #validation data
