@@ -149,7 +149,8 @@ training_parameters = {'train_split': train_split,
     'batch_size': batch_size,
     'num_epochs': num_epochs,
     'learning_rate': learning_rate,
-    'optimizer': optimizer
+    'optimizer': optimizer,
+    'regularization_lambda': regularization_lambda
     }
 
 def main():
