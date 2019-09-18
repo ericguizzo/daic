@@ -406,8 +406,10 @@ def main():
         #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
         if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
             print ('merda')
-            for m in model.modules():
-                print (m)
+            for layer in model.modules():
+                if 'MultiscaleConv2d' in layer:
+                    print (layer)
+                    layer.update_kernels()
 
 
             model.multiscale1.update_kernels()
