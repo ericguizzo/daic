@@ -382,7 +382,7 @@ def main():
             val_epoch_acc = np.mean(val_batch_accs)
             val_acc_hist.append(val_epoch_acc)
 
-        #save best model (metrics = loss)
+        #save best model (metrics = validation loss)
         if epoch == 0:
             torch.save(model.state_dict(), BVL_model_path)
             print ('\nsaved_BVL')
