@@ -235,18 +235,18 @@ def main():
 
     #from onehot to float (CrossEntropyLoss requires this)
     if task_type == 'classification':
-    training_target = []
-    validation_target = []
-    test_target = []
-    for i in training_target_onehot:
-        training_target.append(np.argmax(i))
-    for i in validation_target_onehot:
-        validation_target.append(np.argmax(i))
-    for i in test_target_onehot:
-        test_target.append(np.argmax(i))
-    training_target = np.array(training_target)
-    validation_target = np.array(validation_target)
-    test_target = np.array(test_target)
+        tr_target = []
+        v_target = []
+        ts_target = []
+        for i in training_target:
+            tr_target.append(np.argmax(i))
+        for i in validation_target:
+            v_target.append(np.argmax(i))
+        for i in test_target:
+            ts_target.append(np.argmax(i))
+        training_target = np.array(tr_target)
+        validation_target = np.array(v_target)
+        test_target = np.array(ts_target)
 
     #reshape tensors
     #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
