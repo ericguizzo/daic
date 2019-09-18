@@ -65,9 +65,9 @@ def EmoModel1layer(time_dim, features_dim, user_parameters=['niente = 0']):
 
         def forward(self, X):
             training_state = self.training
-            if layer_type == 'conv':
+            if p['layer_type'] == 'conv':
                 X = F.relu(self.conv1(X))
-            if layer_type == 'multi':
+            if p['layer_type'] == 'multi':
                 X = F.relu(self.multiscale1(X, training_state))
             X = X.reshape(X.size(0), -1)
             X = F.relu(self.hidden(X))
