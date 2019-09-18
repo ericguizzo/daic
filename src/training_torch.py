@@ -410,11 +410,6 @@ def main():
                 if isinstance(layer, MultiscaleConv2d):
                     print (layer)
                     layer.update_kernels()
-
-
-            if network_type == '3_layer':
-                model.multiscale2.update_kernels()
-                model.multiscale3.update_kernels()
         elif training_mode =='only_eval':
             pass
         else:
