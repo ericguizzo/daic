@@ -30,7 +30,7 @@ def parse_parameters(defaults, parameters):
 
 
 #DEFINE HERE YOUR MODELS!!
-def example(time_dim, features_dim, user_parameters=['niente = 0']):
+def EmoModel1layer(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
     to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the UI script
@@ -51,10 +51,10 @@ def example(time_dim, features_dim, user_parameters=['niente = 0']):
     p = parse_parameters(p, user_parameters)
 
     #always return model AND p!!!
-    class EmoModel1layer(nn.Module):
+    class EmoModel1layer_class(nn.Module):
 
         def __init__(self):
-            super(EmoModel1layer, self).__init__()
+            super(EmoModel1layer_class, self).__init__()
             self.inner_state = True
             self.conv1 = nn.Conv2d(1, p['channels'], kernel_size=p['kernel_size_1'])
             self.multiscale1 = MultiscaleConv2d(1, p['channels'], kernel_size=p['kernel_size_1'], scale_factors=p['stretch_factors'],
@@ -75,6 +75,6 @@ def example(time_dim, features_dim, user_parameters=['niente = 0']):
             return X
 
 
-    out = EmoModel1layer()
+    out = EmoModel1layer_class()
 
     return out, p
