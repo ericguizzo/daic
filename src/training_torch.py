@@ -71,7 +71,7 @@ import torch.utils.data as utils
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import numpy as np
-import define_models_torch as choose_model
+from multiscale_convlayer2 import MultiscaleConv2d
 import utility_functions as uf
 import define_models_torch as choose_model
 #import preprocessing_DAIC as pre
@@ -407,12 +407,11 @@ def main():
         if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
             print ('merda')
             for layer in model.modules():
-                if 'MultiscaleConv2d' in str(layer):
+                if isinstance(layer, MultiscaleConv2d):
                     print (layer)
                     layer.update_kernels()
 
 
-            model.multiscale1.update_kernels()
             if network_type == '3_layer':
                 model.multiscale2.update_kernels()
                 model.multiscale3.update_kernels()
