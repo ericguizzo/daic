@@ -58,30 +58,21 @@ except IndexError:
     print ('saving model at: ' + SAVE_MODEL + '.hdf5')
     print ('')
 
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_ID)
+
 
 import loadconfig
 import configparser
 import json
-import keras
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Model
-from keras.layers import Input, Convolution2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, Reshape
-from keras.layers.normalization import BatchNormalization
-from keras.layers.advanced_activations import ELU
-from keras.callbacks import EarlyStopping, ModelCheckpoint, History
-from keras.utils import np_utils
-from keras.backend import int_shape
-from keras.models import load_model
-from keras import regularizers
-from keras import optimizers
-from keras import backend as K
+from torch import nn
+from torch import optim
+import torch.nn.functional as F
+import torch.utils.data as utils
 from sklearn.metrics import classification_report
-from sklearn.metrics import f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import numpy as np
 import define_models as choose_model
 import utility_functions as uf
+import define_models_torch as choose_model
 #import preprocessing_DAIC as pre
 
 #np.random.seed(0)
@@ -115,21 +106,22 @@ reshaping_type = cfg.get('training_defaults', 'reshaping_type')
 optimizer = cfg.get('training_defaults', 'optimizer')
 recompute_matrices = eval(cfg.get('training_defaults', 'recompute_matrices'))
 
-
 percs = [train_split, validation_split, test_split]
 
+device = torch.device('cuda:' + str(gpu_ID))
+
 if task_type == 'classification':
-    loss_function = 'categorical_crossentropy'
+    loss_function nn.CrossEntropyLoss()
     metrics_list = ['accuracy']
 elif task_type == 'regression':
-    loss_function = 'MSE'
-    metrics_list = ['MAE']
-
+    loss_function = criterion = nn.MSELoss()
 else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
 
 #path for saving best val loss and best val acc models
-BVL_model_path = SAVE_MODEL + '.hdf5'
+BVL_model_path = SAVE_MODEL
+recompute_matrices = False
+
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
@@ -142,14 +134,6 @@ try:
 except IndexError:
     pass
 
-
-#define optimizer ADD HERE DIFFERENT OPTIMIZERS!!!!!!!
-if optimizer == 'adam':
-    opt = optimizers.Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-elif optimizer == 'sgd':
-    opt.optimizers.SGD(lr=learning_rate)
-else:
-    raise ValueError('Bad optimizer chosen')
 
 #build dict with all UPDATED training parameters
 training_parameters = {'train_split': train_split,
@@ -249,65 +233,68 @@ def main():
     test_predictors = np.subtract(test_predictors, tr_mean)
     test_predictors = np.divide(test_predictors, tr_std)
 
-    #OVERFITTING TEST!!! REMOVE THESE LINES FOR PROPER TRAINING
-    '''
-    validation_predictors = training_predictors.copy()
-    validation_target = training_target.copy()
-    '''
-
-    #normalize labels between 0 and 1
-    '''
-    max_labels = [np.max(training_target), np.max(validation_target), np.max(test_target)]
-    max_val = float(np.max(max_labels))
-    training_target = np.divide(training_target, max_val)
-    validation_target = np.divide(validation_target, max_val)
-    test_target = np.divide(test_target, max_val)
-    '''
-
-    #select a subdataset for testing (to be commented when normally trained)
-    '''
-    bound = 30
-    training_predictors = training_predictors[:bound]
-    training_target = training_target[:bound]
-    validation_predictors = validation_predictors[:bound]
-    validation_target = validation_target[:bound]
-    test_predictors = test_predictors[:bound]
-    test_target = test_target[:bound]
-    '''
+    #from onehot to float (CrossEntropyLoss requires this)
+    if task_type == 'classification':
+    training_target = []
+    validation_target = []
+    test_target = []
+    for i in training_target_onehot:
+        training_target.append(np.argmax(i))
+    for i in validation_target_onehot:
+        validation_target.append(np.argmax(i))
+    for i in test_target_onehot:
+        test_target.append(np.argmax(i))
+    training_target = np.array(training_target)
+    validation_target = np.array(validation_target)
+    test_target = np.array(test_target)
 
     #reshape tensors
     #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
     if reshaping_type == 'cnn':
-        training_predictors = training_predictors.reshape(training_predictors.shape[0], training_predictors.shape[1],training_predictors.shape[2], 1)
-        validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], validation_predictors.shape[1], validation_predictors.shape[2], 1)
-        test_predictors = test_predictors.reshape(test_predictors.shape[0], test_predictors.shape[1], test_predictors.shape[2], 1)
-        time_dim = training_predictors.shape[1]
-        features_dim = training_predictors.shape[2]
-    elif reshaping_type == 'rnn':
-        time_dim = training_predictors.shape[1]
-        features_dim = training_predictors.shape[2]
-    elif reshaping_type == 'none':
-        time_dim = training_predictors.shape[1]
-        features_dim = training_predictors.shape[2]
+        training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
+        validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
+        test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
+
     else:
         raise ValueError('wrong reshaping type')
 
+    #convert to tensor
+    train_predictors = torch.tensor(training_predictors).float()
+    val_predictors = torch.tensor(validation_predictors).float()
+    test_predictors = torch.tensor(test_predictors).float()
+    train_target = torch.tensor(training_target).float()
+    val_target = torch.tensor(validation_target).float()
+    test_target = torch.tensor(test_target).float()
 
-    #load and compile model (model is in locals()['model'])
-    print('\n loading model...')
-    model_string = 'model, model_parameters = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
+    #build dataset from tensors
+    #target i == predictors because autoencoding
+    tr_dataset = utils.TensorDataset(train_predictors,train_target)
+    val_dataset = utils.TensorDataset(val_predictors, val_target)
+    test_dataset = utils.TensorDataset(test_predictors, test_target)
+
+    #build data loader from dataset
+    tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=True)
+    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=True, pin_memory=True)
+    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=True, pin_memory=True)  #no batch here!!
+    #DNN input shape
+    time_dim = training_predictors.shape[-2]
+    features_dim = training_predictors.shape[-1]
+
+
+    #load model
+    model_string = 'model_class, model_parameters = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
     exec(model_string)
-    locals()['model'].compile(loss=loss_function, optimizer=opt, metrics=metrics_list)
-    print (locals()['model'].summary())
-    #print (locals()['model_parameters'])
+    model = locals()['model_class'].to(device)
 
-    #callbacks
-    best_model = ModelCheckpoint(SAVE_MODEL, monitor=save_best_model_metric, save_best_only=True, mode=save_best_model_mode)  #save the best model
-    early_stopping_monitor = EarlyStopping(patience=patience)  #stops training when the model is not improving
-    if early_stopping:
-        callbacks_list = [early_stopping_monitor, best_model]
-    else:
-        callbacks_list = [best_model]
+    #compute number of parameters
+    model_params = sum([np.prod(p.size()) for p in model.parameters()])
+    print ('Total paramters: ' + str(model_params))
+
+    #define optimizer
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate,
+                               weight_decay=regularization_lambda)
+
+
 
     #run training
     if not os.path.exists(results_path):
@@ -316,29 +303,121 @@ def main():
     if not os.path.exists(model_folder):
         os.makedirs(model_folder)
 
-
-    #if training with generator
-    if generator:  #if loading one batch at time to GPU
-        datagen = ImageDataGenerator()
-
-        history = locals()['model'].fit_generator(datagen.flow(training_predictors, training_target, batch_size=batch_size,
-                shuffle=shuffle_training_data), validation_data=datagen.flow(validation_predictors, validation_target, batch_size=batch_size,
-                shuffle=False), validation_steps=len(validation_target)/batch_size, callbacks=callbacks_list,
-                steps_per_epoch=len(training_target)/batch_size, epochs=num_epochs, shuffle=shuffle_training_data)
-
-    else:  #if loading all dataset to GPU
-        history = locals()['model'].fit(training_predictors,training_target, epochs=num_epochs,
-                                validation_data=(validation_predictors,validation_target), callbacks=callbacks_list,
-                                batch_size=batch_size, shuffle=shuffle_training_data)
-
-    train_loss_hist = history.history['loss']
-    val_loss_hist = history.history['val_loss']
+    train_loss_hist = []
+    val_loss_hist = []
     if task_type == 'classification':
-        train_acc_hist = history.history['acc']
-        val_acc_hist = history.history['val_acc']
+        train_acc_hist = []
+        val_acc_hist = []
+
+    #finally, TRAINING LOOP
+    for epoch in range(num_epochs):
+        model.train()
+        print ('\n')
+        string = 'Epoch: [' + str(epoch+1) + '/' + str(num_epochs) + '] '
+        #iterate batches
+        for i, (sounds, truth) in enumerate(tr_data):
+            sounds = sounds.to(device)
+            truth = truth.to(device)
+
+            optimizer.zero_grad()
+            outputs = model(sounds)
+            loss = loss_function(outputs, truth)
+            loss.backward()
+            #print
+            #print progress and update history, optimizer step
+            perc = int(i / len(tr_data) * 20)
+            inv_perc = int(20 - perc - 1)
+
+            loss_print_t = str(np.round(loss.item(), decimals=5))
+            string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
+            print ('\r', string_progress, end='')
+
+        #validation loss, training and val accuracy computation
+        #after current epoch training
+        train_batch_losses = []
+        val_batch_losses = []
+        if task_type == 'classification':
+            train_batch_accs = []
+            val_batch_accs = []
+
+        with torch.no_grad():
+            model.eval()
+            #training data
+            for i, (sounds, truth) in enumerate(tr_data):
+                optimizer.zero_grad()
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+
+                outputs = model(sounds)
+                temp_loss = loss_function(outputs, truth)
+                train_batch_losses.append(temp_loss.item())
+                if task_type == 'classification':
+                    temp_acc = accuracy_score(outputs, np.argmax(truth, axis=1) , average="macro")
+                    train_batch_accs.append(temp_acc)
+
+            #validation data
+            for i, (sounds, truth) in enumerate(val_data):
+                optimizer.zero_grad()
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+
+                outputs = model(sounds)
+                temp_loss = loss_function(outputs, truth)
+                val_batch_losses.append(temp_loss.item())
+                if task_type == 'classification':
+                    temp_acc = accuracy_score(outputs, np.argmax(truth, axis=1) , average="macro")
+                    val_batch_accs.append(temp_acc)
+
+        #append to history and print
+        train_epoch_loss = np.mean(train_batch_losses)
+        train_loss_hist.append(train_epoch_loss)
+        val_epoch_loss = np.mean(val_batch_losses)
+        val_loss_hist.append(val_epoch_loss)
+        if task_type == 'classification':
+            train_epoch_acc = np.mean(train_batch_accs)
+            train_acc_hist.append(train_epoch_acc)
+            val_epoch_acc = np.mean(val_batch_accs)
+            val_acc_hist.append(val_epoch_acc)
+
+        #save best model (metrics = loss)
+        if save_best_only == True:
+            if epoch == 0:
+                torch.save(model.state_dict(), BVL_model_path)
+                print ('\nsaved_BVL')
+                saved_epoch = epoch + 1
+            else:
+                best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
+                curr_loss = val_loss_hist[-1]
+                if curr_loss < best_loss:
+                    torch.save(model.state_dict(), BVL_model_path)
+                    print ('\nsaved_BVL')  #SUBSTITUTE WITH SAVE MODEL FUNC
+                    saved_epoch = epoch + 1
+        utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
+        print (utilstring)
+
+
+        print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
+        if task_type == 'classification':
+            print ('  Train acc: ' + str(np.round(train_epoch_acc.item(), decimals=5)) + ' | Val acc: ' + str(np.round(val_epoch_acc.item(), decimals=5)))
+
+        #AS LAST THING, AFTER OPTIMIZER.STEP AND EVENTUAL MODEL SAVING
+        #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
+        if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
+            model.multiscale1.update_kernels()
+            if network_type == '3_layer':
+                model.multiscale2.update_kernels()
+                model.multiscale3.update_kernels()
+        elif training_mode =='only_eval':
+            pass
+        else:
+            raise NameError ('Invalid training mode')
+            print ('Given mode: ' + str(training_mode))
+
+
+        #END OF EPOCH LOOP
 
     #compute results on the best saved model
-    K.clear_session()  #free GPU
+    torch.cuda.empty_cache()  #free GPU
     best_model = load_model(SAVE_MODEL)  #load best saved model
 
     if generator:

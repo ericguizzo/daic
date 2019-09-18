@@ -4,7 +4,14 @@ import os, sys
 import subprocess
 import time
 import shutil
+import loadconfig
+import configparser
 
+config = loadconfig.load()
+cfg = configparser.ConfigParser()
+cfg.read(config)
+
+BACKEND = cfg.get('backend', 'backend')
 
 def save_code(output_code_path):
     curr_src_path = './'
@@ -90,12 +97,20 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         np.save(results_name, np.array(['ERROR']))
 
         #run training
-        training = subprocess.Popen(['python3', 'training.py',
-                                     'crossvalidation', str(num_experiment), str(num_run),
-                                      str(num_fold), parameters, model_name, results_name,
-                                      output_temp_data_path, dataset, str(gpu_ID),
-                                      str(num_folds), locals()['task_type'],parameters_name,
-                                      task_type, str(generator)])
+        if BACKEND == 'keras':
+            training = subprocess.Popen(['python3', 'training_keras.py',
+                                         'crossvalidation', str(num_experiment), str(num_run),
+                                          str(num_fold), parameters, model_name, results_name,
+                                          output_temp_data_path, dataset, str(gpu_ID),
+                                          str(num_folds), locals()['task_type'],parameters_name,
+                                          task_type, str(generator)])
+        if BACKEND == 'torch':
+            training = subprocess.Popen(['python3', 'training_torch.py',
+                                         'crossvalidation', str(num_experiment), str(num_run),
+                                          str(num_fold), parameters, model_name, results_name,
+                                          output_temp_data_path, dataset, str(gpu_ID),
+                                          str(num_folds), locals()['task_type'],parameters_name,
+                                          task_type, str(generator)])
         training.communicate()
         training.wait()
 
