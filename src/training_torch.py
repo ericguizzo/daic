@@ -111,10 +111,10 @@ percs = [train_split, validation_split, test_split]
 device = torch.device('cuda:' + str(gpu_ID))
 
 if task_type == 'classification':
-    loss_function nn.CrossEntropyLoss()
+    loss_function = nn.CrossEntropyLoss()
     metrics_list = ['accuracy']
 elif task_type == 'regression':
-    loss_function = criterion = nn.MSELoss()
+    loss_function = nn.MSELoss()
 else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
 
