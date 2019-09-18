@@ -395,6 +395,7 @@ def main():
                 print ('\nsaved_BVL')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
         utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
+        print ('')
         print (utilstring)
 
 
@@ -405,10 +406,8 @@ def main():
         #AS LAST THING, AFTER OPTIMIZER.STEP AND EVENTUAL MODEL SAVING
         #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
         if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
-            print ('merda')
             for layer in model.modules():
                 if isinstance(layer, MultiscaleConv2d):
-                    print (layer)
                     layer.update_kernels()
         elif training_mode =='only_eval':
             pass
