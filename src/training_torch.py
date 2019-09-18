@@ -407,7 +407,7 @@ def main():
         if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
             print ('merda')
             for layer in model.modules():
-                if 'MultiscaleConv2d' in layer:
+                if 'MultiscaleConv2d' in str(layer):
                     print (layer)
                     layer.update_kernels()
 
