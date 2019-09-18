@@ -383,18 +383,17 @@ def main():
             val_acc_hist.append(val_epoch_acc)
 
         #save best model (metrics = loss)
-        if save_best_only == True:
-            if epoch == 0:
+        if epoch == 0:
+            torch.save(model.state_dict(), BVL_model_path)
+            print ('\nsaved_BVL')
+            saved_epoch = epoch + 1
+        else:
+            best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
+            curr_loss = val_loss_hist[-1]
+            if curr_loss < best_loss:
                 torch.save(model.state_dict(), BVL_model_path)
-                print ('\nsaved_BVL')
+                print ('\nsaved_BVL')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
-            else:
-                best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
-                curr_loss = val_loss_hist[-1]
-                if curr_loss < best_loss:
-                    torch.save(model.state_dict(), BVL_model_path)
-                    print ('\nsaved_BVL')  #SUBSTITUTE WITH SAVE MODEL FUNC
-                    saved_epoch = epoch + 1
         utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
         print (utilstring)
 
