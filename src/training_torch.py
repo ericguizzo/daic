@@ -405,6 +405,11 @@ def main():
         #AS LAST THING, AFTER OPTIMIZER.STEP AND EVENTUAL MODEL SAVING
         #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
         if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
+            print ('merda')
+            for m in model.modules():
+                print (m)
+
+
             model.multiscale1.update_kernels()
             if network_type == '3_layer':
                 model.multiscale2.update_kernels()
