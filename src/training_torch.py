@@ -70,7 +70,7 @@ import torch.utils.data as utils
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import numpy as np
-import define_models as choose_model
+import define_models_torch as choose_model
 import utility_functions as uf
 import define_models_torch as choose_model
 #import preprocessing_DAIC as pre
