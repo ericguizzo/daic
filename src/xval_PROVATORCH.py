@@ -28,7 +28,7 @@ experiment_folder = '../../../copy/provatorch'  #where to save results
 experiment = {}
 experiment[1] = ['architecture="EmoModel1layer"', 'reshaping_type="cnn"',
                  'comment_1="prova"', 'comment_2="torch"',
-                 'learning_rate=0.000001', 'output_classes=8',
+                 'learning_rate=0.000001', 'num_classes=8',
                  'layer_type="conv"', 'fc_insize=81213']
 
 

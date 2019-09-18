@@ -355,6 +355,10 @@ def main():
                 temp_loss = loss_function(outputs, truth)
                 train_batch_losses.append(temp_loss.item())
                 if task_type == 'classification':
+                    print ('culo')
+                    print (outputs)
+                    print ('merda')
+                    print (truth)
                     temp_acc = accuracy_score(outputs, np.argmax(truth, axis=1) , average="macro")
                     train_batch_accs.append(temp_acc)
 
