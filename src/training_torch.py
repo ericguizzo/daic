@@ -71,6 +71,7 @@ import torch.utils.data as utils
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import numpy as np
+from multiscale_convlayer2 import MultiscaleConv2d
 import define_models_torch as choose_model
 import utility_functions as uf
 import define_models_torch as choose_model
