@@ -46,7 +46,7 @@ def EmoModel1layer(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'hidden_size': 200,
     'fc_insize':100,
-    'num_classes':1
+    'num_classes':8
     }
 
     p = parse_parameters(p, user_parameters)
