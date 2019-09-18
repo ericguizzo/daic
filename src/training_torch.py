@@ -265,9 +265,9 @@ def main():
     train_predictors = torch.tensor(training_predictors).float()
     val_predictors = torch.tensor(validation_predictors).float()
     test_predictors = torch.tensor(test_predictors).float()
-    train_target = torch.tensor(training_target).float()
-    val_target = torch.tensor(validation_target).float()
-    test_target = torch.tensor(test_target).float()
+    train_target = torch.tensor(training_target).long()
+    val_target = torch.tensor(validation_target).long()
+    test_target = torch.tensor(test_target).long()
 
     #build dataset from tensors
     #target i == predictors because autoencoding
