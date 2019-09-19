@@ -606,8 +606,6 @@ def main():
         temp_results['train_stretch_percs'] = np.mean(train_batch_stretch_percs, axis=0)
         temp_results['val_stretch_percs'] = np.mean(val_batch_stretch_percs, axis=0)
         temp_results['test_stretch_percs'] = np.mean(test_batch_stretch_percs, axis=0)
-    print ('culo')
-    print (temp_results['train_stretch_percs'] )
 
     #if classification compute also f1, precision, recall
     if task_type == 'classification':
