@@ -363,6 +363,7 @@ def main():
             loss_print_t = str(np.round(loss.item(), decimals=5))
             string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
             print ('\r', string_progress, end='')
+            optimizer.step()
 
         #validation loss, training and val accuracy computation
         #after current epoch training
