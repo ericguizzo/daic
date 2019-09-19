@@ -29,7 +29,7 @@ experiment = {}
 experiment[1] = ['architecture="EmoModel1layer"', 'reshaping_type="cnn"',
                  'training_mode="train_and_eval"',
                  'comment_1="prova"', 'comment_2="torch"',
-                 'learning_rate=0.000001', 'num_classes=8',
+                 'learning_rate=0.000001', 'num_classes=4',
                  'layer_type="conv"', 'fc_insize=81213']
 
 
