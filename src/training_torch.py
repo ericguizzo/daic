@@ -370,7 +370,10 @@ def main():
         if task_type == 'classification':
             train_batch_accs = []
             val_batch_accs = []
-
+        print ('culo')
+        print (train_batch_losses[:5])
+        print ('kaxxo')
+        print (val_batch_losses[:5])
         with torch.no_grad():
             model.eval()
             #training data
