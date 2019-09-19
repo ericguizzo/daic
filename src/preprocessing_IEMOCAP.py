@@ -20,7 +20,11 @@ INPUT_IEMOCAP_FOLDER = cfg.get('preprocessing', 'input_iemocap_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)
-print ('Augmentation: ' + str(AUGMENTATION) + ' | num_aug_samples: ' + str(NUM_AUG_SAMPLES) )
+if AUGMENTATION:
+    print ('Augmentation: ' + str(AUGMENTATION) + ' | num_aug_samples: ' + str(NUM_AUG_SAMPLES) )
+else:
+    print ('Augmentation: ' + str(AUGMENTATION))
+
 print ('Segmentation: ' + str(SEGMENTATION))
 print ('Features type: ' + str(FEATURES_TYPE))
 
