@@ -370,10 +370,7 @@ def main():
         if task_type == 'classification':
             train_batch_accs = []
             val_batch_accs = []
-        print ('culo')
-        print (train_batch_losses[:5])
-        print ('kaxxo')
-        print (val_batch_losses[:5])
+
         with torch.no_grad():
             model.eval()
             #training data
@@ -402,6 +399,11 @@ def main():
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     val_batch_accs.append(temp_acc)
 
+
+            print ('culo')
+            print (train_batch_losses[:5])
+            print ('kaxxo')
+            print (val_batch_losses[:5])
         #append to history and print
         train_epoch_loss = np.mean(train_batch_losses)
         train_loss_hist.append(train_epoch_loss)
