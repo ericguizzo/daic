@@ -281,7 +281,7 @@ def main():
     #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
     print ('culo')
     print (training_predictors.shape)
-    '''
+
     if reshaping_type == 'cnn':
         training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
         validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
@@ -289,7 +289,7 @@ def main():
 
     else:
         raise ValueError('wrong reshaping type')
-    '''
+
     #convert to tensor
     train_predictors = torch.tensor(training_predictors).float()
     val_predictors = torch.tensor(validation_predictors).float()
@@ -300,14 +300,14 @@ def main():
 
     #build dataset from tensors
     #target i == predictors because autoencoding
-    tr_dataset = utils.TensorDataset(train_predictors,train_target)
+    tr_dataset = utils.TensorDataset(train_predictors, train_target)
     val_dataset = utils.TensorDataset(val_predictors, val_target)
     test_dataset = utils.TensorDataset(test_predictors, test_target)
 
     #build data loader from dataset
     tr_data = utils.DataLoader(tr_dataset, batch_size, shuffle=True, pin_memory=True)
-    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=True, pin_memory=True)
-    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=True, pin_memory=True)  #no batch here!!
+    val_data = utils.DataLoader(val_dataset, batch_size, shuffle=False, pin_memory=True)
+    test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory=True)  #no batch here!!
     #DNN input shape
     time_dim = training_predictors.shape[-2]
     features_dim = training_predictors.shape[-1]
