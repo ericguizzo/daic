@@ -246,7 +246,7 @@ class MultiscaleConv2d(nn.Module):
                 merged_matrix = torch.cat((merged_matrix, index_matrix[:,i,:,:]), dim=1)
                 print (merged_matrix.shape)
             '''
-
+        '''
         kr = self.conv_shifted_0.weight.detach().numpy().reshape(self.conv_shifted_0.weight.shape[2],self.conv_shifted_0.weight.shape[3])
         kr1 = self.conv_shifted_1.weight.detach().numpy().reshape(self.conv_shifted_1.weight.shape[2],self.conv_shifted_1.weight.shape[3])
         kr2 = self.conv_shifted_2.weight.detach().numpy().reshape(self.conv_shifted_2.weight.shape[2],self.conv_shifted_2.weight.shape[3])
@@ -279,7 +279,7 @@ class MultiscaleConv2d(nn.Module):
         plt.figure(3)
 
         plt.pcolormesh(index_matrix.detach().numpy().reshape(locals()[fmap_names[2]].shape[-2], 118).T)
-
+        '''
 
         return output_matrix
 

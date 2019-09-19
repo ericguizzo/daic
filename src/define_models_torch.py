@@ -57,9 +57,11 @@ def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
         def __init__(self):
             super(EmoModel1layer_class, self).__init__()
             self.inner_state = True
-            self.conv1 = nn.Conv2d(1, p['channels'], kernel_size=p['kernel_size_1'])
-            self.multiscale1 = MultiscaleConv2d(1, p['channels'], kernel_size=p['kernel_size_1'], scale_factors=p['stretch_factors'],
-                                               output_type=p['output_type'], stretch_penality_lambda=p['stretch_penality_lambda'])
+            if p['layer_type'] == 'conv':
+                self.conv1 = nn.Conv2d(1, p['channels'], kernel_size=p['kernel_size_1'])
+            if p['layer_type'] == 'multi':
+                self.multiscale1 = MultiscaleConv2d(1, p['channels'], kernel_size=p['kernel_size_1'], scale_factors=p['stretch_factors'],
+                                            output_type=p['output_type'], stretch_penality_lambda=p['stretch_penality_lambda'])
             self.hidden = nn.Linear(p['fc_insize'], p['hidden_size'])
             self.out = nn.Linear(p['hidden_size'], p['num_classes'])
 
