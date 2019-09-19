@@ -4,7 +4,7 @@ import sys, os
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
-gpu_ID = 0
+gpu_ID = 1
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'testing torch porting'
