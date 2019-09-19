@@ -31,7 +31,7 @@ def parse_parameters(defaults, parameters):
 
 
 #DEFINE HERE YOUR MODELS!!
-def EmoModel1layer(time_dim, features_dim, user_parameters=['niente = 0']):
+def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
     '''
     to use this model, simply call architecture=EXAMPLE_model as a parameter
     in the UI script
@@ -52,7 +52,7 @@ def EmoModel1layer(time_dim, features_dim, user_parameters=['niente = 0']):
     p = parse_parameters(p, user_parameters)
 
     #always return model AND p!!!
-    class simple_CNN(nn.Module):
+    class EmoModel1layer_class(nn.Module):
 
         def __init__(self):
             super(EmoModel1layer_class, self).__init__()
