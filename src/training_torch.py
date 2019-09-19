@@ -69,7 +69,7 @@ from torch import optim
 import torch.nn.functional as F
 import torch.utils.data as utils
 from sklearn.metrics import classification_report
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, mean_squared_error, mean_absolute_error
 import numpy as np
 from multiscale_convlayer2 import MultiscaleConv2d
 import utility_functions as uf
@@ -368,7 +368,7 @@ def main():
                 temp_loss = loss_function(outputs, truth)
                 val_batch_losses.append(temp_loss.item())
                 if task_type == 'classification':
-                    temp_acc = accuracy_score(np.argmax(outputs.cpu(), axis=1), truth.cpu())
+                    temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     val_batch_accs.append(temp_acc)
 
         #append to history and print
@@ -420,84 +420,155 @@ def main():
 
     #compute results on the best saved model
     torch.cuda.empty_cache()  #free GPU
-    best_model = load_model(SAVE_MODEL)  #load best saved model
+    #load best saved model
+    model.load_state_dict(torch.load(BVL_model_path), strict=False)
 
-    if generator:
-        #del training_generator  #delete shuffled generator
-        #build non shuffled generator
-        train_score = best_model.evaluate_generator(datagen.flow(training_predictors, training_target,
-                        batch_size=batch_size, shuffle=False), steps=len(training_target)/batch_size)
-        val_score = best_model.evaluate_generator(datagen.flow(validation_predictors, validation_target,
-                        batch_size=batch_size, shuffle=False), steps=len(validation_target)/batch_size)
-        test_score = best_model.evaluate_generator(datagen.flow(test_predictors, test_target,
-                        batch_size=batch_size, shuffle=False), steps=len(test_target)/batch_size)
+    train_batch_losses = []
+    val_batch_lesses = []
+    test_batch_losses = []
 
-        train_pred = best_model.predict_generator(datagen.flow(training_predictors, training_target,
-                        batch_size=batch_size, shuffle=False), steps=len(training_target)/batch_size)
-        val_pred = best_model.predict_generator(datagen.flow(validation_predictors, validation_target,
-                        batch_size=batch_size, shuffle=False), steps=len(validation_target)/batch_size)
-        test_pred = best_model.predict_generator(datagen.flow(test_predictors, test_target,
-                        batch_size=batch_size, shuffle=False), steps=len(test_target)/batch_size)
-    else:
-        train_score = best_model.evaluate(training_predictors, training_target)
-        val_score = best_model.evaluate(validation_predictors, validation_target)
-        test_score = best_model.evaluate(test_predictors, test_target)
-        train_pred = best_model.predict(training_predictors)
-        val_pred = best_model.predict(validation_predictors)
-        test_pred = best_model.predict(test_predictors)
+    if task_type == 'classification':
+        train_batch_accs = []
+        val_batch_accs = []
+        test_batch_accs = []
+
+        train_batch_f1 = []
+        val_batch_f1 = []
+        test_batch_f1 = []
+
+        train_batch_precision = []
+        val_batch_precision = []
+        test_batch_precision = []
+
+        train_batch_recall = []
+        val_batch_recall = []
+        test_batch_recall = []
+
+    elif task_type == 'recression':
+        train_batch_rmse = []
+        val_batch_rmse = []
+        test_batch_rmse = []
+
+        train_batch_mae = []
+        val_batch_mae = []
+        test_batch_mae = []
+
+    model.eval()
+    with torch.no_grad():
+
+        #TRAINING DATA
+        for i, (sounds, truth) in enumerate(tr_data):
+            optimizer.zero_grad()
+            sounds = sounds.to(device)
+            truth = truth.to(device)
+            outputs = model(sounds)
+
+            temp_loss = loss_function(outputs, truth)
+            train_batch_losses.append(temp_loss.item())
+
+            if task_type == 'classification':
+                temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                train_batch_accs.append(temp_acc)
+                temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                train_batch_f1.append(temp_f1)
+                temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                train_batch_precision.append(temp_precision)
+                temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                train_batch_recall.append(temp_recall)
+
+            elif task_type == 'regression':
+                temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                train_batch_rmse.append(temp_rmse)
+                temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                train_batch_mae.append(temp_mae)
+
+        #VALIDATION DATA
+        for i, (sounds, truth) in enumerate(val_data):
+            optimizer.zero_grad()
+            sounds = sounds.to(device)
+            truth = truth.to(device)
+            outputs = model(sounds)
+
+            temp_loss = loss_function(outputs, truth)
+            val_batch_losses.append(temp_loss.item())
+
+            if task_type == 'classification':
+                temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                val_batch_accs.append(temp_acc)
+                temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                val_batch_f1.append(temp_f1)
+                temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                val_batch_precision.append(temp_precision)
+                temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                val_batch_recall.append(temp_recall)
+
+            elif task_type == 'regression':
+                temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                val_batch_rmse.append(temp_rmse)
+                temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                val_batch_mae.append(temp_mae)
+
+        #TEST DATA
+        for i, (sounds, truth) in enumerate(test_data):
+            optimizer.zero_grad()
+            sounds = sounds.to(device)
+            truth = truth.to(device)
+            outputs = model(sounds)
+
+            temp_loss = loss_function(outputs, truth)
+            val_batch_losses.append(temp_loss.item())
+
+            if task_type == 'classification':
+                temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                test_batch_accs.append(temp_acc)
+                temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                test_batch_f1.append(temp_f1)
+                temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                test_batch_precision.append(temp_precision)
+                temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                test_batch_recall.append(temp_recall)
+
+            elif task_type == 'regression':
+                temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                test_batch_rmse.append(temp_rmse)
+                temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                test_batch_mae.append(temp_mae)
 
 
     #save results in temp dict file
     temp_results = {}
 
     #save loss
-    temp_results['train_loss'] = train_score[0]
-    temp_results['val_loss'] = val_score[0]
-    temp_results['test_loss'] = test_score[0]
+    temp_results['train_loss'] = np.mean(train_batch_losses)
+    temp_results['val_loss'] = np.mean(val_batch_losses)
+    temp_results['test_loss'] = np.mean(test_batch_losses)
 
     #if classification compute also f1, precision, recall
     if task_type == 'classification':
-        #pred
-        train_pred = np.argmax(train_pred, axis=1)
-        val_pred = np.argmax(val_pred, axis=1)
-        test_pred = np.argmax(test_pred, axis=1)
-        #precision
-        train_precision = precision_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
-        val_precision = precision_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
-        test_precision = precision_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
-        #recall
-        train_recall = recall_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
-        val_recall = recall_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
-        test_recall = recall_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
-        #f1
-        train_f1 = f1_score(train_pred, np.argmax(training_target, axis=1) , average="macro")
-        val_f1 = f1_score(val_pred, np.argmax(validation_target, axis=1) , average="macro")
-        test_f1 = f1_score(test_pred, np.argmax(test_target, axis=1) , average="macro")
+        temp_results['train_acc'] = np.mean(train_batch_accs)
+        temp_results['val_acc'] = np.mean(val_batch_accs)
+        temp_results['test_acc'] = np.mean(test_batch_accs)
 
-        temp_results['train_acc'] = train_score[1]
-        temp_results['val_acc'] = val_score[1]
-        temp_results['test_acc'] = test_score[1]
+        temp_results['train_f1'] = np.mean(train_batch_f1)
+        temp_results['val_f1'] = np.mean(val_batch_f1)
+        temp_results['test_f1'] = np.mean(test_batch_f1)
 
-        temp_results['train_f1'] = train_f1
-        temp_results['val_f1'] = val_f1
-        temp_results['test_f1'] = test_f1
+        temp_results['train_precision'] = np.mean(train_batch_precision)
+        temp_results['val_precision'] = np.mean(val_batch_precision)
+        temp_results['test_precision'] = np.mean(test_batch_precision)
 
-        temp_results['train_precision'] = train_precision
-        temp_results['val_precision'] = val_precision
-        temp_results['test_precision'] = test_precision
-
-        temp_results['train_recall'] = train_recall
-        temp_results['val_recall'] = val_recall
-        temp_results['test_recall'] = test_recall
+        temp_results['train_recall'] = np.mean(train_batch_recall)
+        temp_results['val_recall'] = np.mean(val_batch_recall)
+        temp_results['test_recall'] = np.mean(test_batch_recall)
     #save acc if classification append classification metrics
     elif task_type == 'regression':
-        temp_results['train_MAE'] = train_score[1]
-        temp_results['val_MAE'] = val_score[1]
-        temp_results['test_MAE'] = test_score[1]
+        temp_results['train_MAE'] = np.mean(train_batch_mae)
+        temp_results['val_MAE'] = np.mean(val_batch_mae)
+        temp_results['test_MAE'] = np.mean(test_batch_mae)
 
-        temp_results['train_RMSE'] = np.sqrt(train_score[0])
-        temp_results['val_RMSE'] = np.sqrt(val_score[0])
-        temp_results['test_RMSE'] = np.sqrt(test_score[0])
+        temp_results['train_RMSE'] = np.mean(train_batch_rmse)
+        temp_results['val_RMSE'] = np.mean(val_batch_rmse)
+        temp_results['test_RMSE'] = np.mean(test_batch_rmse)
 
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
