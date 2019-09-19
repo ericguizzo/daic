@@ -279,7 +279,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     np.save(final_dict_path, folds)
 
     #run training
-    spreadsheet_name = dataset + '_exp' + str(num_experiment) + 'results_spreadsheet.xls'
+    spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet.xls'
     gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
                                         output_results_path, spreadsheet_name])
     gen_spreadsheet.communicate()
