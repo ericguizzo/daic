@@ -148,6 +148,31 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                         'test':{'mean_loss': test_mean,
                                     'loss_std': test_std}}
 
+    #compute perc stretch factors if multiconv was used
+    try:
+        dummy = folds[0]['train_stretch_percs']
+        tr_stretches = []
+        val_stretches = []
+        test_stretches = []
+        for i in range(num_folds):
+            tr_stretches.append(folds[i]['train_stretch_percs'])
+            val_stretches.append(folds[i]['val_stretch_percs'])
+            test_stretches.append(folds[i]['test_stretch_percs'])
+        tr_mean = np.mean(tr_stretches, axis=0)
+        val_mean = np.mean(val_stretches, axis=0)
+        test_mean = np.mean(test_stretches, axis=0)
+        tr_std = np.std(tr_stretches, axis=0)
+        val_std = np.std(val_stretches, axis=0)
+        test_std = np.std(test_stretches, axis=0)
+        folds['summary'] = {'training':{'mean_stretch_percs': tr_mean,
+                                        'stretch_percs_std': tr_std},
+                            'validation':{'mean_stretch_percs': val_mean,
+                                        'stretch_percs_std': val_std},
+                            'test':{'mean_stretch_percs': test_mean,
+                                        'stretch_percs_std': test_std}}
+    except:
+        pass
+
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
         tr_RMSE = []
