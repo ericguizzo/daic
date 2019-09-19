@@ -279,8 +279,6 @@ def main():
 
     #reshape tensors
     #INSERT HERE FUNCTION FOR CUSTOM RESHAPING!!!!!
-    print ('culo')
-    print (training_predictors.shape)
 
     if reshaping_type == 'cnn':
         training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
@@ -402,10 +400,6 @@ def main():
                     val_batch_accs.append(temp_acc)
 
 
-            print ('culo')
-            print (train_batch_losses[:5])
-            print ('kaxxo')
-            print (val_batch_losses[:5])
         #append to history and print
         train_epoch_loss = np.mean(train_batch_losses)
         train_loss_hist.append(train_epoch_loss)
@@ -462,6 +456,14 @@ def main():
     val_batch_lesses = []
     test_batch_losses = []
 
+    #if there is any multiscale layer
+    for layer in model.modules():
+        if isinstance(layer, MultiscaleConv2d):
+            train_batch_stretch_percs = []
+            val_batch_stretch_percs= []
+            test_batch_stretch_percs = []
+
+
     if task_type == 'classification':
         train_batch_accs = []
         val_batch_accs = []
@@ -517,6 +519,12 @@ def main():
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 train_batch_mae.append(temp_mae)
 
+            for layer in model.modules():
+                if isinstance(layer, MultiscaleConv2d):
+                    temp_stretch_percs = layer.get_stretch_percs()
+                    train_batch_stretch_percs.append(temp_stretch_percs)
+
+
         #VALIDATION DATA
         for i, (sounds, truth) in enumerate(val_data):
             optimizer.zero_grad()
@@ -543,6 +551,11 @@ def main():
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 val_batch_mae.append(temp_mae)
 
+            for layer in model.modules():
+                if isinstance(layer, MultiscaleConv2d):
+                    temp_stretch_percs = layer.get_stretch_percs()
+                    val_batch_stretch_percs.append(temp_stretch_percs)
+
         #TEST DATA
         for i, (sounds, truth) in enumerate(test_data):
             optimizer.zero_grad()
@@ -568,6 +581,11 @@ def main():
                 test_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 test_batch_mae.append(temp_mae)
+
+            for layer in model.modules():
+                if isinstance(layer, MultiscaleConv2d):
+                    temp_stretch_percs = layer.get_stretch_percs()
+                    test_batch_stretch_percs.append(temp_stretch_percs)
 
 
     #save results in temp dict file
@@ -653,19 +671,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
