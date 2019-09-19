@@ -96,11 +96,11 @@ def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
     'num_classes':8
     }
 
-    reg = regularizers.l2(p['regularization_lambda'])
 
     #THEN CALL PARSE_PAREMETERS TO OVERWRITE DEFAULT PARAMETERS
     #WITH PARAMETERS DEFINED IN THE UI SCRIPT
     p = parse_parameters(p, user_parameters)
+    reg = regularizers.l2(p['regularization_lambda'])
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
     input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
