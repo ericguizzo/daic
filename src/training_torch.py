@@ -457,11 +457,15 @@ def main():
     test_batch_losses = []
 
     #if there is any multiscale layer
+    there_is_multiconv = False
     for layer in model.modules():
         if isinstance(layer, MultiscaleConv2d):
-            train_batch_stretch_percs = []
-            val_batch_stretch_percs= []
-            test_batch_stretch_percs = []
+            there_is_multiconv = True
+
+    if there_is_multiconv:
+        train_batch_stretch_percs = []
+        val_batch_stretch_percs= []
+        test_batch_stretch_percs = []
 
 
     if task_type == 'classification':
@@ -596,6 +600,14 @@ def main():
     temp_results['train_loss'] = np.mean(train_batch_losses)
     temp_results['val_loss'] = np.mean(val_batch_losses)
     temp_results['test_loss'] = np.mean(test_batch_losses)
+
+    #save stretch percs if multiconv
+    if there_is_multiconv:
+        temp_results['train_stretch_percs'] = np.mean(train_batch_stretch_percs, axis=0)
+        temp_results['val_stretch_percs'] = np.mean(val_batch_stretch_percs, axis=0)
+        temp_results['test_stretch_percs'] = np.mean(test_batch_stretch_percs, axis=0)
+    print ('culo')
+    print (temp_results['train_stretch_percs'] )
 
     #if classification compute also f1, precision, recall
     if task_type == 'classification':
