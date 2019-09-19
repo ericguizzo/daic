@@ -104,7 +104,7 @@ def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
 
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
     input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
-    conv_1 = Convolution2D(p['conv1_depth'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
+    conv_1 = Convolution2D(p['channels'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
     flat = Flatten()(pool_1)
     hidden = Dense(p['hidden_size'], activation='tanh', kernel_regularizer=reg)(flat)
     out = Dense(8, activation='softmax')(hidden)
