@@ -86,11 +86,15 @@ def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
     #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL AS KEYS OF A DICT
     #default parameters
     p = {
-    'regularization_lambda': 0.1,
-    'kernel_size_1': [16, 12],
-    'pool_size': [2,2],
-    'conv1_depth': 10,
-    'hidden_size': 100}
+    'channels':1,
+    'kernel_size_1': [10,5],
+    'output_type': 'pooled_map',
+    'stretch_penality_lambda': 0.,
+    'stretch_factors': [],
+    'hidden_size': 200,
+    'fc_insize':100,
+    'num_classes':8
+    }
 
     reg = regularizers.l2(p['regularization_lambda'])
 
@@ -101,7 +105,6 @@ def simple_CNN(time_dim, features_dim, user_parameters=['niente = 0']):
     #FINALLY DECLARE YOUR ARCHITECTURE AND RETURN THE MODEL
     input_data = Input(shape=(time_dim, features_dim, 1))  #time_dim and features_dim are not from the dict
     conv_1 = Convolution2D(p['conv1_depth'], (p['kernel_size_1'][0],p['kernel_size_1'][1]), padding='same', activation='tanh')(input_data)
-    pool_1 = MaxPooling2D(pool_size=(p['pool_size'][0],p['pool_size'][1]))(conv_1)
     flat = Flatten()(pool_1)
     hidden = Dense(p['hidden_size'], activation='tanh', kernel_regularizer=reg)(flat)
     out = Dense(8, activation='softmax')(hidden)
