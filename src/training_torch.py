@@ -122,7 +122,6 @@ else:
 
 #path for saving best val loss and best val acc models
 BVL_model_path = SAVE_MODEL
-recompute_matrices = False
 
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
