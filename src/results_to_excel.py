@@ -24,6 +24,8 @@ try:
     task_type = 'regression'
 except:
     task_type = 'classification'
+#find if is multicon layer has been used
+
 
 
 #init workbook

@@ -34,6 +34,14 @@ experiment[1] = ['architecture="simple_CNN"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0001',
                  'stretch_factors=[(0.7, 1.),(1.428,1.)]']
 
+experiment[2] = ['architecture="simple_CNN"', 'reshaping_type="cnn"',
+                 'training_mode="train_and_eval"', 'channels=10',
+                 'comment_1="prova"', 'comment_2="torch"',
+                 'learning_rate=0.001', 'num_classes=8',
+                 'layer_type="conv"', 'fc_insize=812130',
+                 'regularization_lambda=0.0001',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]']
+
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#
