@@ -26,7 +26,7 @@ experiment_folder = '../../../copy/provatorch'  #where to save results
 #-architecture: one of the models defined in the models_API script
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
-experiment[1] = ['architecture="EmoModel1layer"', 'reshaping_type="cnn"',
+experiment[1] = ['architecture="simple_CNN"', 'reshaping_type="cnn"',
                  'training_mode="train_and_eval"', 'channels=10',
                  'comment_1="prova"', 'comment_2="torch"',
                  'learning_rate=0.001', 'num_classes=8',
