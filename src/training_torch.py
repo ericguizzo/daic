@@ -586,6 +586,7 @@ def main():
                 if isinstance(layer, MultiscaleConv2d):
                     temp_stretch_percs = layer.get_stretch_percs()
                     test_batch_stretch_percs.append(temp_stretch_percs)
+                    print (temp_stretch_percs)
 
 
     #save results in temp dict file
