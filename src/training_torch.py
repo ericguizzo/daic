@@ -544,7 +544,7 @@ def main():
             outputs = model(sounds)
 
             temp_loss = loss_function(outputs, truth)
-            val_batch_losses.append(temp_loss.item())
+            test_batch_losses.append(temp_loss.item())
 
             if task_type == 'classification':
                 temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
