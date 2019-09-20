@@ -133,8 +133,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     test_loss = []
     for i in range(num_folds):
         tr_loss.append(folds[i]['train_loss'])
-        print ('cazzo')
-        print (folds[i]['train_loss'])
+
         val_loss.append(folds[i]['val_loss'])
         test_loss.append(folds[i]['test_loss'])
     tr_mean = np.mean(tr_loss)
@@ -143,7 +142,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     tr_std = np.std(tr_loss)
     val_std = np.std(val_loss)
     test_std = np.std(test_loss)
-    print ('CULOOOOOOOOOOOOOOOOOO')
     folds['summary'] = {'training':{'mean_loss': tr_mean,
                                     'loss_std': tr_std},
                         'validation':{'mean_loss': val_mean,
@@ -152,6 +150,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                     'loss_std': test_std}}
 
     #compute perc stretch factors if multiconv was used
+    '''
     try:
         dummy = folds[0]['train_stretch_percs']
         tr_stretches = []
@@ -175,6 +174,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                         'stretch_percs_std': test_std_str}}
     except:
         pass
+    '''
 
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
