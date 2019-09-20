@@ -165,13 +165,12 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         tr_std_str = np.std(tr_stretches, axis=0)
         val_std_str = np.std(val_stretches, axis=0)
         test_std_str = np.std(test_stretches, axis=0)
-        folds['summary'] = {'training':{'mean_stretch_percs': tr_mean_str,
-                                        'stretch_percs_std': tr_std_str},
-                            'validation':{'mean_stretch_percs': val_mean_str,
-                                        'stretch_percs_std': val_std_str},
-                            'test':{'mean_stretch_percs': test_mean_str,
-                                        'stretch_percs_std': test_std_str}}
-
+        folds['summary']['training']['mean_stretch_percs'] =  tr_mean_str
+        folds['summary']['training']['stretch_percs_std'] = tr_std_str
+        folds['summary']['validation']['mean_stretch_percs'] =  val_mean_str
+        folds['summary']['validation']['stretch_percs_std'] = val_std_str
+        folds['summary']['test']['mean_stretch_percs'] =  test_mean_str
+        folds['summary']['test']['stretch_percs_std'] = test_std_str
 
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
