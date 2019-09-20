@@ -133,6 +133,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     test_loss = []
     for i in range(num_folds):
         tr_loss.append(folds[i]['train_loss'])
+        print ('cazzo')
+        print (folds[i]['train_loss'])
         val_loss.append(folds[i]['val_loss'])
         test_loss.append(folds[i]['test_loss'])
     tr_mean = np.mean(tr_loss)
