@@ -15,7 +15,7 @@ num_exps = len(contents)
 out_name = os.path.join(in_folder, out_name)
 contents = list(filter(lambda x: '.npy' in x, contents))
 temp_path = os.path.join(in_folder, contents[0])
-dict = np.load(temp_path)
+dict = np.load(temp_path, allow_pickle=True)
 dict = dict.item()
 
 #find if is regression or classification task
@@ -224,7 +224,7 @@ elif task_type == 'classification':
 for i in contents:
     if '.npy' in i:
         temp_path = os.path.join(in_folder, i)
-        dict = np.load(temp_path)
+        dict = np.load(temp_path, allow_pickle=True)
         dict = dict.item()
         keys = dict[0].keys()
 

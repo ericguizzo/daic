@@ -141,6 +141,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     tr_std = np.std(tr_loss)
     val_std = np.std(val_loss)
     test_std = np.std(test_loss)
+    print ('CULOOOOOOOOOOOOOOOOOO')
     folds['summary'] = {'training':{'mean_loss': tr_mean,
                                     'loss_std': tr_std},
                         'validation':{'mean_loss': val_mean,
@@ -158,18 +159,18 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
             tr_stretches.append(folds[i]['train_stretch_percs'])
             val_stretches.append(folds[i]['val_stretch_percs'])
             test_stretches.append(folds[i]['test_stretch_percs'])
-        tr_mean = np.mean(tr_stretches, axis=0)
-        val_mean = np.mean(val_stretches, axis=0)
-        test_mean = np.mean(test_stretches, axis=0)
-        tr_std = np.std(tr_stretches, axis=0)
-        val_std = np.std(val_stretches, axis=0)
-        test_std = np.std(test_stretches, axis=0)
-        folds['summary'] = {'training':{'mean_stretch_percs': tr_mean,
-                                        'stretch_percs_std': tr_std},
-                            'validation':{'mean_stretch_percs': val_mean,
-                                        'stretch_percs_std': val_std},
-                            'test':{'mean_stretch_percs': test_mean,
-                                        'stretch_percs_std': test_std}}
+        tr_mean_str = np.mean(tr_stretches, axis=0)
+        val_mean_str = np.mean(val_stretches, axis=0)
+        test_mean_str = np.mean(test_stretches, axis=0)
+        tr_std_str = np.std(tr_stretches, axis=0)
+        val_std_str = np.std(val_stretches, axis=0)
+        test_std_str = np.std(test_stretches, axis=0)
+        folds['summary'] = {'training':{'mean_stretch_percs': tr_mean_str,
+                                        'stretch_percs_std': tr_std_str},
+                            'validation':{'mean_stretch_percs': val_mean_str,
+                                        'stretch_percs_std': val_std_str},
+                            'test':{'mean_stretch_percs': test_mean_str,
+                                        'stretch_percs_std': test_std_str}}
     except:
         pass
 
