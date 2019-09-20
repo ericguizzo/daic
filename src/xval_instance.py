@@ -150,8 +150,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                     'loss_std': test_std}}
 
     #compute perc stretch factors if multiconv was used
-    '''
-    try:
+    if  'train_stretch_percs' in folds[0].keys():
         dummy = folds[0]['train_stretch_percs']
         tr_stretches = []
         val_stretches = []
@@ -172,9 +171,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                         'stretch_percs_std': val_std_str},
                             'test':{'mean_stretch_percs': test_mean_str,
                                         'stretch_percs_std': test_std_str}}
-    except:
-        pass
-    '''
+
 
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
