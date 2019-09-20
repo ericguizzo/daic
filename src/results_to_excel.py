@@ -25,6 +25,15 @@ try:
 except:
     task_type = 'classification'
 #find if is multicon layer has been used
+multiconv_is_used = False
+for i in contents:
+    if '.npy' in i:
+        temp_path = os.path.join(in_folder, i)
+        dict = np.load(temp_path, allow_pickle=True)
+        dict = dict.item()
+        if  'mean_stretch_percs' in dict['summary']['training'].keys():
+            multiconv_is_used = True
+
 
 
 
@@ -46,6 +55,7 @@ accuracy_format = workbook.add_format({'align': 'center', 'bold':True,'border': 
 f1_format = workbook.add_format({'align': 'center', 'bold':True,'border': 1, 'bg_color':'cyan'})
 precision_format = workbook.add_format({'align': 'center', 'bold':True,'border': 1, 'bg_color':'lime'})
 recall_format = workbook.add_format({'align': 'center', 'bold':True,'border': 1, 'bg_color':'magenta'})
+strp_format = workbook.add_format({'align': 'center', 'bold':True,'border': 1, 'bg_color':'brown'})
 
 rmse_format = workbook.add_format({'align': 'center', 'bold':True,'border': 1, 'bg_color':'orange'})
 mae_format = workbook.add_format({'align': 'center', 'bold':True,'border': 1, 'bg_color':'cyan'})
@@ -82,6 +92,16 @@ if task_type == 'regression':
 
     end_c = 21
 
+    if multiconv_is_used:
+        train_strp_c = 22
+        val_strp_c = 23
+        test_strp_c = 24
+
+        end_c = 24
+
+
+
+
 elif task_type == 'classification':
     train_acc_c = 10
     val_acc_c = 11
@@ -112,6 +132,13 @@ elif task_type == 'classification':
     test_recall_std_c = 33
 
     end_c = 33
+
+    if multiconv_is_used:
+        train_strp_c = 34
+        val_strp_c = 35
+        test_strp_c = 36
+
+        end_c = 36
 
 
 v_offset = 2
@@ -147,6 +174,9 @@ elif task_type == 'classification':
     #recall
     worksheet.merge_range(v_offset-1,train_recall_c, v_offset-1, test_recall_c, " MEAN RECALL", recall_format)
     worksheet.merge_range(v_offset-1,train_recall_std_c, v_offset-1, test_recall_std_c, "RECALL STD", recall_format)
+
+if multiconv_is_used:
+    worksheet.merge_range(v_offset-1,train_strp_c, v_offset-1, test_strp_c, "% USAGE MULTICONV", strp_format)
 
 #write column names
 worksheet.write(v_offset, exp_id_c, 'ID',parameters_format)
@@ -218,6 +248,13 @@ elif task_type == 'classification':
     worksheet.write(v_offset, test_recall_std_c, 'test',recall_format)
 
     worksheet.set_column(train_acc_c,test_loss_std_c,10)
+
+if multiconv_is_used:
+    worksheet.write(v_offset, train_strp_c, 'train',strp_format)
+    worksheet.write(v_offset, val_strp_c, 'val',strp_format)
+    worksheet.write(v_offset, test_strp_c, 'test',strp_format)
+
+    worksheet.set_column(test_strp_c,test_strp_c,40)
 
 #fill values
 #iterate every experiment
@@ -308,6 +345,18 @@ for i in contents:
             test_precision_std = test['precision_std']
             test_recall_std = test['recall_std']
 
+        train_strp = '/'
+        val_strp = '/'
+        test_strp = '/'
+        try:
+            #stretch percs
+            train_strp = tr['mean_stretch_percs']
+            val_strp = val['mean_stretch_percs']
+            test_strp = val['mean_stretch_percs']
+        except KeyError:
+            pass
+
+
         #print results
         #loss
         worksheet.write(curr_row, train_loss_c, tr_loss,values_format)
@@ -367,6 +416,12 @@ for i in contents:
             worksheet.write(curr_row, train_recall_std_c, tr_recall_std,values_format)
             worksheet.write(curr_row, val_recall_std_c, val_recall_std,values_format)
             worksheet.write(curr_row, test_recall_std_c, test_recall_std,values_format)
+            #stretch percs
+        if multiconv_is_used:
+            worksheet.write(curr_row, train_strp_c, str(train_strp),values_format)
+            worksheet.write(curr_row, val_strp_c, str(val_strp),values_format)
+            worksheet.write(curr_row, test_strp_c, str(test_strp),values_format)
+
 
 
 explist = list(range(1, num_exps+1))
