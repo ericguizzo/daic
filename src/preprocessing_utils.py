@@ -257,7 +257,7 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function):
                     else:
                         predictors = np.append(predictors, cut_predictors, axis=0)
                         target = np.append(target, cut_target, axis=0)
-            except (ValueError):
+            except (ValueError) as e :
                 if str(e) == 'File format b\'FORM\'... not understood.':
                     pass
         #print ('\n | shape:' + str(predictors.shape))
