@@ -28,16 +28,10 @@ else:
 print ('Segmentation: ' + str(SEGMENTATION))
 print ('Features type: ' + str(FEATURES_TYPE))
 
-label_to_int_complete = {'neu':0,
-                'ang':1,
-                'fru':2,
-                'hap':3,
-                'sad':4,
-                'exc':5,
-                'fea':6,
-                'sur':7,
-                'dis':8,
-                'xxx':9}
+#put NONE in one key to not preprocess that label
+#and change num_classes_IEMOCAP
+num_classes_IEMOCAP = 4
+
 
 label_to_int = {'neu':0,
                 'ang':1,
@@ -51,7 +45,6 @@ label_to_int = {'neu':0,
                 'oth':None,
                 'xxx':None}
 
-num_classes_IEMOCAP = 4
 wavname = 'Ses01F_impro01_F001.wav'
 #wavname = 'Ses01M_script01_2_F003.wav'
 
@@ -79,6 +72,10 @@ def get_label_IEMOCAP(wavname):
         contents = f.readlines()
 
     str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
+
+    #change this to have only 4 labels!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    #int_label = label_to_int[str_label]
     int_label = label_to_int[str_label]
 
     if int_label != None:
@@ -113,21 +110,20 @@ def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
 
 def filter_labels(sounds_list):
     '''
-    filter only sounds with desired labels:
-    -neutral
-    -happy (excited)
-    -angry
-    -sad
+    filter only sounds that are in the
+    selected label_to_int dict
     '''
     filtered_list = []
     for sound in sounds_list:
         label = get_label_IEMOCAP(sound)
-        if type(label) == np.ndarray:
+        if type(label) == np.ndarray:  #if not none
             filtered_list.append(sound)
 
     return filtered_list
 
-def filter_data_IEMOCAP(sound_file):
+
+
+def filter_actors_IEMOCAP(sounds_list, foldable_item):
     '''
     this function simply returns the input string as a list
     NOTE THAT DOING THIS WE DO NOT SPLIT DATASET ACCORDING TO
@@ -135,9 +131,10 @@ def filter_data_IEMOCAP(sound_file):
     we only xfold and tr/val/test split in order to not have segments of the
     same recordings divided in different sets
     '''
-    output = [sound_file]
+    key = 'Ses0' + str(foldable_item + 1)
+    curr_list = list(filter(lambda x: key in x, sounds_list))
 
-    return output
+    return curr_list
 
 def main():
     '''
@@ -147,7 +144,14 @@ def main():
     print ('Setting up preprocessing...')
     print('')
     sounds_list = get_sounds_list(INPUT_IEMOCAP_FOLDER)  #get list of all soundfile paths
+
+    #change this to have only 4 labels
     filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
+
+    #filtered_list = sounds_list
+
+    num_foldables = 5
+
     if SEGMENTATION:
         max_file_length = 1
     else:
@@ -165,26 +169,24 @@ def main():
         predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap' + appendix + '_predictors.npy')
         target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap' + appendix + '_target.npy')
     index = 1  #index for progress bar
-    for i in filtered_list:
+
+    for i in range(num_foldables):
         #print progress bar
-        uf.print_bar(index, num_files)
-        #get foldable item """NOT DIVIDING BY ACTORS!!!
-        curr_list = filter_data_IEMOCAP(i)
+        uf.print_bar(index, num_foldables)
+        #get foldable item DIVIDING BY ACTORS. Every session hae 2 actors
+        curr_list = filter_actors_IEMOCAP(sounds_list, i)
 
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
-        try:
-            curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
-            #append preprocessed predictors and target to the dict
-            predictors[i] = curr_predictors
-            target[i] = curr_target
-        except Exception as e:
-            print ('')
-            print (e)  #PROBABLY SOME FILES ARE CORRUPTED
-
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
+        #append preprocessed predictors and target to the dict
+        predictors[i] = curr_predictors
+        target[i] = curr_target
 
         index +=1
+
     #save dicts
+
     np.save(predictors_save_path, predictors)
     np.save(target_save_path, target)
     #print dimensions
@@ -201,6 +203,7 @@ def main():
     print ('Total number of datapoints: ' + str(count))
     print (' Predictors shape: ' + str(pred_shape))
     print (' Target shape: ' + str(tg_shape))
+
 
 
 if __name__ == '__main__':

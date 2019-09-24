@@ -485,7 +485,7 @@ def main():
         val_batch_recall = []
         test_batch_recall = []
 
-    elif task_type == 'recression':
+    elif task_type == 'regression':
         train_batch_rmse = []
         val_batch_rmse = []
         test_batch_rmse = []
