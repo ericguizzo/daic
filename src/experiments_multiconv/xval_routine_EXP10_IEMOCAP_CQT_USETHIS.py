@@ -10,14 +10,14 @@ import xval_instance as xval
 gpu_ID = 1
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = False  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'pretraining on ravdess, training on iemocap'
-dataset = 'iemocap_cqt_aug2'
+short_description = ''
+dataset = 'ravdess_stft'
 task_type = 'classification'
 generator = True
-num_experiment = 10  #id of the experiment
-num_folds = 1  #number of k-folds for cross-validation
+num_experiment = 1  #id of the experiment
+num_folds = 4  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
-experiment_folder = '../bestresults_iemocap'  #where to save results
+experiment_folder = '../../new_results/ravdess'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
