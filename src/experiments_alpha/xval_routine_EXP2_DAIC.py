@@ -1,5 +1,8 @@
 import numpy as np
-import sys, os
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
 import xval_instance_GENERIC_API as xval
 
 # USING EMOMODEL4 (3 CONV/POOL)

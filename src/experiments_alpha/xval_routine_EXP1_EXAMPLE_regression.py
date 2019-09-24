@@ -1,15 +1,18 @@
 from __future__ import print_function
 import numpy as np
-import sys, os
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
 short_description = 'stupid test'
 dataset = 'daic'
 num_experiment = 1  #id of the experiment
-num_folds = 4  #number of k-folds for cross-validation
+num_folds = 2  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
-experiment_folder = '../results_daic_prova'  #where to save results
+experiment_folder = '../resultsdaic'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
@@ -21,7 +24,13 @@ experiment_folder = '../results_daic_prova'  #where to save results
 #-comment: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
 experiment[1] = ['task_type= "regression"', 'architecture="EXAMPLE_model_regression"',
-                 'generator = False', 'comment_1="init "', 'comment_2="EXAMPLE_architecture"']
+                 'comment_1="reg 0.001"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
+experiment[2] = ['task_type= "regression"', 'architecture="EXAMPLE_model_regression"',
+                 'comment_1="reg 0.01"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.01"']
+experiment[3] = ['task_type= "regression"', 'architecture="EXAMPLE_model_regression"',
+                 'comment_1="reg 0.1"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
+experiment[4] = ['task_type= "regression"', 'architecture="EXAMPLE_model_regression"',
+                 'comment_1="reg 0.3"', 'comment_2="EXAMPLE_architecture"','regularization_lambda="0.1"']
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE

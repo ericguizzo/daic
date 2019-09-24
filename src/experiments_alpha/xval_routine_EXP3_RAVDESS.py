@@ -1,20 +1,23 @@
 from __future__ import print_function
 import numpy as np
-import sys, os
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
 gpu_ID = 0
 overwrite_results = True  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'testing learning rate on OMG_model'
-dataset = 'ravdess_mfcc'
+short_description = 'testing learning rate on ParallelConv'
+dataset = 'ravdess'
 task_type = 'classification'
 generator = False
-num_experiment = 1  #id of the experiment
+num_experiment = 3  #id of the experiment
 num_folds = 2  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
-experiment_folder = '../../../copy/consultancy/ravdess_mfcc'  #where to save results
+experiment_folder = '../../../copy/consultancy/ravdess'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
@@ -26,29 +29,29 @@ experiment_folder = '../../../copy/consultancy/ravdess_mfcc'  #where to save res
 #-architecture: one of the models defined in the models_API script
 #-comment_1 and comment_2: write here any info you want to show in the results spreadsheet. Example: L2 increased to 0.1
 experiment = {}
-experiment[1] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.000001"', 'comment_2="OMG_model"',
+experiment[1] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.000001"', 'comment_2="ParallelConv"',
                  'learning_rate=0.000001', 'output_classes=8']
-experiment[2] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.00001"', 'comment_2="OMG_model"',
+experiment[2] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.00001"', 'comment_2="ParallelConv"',
                  'learning_rate=0.00001', 'output_classes=8']
-experiment[3] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.0001"', 'comment_2="OMG_model"',
+experiment[3] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.0001"', 'comment_2="ParallelConv"',
                  'learning_rate=0.0001', 'output_classes=8']
-experiment[4] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.0003"', 'comment_2="OMG_model"',
+experiment[4] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.0003"', 'comment_2="ParallelConv"',
                  'learning_rate=0.0003', 'output_classes=8']
-experiment[5] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.0006"', 'comment_2="OMG_model"',
+experiment[5] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.0006"', 'comment_2="ParallelConv"',
                  'learning_rate=0.0006', 'output_classes=8']
-experiment[6] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.001"', 'comment_2="OMG_model"',
+experiment[6] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.001"', 'comment_2="ParallelConv"',
                  'learning_rate=0.001', 'output_classes=8']
-experiment[7] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.003"', 'comment_2="OMG_model"',
+experiment[7] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="lr 0.003"', 'comment_2="ParallelConv"',
                  'learning_rate=0.003', 'output_classes=8']
-experiment[8] = ['architecture="OMG_model"', 'reshaping_type="cnn"',
-                 'comment_1="lr 0.005"', 'comment_2="OMG_model"',
+experiment[8] = ['architecture="ParallelConv"', 'reshaping_type="cnn"',
+                 'comment_1="relrg 0.005"', 'comment_2="ParallelConv"',
                  'learning_rate=0.005', 'output_classes=8']
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
