@@ -91,7 +91,7 @@ def main():
     index = 1  #index for progress bar
     for i in ac_list:
         #print progress bar
-        uf.print_bar(index, num_files)
+        #uf.print_bar(index, num_files)
         #get foldable item DIVIDING BY ACTORS
         curr_list = filter_actor_list(contents, assoc_dict[i])
         fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
@@ -100,7 +100,7 @@ def main():
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
 
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_FSDD)
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_FSDD, True)
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
