@@ -96,15 +96,17 @@ def main():
     index = 1  #index for progress bar
     for i in actors_list:
         #print progress bar
-        uf.print_bar(index, num_files)
+        #uf.print_bar(index, num_files)
         #get only soundpaths of current actor
         curr_list = filter_data_RAVDESS(contents, 'actor', [i+1])
+        fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
+        print (fold_string)
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
         curr_list = [os.path.join(INPUT_RAVDESS_FOLDER, x) for x in curr_list]
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_RAVDESS)
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_RAVDESS, True)
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
