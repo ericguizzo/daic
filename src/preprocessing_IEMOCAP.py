@@ -178,7 +178,7 @@ def main():
         fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_foldables)
         print (fold_string)
         #get foldable item DIVIDING BY ACTORS. Every session hae 2 actors
-        curr_list = filter_actors_IEMOCAP(sounds_list, i)
+        curr_list = filter_actors_IEMOCAP(filtered_list, i)
 
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
