@@ -216,7 +216,6 @@ def main():
         np.save(test_target_path, test_target)
 
     if not recompute_matrices:
-
         if not os.path.exists(test_target_path):
             #load merged dataset, compute and save current tensors
             predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
