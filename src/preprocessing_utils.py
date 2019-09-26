@@ -253,7 +253,6 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function, p
                     if not np.isnan(np.std(cut_predictors)):   #some sounds give nan for no reason
                         for i in range(cut_predictors.shape[0]):
                             predictors.append(cut_predictors[i])
-                            print(target)
                             target.append(cut_target[i])
                         #print ('Foldable item progress:')
         except Exception as e:
