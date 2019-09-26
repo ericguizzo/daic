@@ -98,7 +98,7 @@ def build_matrix_dataset(merged_predictors, merged_target, actors_list):
     for i in actors_list:
         for j in range(merged_predictors[i].shape[0]):
             predictors.append(merged_predictors[i][j])
-            predictors.append(target[i][j])
+            target.append(merged_target[i][j])
         index += 1
         perc = int(index / total * 20)
         perc_progress = int(np.round((float(index)/total) * 100))
