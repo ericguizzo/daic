@@ -112,16 +112,17 @@ def main():
     index = 1  #index for progress bar
     for i in range(num_actors):
         #print progress bar
-        uf.print_bar(index, num_actors)
+        #uf.print_bar(index, num_actors)
         #get foldable item
         curr_list = assoc_dict[i]
         curr_list = [os.path.join(INPUT_GSC_FOLDER, x) for x in curr_list]
-
+        fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_actors)
+        print (fold_string)
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
 
         try:
-            curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_GSC)
+            curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_GSC, True)
             #append preprocessed predictors and target to the dict
             predictors[i] = curr_predictors
             target[i] = curr_target

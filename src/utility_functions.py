@@ -91,19 +91,14 @@ def build_matrix_dataset(merged_predictors, merged_target, actors_list):
     load preprocessing dict and output numpy matrices of predictors and target
     containing only samples defined in actors_list
     '''
-    predictors = np.array([])
-    target = np.array([])
+    predictors = []
+    target = []
     index = 0
     total = len(actors_list)
     for i in actors_list:
-        if i == actors_list[0]:  #if is first item
-            predictors = np.array(merged_predictors[i])
-            target = np.array(merged_target[i],dtype='float32')
-            #print (i, predictors.shape)
-        else:
-            if np.array(merged_predictors[i]).shape != (0,):  #if it not void due to preprocessing errors
-                predictors = np.concatenate((predictors, np.array(merged_predictors[i])), axis=0)
-                target = np.concatenate((target, np.array(merged_target[i],dtype='float32')), axis=0)
+        if np.array(merged_predictors[i]).shape != (0,):  #if it not void due to preprocessing errors
+            predictors.append(np.array(merged_predictors[i]))
+            target.append(np.array(merged_target[i]))
         index += 1
         perc = int(index / total * 20)
         perc_progress = int(np.round((float(index)/total) * 100))

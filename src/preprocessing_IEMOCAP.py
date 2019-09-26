@@ -148,6 +148,9 @@ def main():
     #change this to have only 4 labels
     filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
 
+    #filter non-wav files
+    filtered_list = list(filter(lambda x: x[-3:] == "wav", filtered_list))  #get only wav
+
     #filtered_list = sounds_list
 
     num_foldables = 5
@@ -172,13 +175,14 @@ def main():
 
     for i in range(num_foldables):
         #print progress bar
-        uf.print_bar(index, num_foldables)
+        fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_foldables)
+        print (fold_string)
         #get foldable item DIVIDING BY ACTORS. Every session hae 2 actors
         curr_list = filter_actors_IEMOCAP(sounds_list, i)
 
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP, True)
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
