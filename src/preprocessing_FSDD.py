@@ -94,6 +94,8 @@ def main():
         uf.print_bar(index, num_files)
         #get foldable item DIVIDING BY ACTORS
         curr_list = filter_actor_list(contents, assoc_dict[i])
+        fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
+        print (fold_string)
 
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
