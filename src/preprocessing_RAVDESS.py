@@ -112,8 +112,10 @@ def main():
         target[i] = curr_target
         index +=1
     #save dicts
-    #np.save(predictors_save_path, predictors)
-    #np.save(target_save_path, target)
+    #save dicts
+    print ('\nSaving matrices...')
+    np.save(predictors_save_path, predictors)
+    np.save(target_save_path, target)
     #print dimensions
     count = 0
     predictors_dims = 0
