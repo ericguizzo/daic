@@ -46,7 +46,7 @@ def CNN_1conv(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'hidden_size': 200,
     'fc_insize':100,
-    'num_classes':8
+    'num_classes':8,
     'dropout': False,
     'drop_prob': 0.4
     }
@@ -105,7 +105,7 @@ def CNN_2conv(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'hidden_size': 200,
     'fc_insize':100,
-    'num_classes':8
+    'num_classes':8,
     'dropout': False,
     'drop_prob': 0.4,
     'pool_size': [2,2]
