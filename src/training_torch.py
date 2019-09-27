@@ -433,15 +433,10 @@ def main():
         print (utilstring)
         #AS LAST THING, AFTER OPTIMIZER.STEP AND EVENTUAL MODEL SAVING
         #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
-        if training_mode == 'train_and_eval' or training_mode == 'only_gradient' or training_mode == 'only_train':
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    layer.update_kernels()
-        elif training_mode =='only_eval':
-            pass
-        else:
-            raise NameError ('Invalid training mode')
-            print ('Given mode: ' + str(training_mode))
+        for layer in model.modules():
+            if isinstance(layer, MultiscaleConv2d):
+                layer.update_kernels()
+
 
 
         #END OF EPOCH LOOP

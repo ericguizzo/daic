@@ -284,42 +284,43 @@ class MultiscaleConv2d(nn.Module):
         return output_matrix
 
     def update_kernels(self):
-        i=0
-        weights_0 = self.conv_shifted_0.weight.clone()  #load original kernels
-        bias_0 = self.conv_shifted_0.bias.clone()
-        original_shape = (weights_0.shape[-2], weights_0.shape[-1])
+        if self.training_mode != 'only_eval':
+            i=0
+            weights_0 = self.conv_shifted_0.weight.clone()  #load original kernels
+            bias_0 = self.conv_shifted_0.bias.clone()
+            original_shape = (weights_0.shape[-2], weights_0.shape[-1])
 
-        #load shifted kernels and up/downsample to the shape of original kernels
-        i = 0
-        weight_names = ['wirghts_0']
-        bias_names = ['bias_0']
-        for layer in self.layer_names:
-            if layer != 'self.conv_shifted_0':
-                weight_names.append('weights_' + str(i))
-                bias_names.append('bias_' + str(i))
-                load_resample_weights_string = 'weights_' + str(i) + ' = nn.functional.interpolate(' + layer + '.weight.clone(), size= ' + str(original_shape) + ', mode=\'bilinear\')'
-                load_bias_string = 'bias_' + str(i) + ' = ' + layer + '.bias.clone()'
-                exec(load_resample_weights_string)
-                exec(load_bias_string)
-            i += 1
+            #load shifted kernels and up/downsample to the shape of original kernels
+            i = 0
+            weight_names = ['wirghts_0']
+            bias_names = ['bias_0']
+            for layer in self.layer_names:
+                if layer != 'self.conv_shifted_0':
+                    weight_names.append('weights_' + str(i))
+                    bias_names.append('bias_' + str(i))
+                    load_resample_weights_string = 'weights_' + str(i) + ' = nn.functional.interpolate(' + layer + '.weight.clone(), size= ' + str(original_shape) + ', mode=\'bilinear\')'
+                    load_bias_string = 'bias_' + str(i) + ' = ' + layer + '.bias.clone()'
+                    exec(load_resample_weights_string)
+                    exec(load_bias_string)
+                i += 1
 
-        #compute average weights and bias
-        for i in range(len(self.layer_names)):
-            if i == 0:
-                w_sum_mtx = weights_0
-                b_sum_mtx = bias_0
-            else:
-                w_sum_mtx = torch.add(w_sum_mtx, locals()[weight_names[i]])
-                b_sum_mtx = torch.add(b_sum_mtx, locals()[bias_names[i]])
+            #compute average weights and bias
+            for i in range(len(self.layer_names)):
+                if i == 0:
+                    w_sum_mtx = weights_0
+                    b_sum_mtx = bias_0
+                else:
+                    w_sum_mtx = torch.add(w_sum_mtx, locals()[weight_names[i]])
+                    b_sum_mtx = torch.add(b_sum_mtx, locals()[bias_names[i]])
 
-        #divide by number of stretch columns
-        n_stretches = float(len(self.layer_names))
-        new_weights = w_sum_mtx / n_stretches
-        new_bias = b_sum_mtx / n_stretches
+            #divide by number of stretch columns
+            n_stretches = float(len(self.layer_names))
+            new_weights = w_sum_mtx / n_stretches
+            new_bias = b_sum_mtx / n_stretches
 
-        #update weights and bias
-        self.conv_shifted_0.weight.data = new_weights
-        self.conv_shifted_0.bias.data = new_bias
+            #update weights and bias
+            self.conv_shifted_0.weight.data = new_weights
+            self.conv_shifted_0.bias.data = new_bias
 
     def get_stretch_percs(self):
         perc_stretches = torch.tensor(self.perc_stretches).numpy()
