@@ -423,13 +423,18 @@ def main():
                     torch.save(model.state_dict(), BVL_model_path)
                     print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                     saved_epoch = epoch + 1
-            if save_model_metric == 'acc':
+
+            elif save_model_metric == 'acc':
                 best_acc = max(val_acc_hist[:-1])  #not looking at curr_loss
                 curr_acc = val_acc_hist[-1]
-                if curr_loss < best_loss:
+                if curr_acc > best_acc:
                     torch.save(model.state_dict(), BVL_model_path)
                     print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                     saved_epoch = epoch + 1
+
+            else:
+                raise ValueError('Wrong metric selected')
+
 
 
         print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
