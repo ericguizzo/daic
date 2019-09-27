@@ -17,7 +17,7 @@ generator = True
 num_experiment = 1  #id of the experiment
 num_folds = 1  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
-experiment_folder = '/../../new_results/ravdess'  #where to save results
+experiment_folder = '../../new_results/ravdess'  #where to save results
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
