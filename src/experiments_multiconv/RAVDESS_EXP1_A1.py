@@ -31,28 +31,28 @@ experiment_folder = '../../new_results/ravdess'  #where to save results
 experiment = {}
 
 
-experiment[1] = ['comment_1="conv, reg:0.0"', 'comment_2="/"',
+experiment[1] = ['comment_1="conv, reg:0.0"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1'
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
                  'fc_insize=567'
                  ]
-experiment[2] = ['comment_1="conv, reg:0.001"', 'comment_2="/"',
+experiment[2] = ['comment_1="conv, reg:0.001"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1'
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
                  'fc_insize=567'
                  ]
-experiment[3] = ['comment_1="conv, reg:0.003"', 'comment_2="/"',
+experiment[3] = ['comment_1="conv, reg:0.003"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1'
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
                  'fc_insize=567'
                  ]
-experiment[4] = ['comment_1="conv, reg:0.01"', 'comment_2="/"',
+experiment[4] = ['comment_1="conv, reg:0.01"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1'
