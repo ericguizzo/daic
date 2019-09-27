@@ -36,28 +36,28 @@ experiment[1] = ['comment_1="conv, reg:0.0"', 'comment_2="none"',
                  'regularization_lambda=0.0',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=567'
+                 'fc_insize=123687'
                  ]
 experiment[2] = ['comment_1="conv, reg:0.001"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=567'
+                 'fc_insize=123687'
                  ]
 experiment[3] = ['comment_1="conv, reg:0.003"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=567'
+                 'fc_insize=123687'
                  ]
 experiment[4] = ['comment_1="conv, reg:0.01"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=567'
+                 'fc_insize=123687'
                  ]
 
 #multi reg 0
@@ -66,21 +66,21 @@ experiment[5] = ['comment_1="multi, reg:0.0"', 'comment_2="(0.7, 1.),(1.428,1.)"
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=123687'
                  ]
 experiment[6] = ['comment_1="multi, reg:0.0"', 'comment_2="(0.5, 1.),(2.,1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=123687'
                  ]
 experiment[7] = ['comment_1="multi, reg:0.0"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=123687'
                  ]
 
 #multi reg 0.001
@@ -89,21 +89,21 @@ experiment[8] = ['comment_1="multi, reg:0.001"', 'comment_2="(0.7, 1.),(1.428,1.
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=123687'
                  ]
 experiment[9] = ['comment_1="multi, reg:0.001"', 'comment_2="(0.5, 1.),(2.,1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=123687'
                  ]
 experiment[10] = ['comment_1="multi, reg:0.001"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=123687'
                  ]
 #multi reg 0.003
 experiment[11] = ['comment_1="multi, reg:0.003"', 'comment_2="(0.7, 1.),(1.428,1.)"',
@@ -111,21 +111,21 @@ experiment[11] = ['comment_1="multi, reg:0.003"', 'comment_2="(0.7, 1.),(1.428,1
                  'regularization_lambda=0.003',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=123687'
                  ]
 experiment[12] = ['comment_1="multi, reg:0.003"', 'comment_2="(0.5, 1.),(2.,1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=123687'
                  ]
 experiment[13] = ['comment_1="multi, reg:0.003"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=123687'
                  ]
 #multi reg 0.01
 experiment[14] = ['comment_1="multi, reg:0.01"', 'comment_2="(0.7, 1.),(1.428,1.)"',
@@ -133,21 +133,21 @@ experiment[14] = ['comment_1="multi, reg:0.01"', 'comment_2="(0.7, 1.),(1.428,1.
                  'regularization_lambda=0.01',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=123687'
                  ]
 experiment[15] = ['comment_1="multi, reg:0.01"', 'comment_2="(0.5, 1.),(2.,1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=123687'
                  ]
 experiment[16] = ['comment_1="multi, reg:0.01"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=567'
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=123687'
                  ]
 
 
