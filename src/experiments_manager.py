@@ -3,7 +3,7 @@ import subprocess
 
 
 #DEFINE PARAMETERS
-num_experiments_to_run = [1]
+num_experiments_to_run = [2]
 
 global_parameters = []
 
@@ -22,7 +22,6 @@ try:
     gpu_ID = int(sys.argv[2])
 except:
     pass
-
 
 
 contents = os.listdir(experiments_to_run_folder)
