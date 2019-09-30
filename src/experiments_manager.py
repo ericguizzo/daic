@@ -10,11 +10,11 @@ global_parameters = []
 experiments_to_run_folder = 'experiments_multiconv'
 
 xval_script_parameters = ['experiment_folder="../../experiments_NEW"',
-                          'debug_mode=True',
+                          'debug_mode=False',
                           'overwrite_results=False']
 begin = 1
 
-end = 36
+end = 32
 
 gpu_ID = 0
 
