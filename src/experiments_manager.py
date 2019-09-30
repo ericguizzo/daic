@@ -19,7 +19,7 @@ end = 36
 gpu_ID = 0
 
 try:
-    experiments_to_run = eval(sys.argv[1])
+    num_experiments_to_run = eval(sys.argv[1])
     gpu_ID = int(sys.argv[2])
 except:
     pass
