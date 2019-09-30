@@ -3,7 +3,7 @@ import subprocess
 
 
 #DEFINE PARAMETERS
-num_experiments_to_run = [2]
+num_experiments_to_run = []
 
 global_parameters = []
 
