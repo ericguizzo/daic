@@ -98,7 +98,7 @@ def CNN_2conv(time_dim, features_dim, user_parameters=['niente = 0']):
     #FIRST, DECLARE DEFAULT PARAMETERS OF YOUR MODEL AS KEYS OF A DICT
     #default parameters
     p = {
-    'channels':1,
+    'channels':10,
     'kernel_size_1': [10,5],
     'output_type': 'pooled_map',
     'stretch_penality_lambda': 0.,

@@ -9,7 +9,8 @@ global_parameters = []
 
 experiments_to_run_folder = 'experiments_multiconv'
 
-xval_script_parameters = ['experiment_folder="../../prova_experiments"']
+xval_script_parameters = ['experiment_folder="../../experiments_NEW"',
+                          'debug_mode=True']
 begin = 1
 
 end = 36
