@@ -330,7 +330,6 @@ try:
     added_global_parameters = added_global_parameters.split('%')
     added_global_parameters = list(filter(lambda x: x != '', added_global_parameters))
     if len(added_global_parameters) > 0:
-        print ('CAZZO')
         for added in added_global_parameters:  #iterate global parameters
             flag = True
             added_name = added.split('=')[0]

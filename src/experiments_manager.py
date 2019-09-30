@@ -1,4 +1,4 @@
-import os
+import os, sys
 import subprocess
 
 
@@ -23,7 +23,6 @@ try:
     gpu_ID = int(sys.argv[2])
 except:
     pass
-
 
 contents = os.listdir(experiments_to_run_folder)
 contents = [os.path.join(experiments_to_run_folder, x) for x in contents]
