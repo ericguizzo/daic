@@ -329,7 +329,9 @@ except IndexError:
 try:
     added_global_parameters = sys.argv[4]
     added_global_parameters = added_global_parameters.split('%')
+    added_global_parameters = list(filter(lambda x: x != '', added_global_parameters))
     if len(added_global_parameters) > 0:
+        print ('CAZZO')
         for added in added_global_parameters:  #iterate global parameters
             flag = True
             added_name = added.split('=')[0]
@@ -371,6 +373,7 @@ if len(global_parameters) > 0:
             #append parameter if not modified
             if flag == True:
                 local_parameters.append(global_parameter)
+
 
 experiment_folder = os.path.join(experiment_folder, dataset)
 

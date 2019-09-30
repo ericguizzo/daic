@@ -3,14 +3,13 @@ import subprocess
 
 
 #DEFINE PARAMETERS
-num_experiments_to_run = [2]
+num_experiments_to_run = [1]
 
 global_parameters = []
 
 experiments_to_run_folder = 'experiments_multiconv'
 
 xval_script_parameters = ['experiment_folder="../../prova_experiments"']
-
 begin = 1
 
 end = 36
