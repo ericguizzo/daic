@@ -68,6 +68,7 @@ from torch import nn
 from torch import optim
 import torch.nn.functional as F
 import torch.utils.data as utils
+from torchsummary import summary
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, mean_squared_error, mean_absolute_error
 import numpy as np
@@ -314,6 +315,8 @@ def main():
     model_string = 'model_class, model_parameters = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
     exec(model_string)
     model = locals()['model_class'].to(device)
+    #print summary
+    summary(model, input_size=(1, time_dim, features_dim))
 
     #compute number of parameters
     model_params = sum([np.prod(p.size()) for p in model.parameters()])
@@ -449,8 +452,6 @@ def main():
         for layer in model.modules():
             if isinstance(layer, MultiscaleConv2d):
                 layer.update_kernels()
-
-
 
         #END OF EPOCH LOOP
 
