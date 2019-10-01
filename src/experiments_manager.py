@@ -11,7 +11,7 @@ experiments_to_run_folder = 'experiments_multiconv'
 
 xval_script_parameters = ['experiment_folder="../../experiments_HOPE"',
                           'debug_mode=True',
-                          'overwrite_results=False',
+                          'overwrite_results=True',
                           'num_folds=1']
 begin = 5
 
