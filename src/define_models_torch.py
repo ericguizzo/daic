@@ -53,9 +53,6 @@ def CNN_1conv(time_dim, features_dim, user_parameters=['niente = 0']):
 
     p = parse_parameters(p, user_parameters)
 
-    print ('CULO')
-    print (p)
-
     #always return model AND p!!!
     class CNN_1conv_class(nn.Module):
 
