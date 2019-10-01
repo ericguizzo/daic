@@ -46,7 +46,7 @@ def CNN_1conv(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'hidden_size': 200,
     'fc_insize':100,
-    'num_classes':8,
+    'output_classes':8,
     'dropout': False,
     'drop_prob': 0.4
     }
@@ -69,7 +69,7 @@ def CNN_1conv(time_dim, features_dim, user_parameters=['niente = 0']):
                 self.multiscale1 = MultiscaleConv2d(1, p['channels'], kernel_size=p['kernel_size_1'], scale_factors=p['stretch_factors'],
                                             output_type=p['output_type'], stretch_penality_lambda=p['stretch_penality_lambda'])
             self.hidden = nn.Linear(p['fc_insize'], p['hidden_size'])
-            self.out = nn.Linear(p['hidden_size'], p['num_classes'])
+            self.out = nn.Linear(p['hidden_size'], p['output_classes'])
             self.dropout = p['dropout']
             self.drop_prob = p['drop_prob']
 
@@ -108,7 +108,7 @@ def CNN_2conv(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'hidden_size': 200,
     'fc_insize':100,
-    'num_classes':8,
+    'output_classes':8,
     'dropout': False,
     'drop_prob': 0.4,
     'pool_size': [2,2]
@@ -132,7 +132,7 @@ def CNN_2conv(time_dim, features_dim, user_parameters=['niente = 0']):
                                                 output_type=p['output_type'], stretch_penality_lambda= p['stretch_penality_lambda'])
             self.pool = nn.MaxPool2d(p['pool_size'][0], p['pool_size'][1])
             self.hidden = nn.Linear(p['fc_insize'], p['hidden_size'])
-            self.out = nn.Linear(p['hidden_size'], p['num_classes'])
+            self.out = nn.Linear(p['hidden_size'], p['output_classes'])
             self.dropout = p['dropout']
             self.drop_prob = p['drop_prob']
 
