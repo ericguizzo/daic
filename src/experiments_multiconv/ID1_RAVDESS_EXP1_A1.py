@@ -373,6 +373,8 @@ if len(global_parameters) > 0:
                 local_parameters.append(global_parameter)
 
 
+print (experiment[1])
+sys.exit(0)
 experiment_folder = os.path.join(experiment_folder, dataset)
 print ('Overwrite results: ' + str(overwrite_results))
 print ('Debug mode: ' + str(debug_mode))

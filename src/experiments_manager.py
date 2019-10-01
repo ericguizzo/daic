@@ -5,7 +5,7 @@ import subprocess
 #DEFINE PARAMETERS
 num_experiments_to_run = []
 
-global_parameters = ['epochs=1']
+global_parameters = ['num_epochs=1']
 
 experiments_to_run_folder = 'experiments_multiconv'
 
