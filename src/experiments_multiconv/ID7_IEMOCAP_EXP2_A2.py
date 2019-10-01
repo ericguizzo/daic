@@ -10,8 +10,8 @@ import xval_instance as xval
 gpu_ID = 0
 overwrite_results = False  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'RAVDESS 1 conv 10 channel'
-dataset = 'ravdess_stft'
+short_description = 'IEMOCAP 1 conv 10 channel'
+dataset = 'iemocap_stft'
 task_type = 'classification'
 generator = True
 num_experiment = 2  #id of the experiment
@@ -20,7 +20,7 @@ num_folds = 4  #number of k-folds for cross-validation
 experiment_folder = '../../new_results'  #where to save results
 
 global_parameters = ['fc_insize=1236870', 'channels=10', 'architecture="CNN_1conv"',
-                    'output_classes=8']
+                     'output_classes=4']
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict

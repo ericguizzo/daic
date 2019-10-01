@@ -10,17 +10,18 @@ import xval_instance as xval
 gpu_ID = 0
 overwrite_results = False  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
-short_description = 'RAVDESS 1 conv 10 channel'
-dataset = 'ravdess_stft'
+short_description = 'GSC ResNet'
+dataset = 'gsc_stft'
 task_type = 'classification'
 generator = True
-num_experiment = 2  #id of the experiment
+num_experiment = 4  #id of the experiment
 num_folds = 4  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
 experiment_folder = '../../new_results'  #where to save results
 
-global_parameters = ['fc_insize=1236870', 'channels=10', 'architecture="CNN_1conv"',
-                    'output_classes=8']
+global_parameters = ['architecture="ResNet"', 'output_classes=36',
+                        ]
+
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
 #every instance must be a key in the experiment dict
@@ -37,137 +38,133 @@ experiment = {}
 #BEST VALIDATION LOSS
 
 experiment[1] = ['comment_1="conv,reg:0.0,BVL"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="loss"'
                  ]
 experiment[2] = ['comment_1="conv,reg:0.001,BVL"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="loss"'
                  ]
 experiment[3] = ['comment_1="conv,reg:0.003,BVL"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"'
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="loss"'
                  ]
 experiment[4] = ['comment_1="conv,reg:0.01,BVL"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="loss"'
                  ]
 
 #multi reg 0
 experiment[5] = ['comment_1="multi,reg:0.0,BVL"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[6] = ['comment_1="multi,reg:0.0,BVL"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[7] = ['comment_1="multi,reg:0.0,BVL"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="loss"'
                  ]
 
 #multi reg 0.001
 experiment[8] = ['comment_1="multi,reg:0.001,BVL"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[9] = ['comment_1="multi,reg:0.001,BVL"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[10] = ['comment_1="multi,reg:0.001,BVL"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="loss"'
                  ]
 #multi reg 0.003
 experiment[11] = ['comment_1="multi,reg:0.003,BVL"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[12] = ['comment_1="multi,reg:0.003,BVL"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[13] = ['comment_1="multi,reg:0.003,BVL"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="loss"'
                  ]
 #multi reg 0.01
 experiment[14] = ['comment_1="multi,reg:0.01,BVL"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[15] = ['comment_1="multi,reg:0.01,BVL"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="loss"'
                  ]
 experiment[16] = ['comment_1="multi,reg:0.01,BVL"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="loss"'
                  ]
 
@@ -176,144 +173,139 @@ experiment[16] = ['comment_1="multi,reg:0.01,BVL"', 'comment_2="(0.5, 1.),(0.7, 
 #BEST VALIDATION ACCURACY
 
 experiment[17] = ['comment_1="conv, reg:0.0"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="acc"'
                  ]
 experiment[18] = ['comment_1="conv, reg:0.001"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="acc"'
                  ]
 experiment[19] = ['comment_1="conv, reg:0.003"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="acc"'
                  ]
 experiment[20] = ['comment_1="conv, reg:0.01"', 'comment_2="none"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'fc_insize=1236870',
                  'save_model_metric="acc"'
                  ]
 
 #multi reg 0
 experiment[21] = ['comment_1="multi,reg:0.0,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[22] = ['comment_1="multi,reg:0.0,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[23] = ['comment_1="multi,reg:0.0,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="acc"'
                  ]
 
 #multi reg 0.001
 experiment[24] = ['comment_1="multi,reg:0.001,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[25] = ['comment_1="multi,reg:0.001,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[26] = ['comment_1="multi,reg:0.001,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.001',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="acc"'
                  ]
 #multi reg 0.003
 experiment[27] = ['comment_1="multi,reg:0.003,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[28] = ['comment_1="multi,reg:0.003,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[29] = ['comment_1="multi,reg:0.003,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="acc"'
                  ]
 #multi reg 0.01
 experiment[30] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[31] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
                  'save_model_metric="acc"'
                  ]
 experiment[32] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="CNN_1conv"', 'reshaping_type="cnn"',
+                 'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.01',
-                 'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
+                 'layer_type="multi"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]', 'fc_insize=1236870',
+                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
                  'save_model_metric="acc"'
                  ]
 
 
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#
-
 #outer arguments
 try:
     begin = int(sys.argv[1])
