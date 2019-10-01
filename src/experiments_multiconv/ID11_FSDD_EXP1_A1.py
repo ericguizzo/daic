@@ -40,7 +40,7 @@ experiment[1] = ['comment_1="conv,reg:0.0,BVL"', 'comment_2="none"',
                  'architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
                  'layer_type="conv"', 'kernel_size_1=[10,5]', 'channels=1',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
+                 'learning_rate=0.001', 'output_classes=10', 'num_epochs=100',
                  'fc_insize=123687',
                  'save_model_metric="loss"'
                  ]
