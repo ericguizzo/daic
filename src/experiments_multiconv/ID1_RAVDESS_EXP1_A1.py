@@ -385,10 +385,10 @@ description_path = output_path + '/experiment_' + str(num_experiment) + '_descri
 with open(description_path, "w") as text_file:
     text_file.write(short_description)
 
-
 for num_run in range(begin,end+1):
     results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     temp_params = '/'.join(experiment[num_run])
+
 
     if overwrite_results:
         if debug_mode == False:
