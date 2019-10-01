@@ -7,7 +7,7 @@ sys.path.insert(0,parentdir)
 import xval_instance as xval
 
 #EXPERIMENT PARAMETERS:
-#gpu_ID = 0
+gpu_ID = 0
 overwrite_results = False  #if true overwrite existing experiment instances
 debug_mode = True  #if false, if an error occurs in one instance, it is skipped without stopping the routine
 short_description = 'RAVDESS ResNet'
