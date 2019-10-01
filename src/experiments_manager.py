@@ -5,14 +5,14 @@ import subprocess
 #DEFINE PARAMETERS
 num_experiments_to_run = []
 
-global_parameters = ['num_epochs=1']
+global_parameters = ['num_epochs=100']
 
 experiments_to_run_folder = 'experiments_multiconv'
 
-xval_script_parameters = ['experiment_folder="../../experiments_PROVA"',
-                          'debug_mode=True',
+xval_script_parameters = ['experiment_folder="../../experiments_HOPE"',
+                          'debug_mode=False',
                           'overwrite_results=False',
-                          'num_folds=2']
+                          'num_folds=4']
 begin = 1
 
 end = 32
