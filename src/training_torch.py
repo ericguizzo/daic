@@ -316,7 +316,7 @@ def main():
     exec(model_string)
     model = locals()['model_class'].to(device)
     #print summary
-    summary(model, input_size=(1, time_dim, features_dim))
+    #summary(model, input_size=(1, time_dim, features_dim))
 
     #compute number of parameters
     model_params = sum([np.prod(p.size()) for p in model.parameters()])
