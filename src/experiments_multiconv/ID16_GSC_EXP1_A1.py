@@ -19,7 +19,7 @@ num_folds = 4  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
 experiment_folder = '../../new_results'  #where to save results
 
-global_parameters = ['fc_insize=123687', 'channels=1', 'architecture="CNN_1conv"',
+global_parameters = ['fc_insize=14252', 'channels=1', 'architecture="CNN_1conv"',
                      'output_classes=36', 'kernel_size_1=[5,5]']
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT

@@ -10,7 +10,7 @@ global_parameters = ['num_epochs=1']
 experiments_to_run_folder = 'experiments_multiconv'
 
 xval_script_parameters = ['experiment_folder="../../experiments_HOPE"',
-                          'debug_mode=False',
+                          'debug_mode=True',
                           'overwrite_results=False',
                           'num_folds=2']
 begin = 1
@@ -43,7 +43,6 @@ def filter_experiments(to_run=num_experiments_to_run, ex_list=contents):
     return filtered_list
 
 filtered_list = filter_experiments()
-
 
 for exp_name in filtered_list:
     process = subprocess.Popen(['python3', exp_name, str(begin), str(end), str(gpu_ID),
