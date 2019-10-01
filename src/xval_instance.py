@@ -118,10 +118,10 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         flag = 'ERROR'
         while flag == 'ERROR':
             time.sleep(0.2)
-            flag = np.load(results_name)
+            flag = np.load(results_name, allow_pickle=True)
 
         #update results dict
-        temp_results = np.load(results_name)
+        temp_results = np.load(results_name, allow_pickle=True)
         temp_results = temp_results.item()
         folds[i] = temp_results
         #stop fold iter
