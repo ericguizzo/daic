@@ -12,7 +12,7 @@ experiments_to_run_folder = 'experiments_multiconv'
 xval_script_parameters = ['experiment_folder="../../experiments_PROVA"',
                           'debug_mode=True',
                           'overwrite_results=False',
-                          'num_folds=1']
+                          'num_folds=2']
 begin = 1
 
 end = 32
