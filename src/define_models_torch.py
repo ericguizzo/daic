@@ -368,7 +368,7 @@ def ResNet18(time_dim, features_dim, user_parameters=['niente = 0']):
 
         def __init__(self, conv_type=p['layer_type'], layers = [2, 2, 2, 2], num_classes=p['output_classes'], zero_init_residual=False,\
                      groups=1, width_per_group=64, replace_stride_with_dilation=None,\
-                     norm_layer=None, scale_factors=p['scale_factors'], output_type=p['output_type'], stretch_penality_lambda=p['stretch_penality_lambda']):
+                     norm_layer=None, scale_factors=p['stretch_factors'], output_type=p['output_type'], stretch_penality_lambda=p['stretch_penality_lambda']):
             super(ResNet, self).__init__()
             if norm_layer is None:
                 norm_layer = nn.BatchNorm2d
