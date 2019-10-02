@@ -41,6 +41,7 @@ except IndexError:
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
+    num_experiment = 1
     parameters_path = results_path + '/parameters'
     SAVE_RESULTS = results_path
     num_fold = 0
