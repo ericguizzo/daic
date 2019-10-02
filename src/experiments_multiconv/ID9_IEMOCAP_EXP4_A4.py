@@ -20,7 +20,7 @@ num_folds = 4  #number of k-folds for cross-validation
 experiment_folder = '../../new_results'  #where to save results
 
 global_parameters = ['architecture="ResNet18"', 'output_classes=4', 'batch_size=200']
-                        ]
+                        
 
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
