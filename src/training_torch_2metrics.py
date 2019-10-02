@@ -476,7 +476,7 @@ def main():
             MODEL_PATH = BVL_model_path
             results_path_final = results_path + '_BVL.npy'
         if curr_metric == 1:
-            MODEL_PATH = BVA_model_path
+            MODEL_PATH = BVL_model_path
             results_path_final = results_path + '_BVL.npy'
 
         torch.cuda.empty_cache()  #free GPU
