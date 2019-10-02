@@ -267,6 +267,8 @@ for i in contents:
 
         #print grobal parameters
         #write ID
+        print ('cazzo')
+        print (i)
         exp_ID = i.split('_')[-1].split('.')[0][3:]
         curr_row = int(exp_ID)+v_offset
         worksheet.write(curr_row, exp_id_c, exp_ID,values_format)

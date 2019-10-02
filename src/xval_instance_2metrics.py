@@ -321,23 +321,23 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
         #save results dict
         if curr_metric == 0:
-            dict_name = 'resultsBVL' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+            dict_name = 'results_BVL_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
             final_dict_path = output_results_path_BVL + '/' + dict_name
             np.save(final_dict_path, folds)
 
             #run training
-            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheetBVL.xls'
+            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet_BVL.xls'
             gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
             output_results_path_BVL, spreadsheet_name])
             gen_spreadsheet.communicate()
             gen_spreadsheet.wait()
 
         if curr_metric == 1:
-            dict_name = 'resultsBVA' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+            dict_name = 'results_BVA_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
             final_dict_path = output_results_path_BVA + '/' + dict_name
             np.save(final_dict_path, folds)
 
-            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheetBVA.xls'
+            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet_BVA.xls'
             gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
             output_results_path_BVA, spreadsheet_name])
             gen_spreadsheet.communicate()
