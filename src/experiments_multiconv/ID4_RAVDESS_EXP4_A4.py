@@ -19,7 +19,7 @@ num_folds = 4  #number of k-folds for cross-validation
 #experiment_folder = '../../../copy/prova_API'  #where to save results
 experiment_folder = '../../new_results'  #where to save results
 
-global_parameters = ['architecture="ResNet18"', 'output_classes=8', 'batch_size=150']
+global_parameters = ['architecture="ResNet18"', 'output_classes=8', 'batch_size=100']
 
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
