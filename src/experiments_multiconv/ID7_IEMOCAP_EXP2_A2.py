@@ -393,7 +393,7 @@ if isinstance(begin,list):
 else:
     iterable_experiments = range(begin,end+1)
 
-for num_run in riterable_experiments:
+for num_run in iterable_experiments:
     results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     temp_params = '/'.join(experiment[num_run])
 
