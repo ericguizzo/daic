@@ -43,6 +43,7 @@ except IndexError:
     results_path = '../results/provisional'
     parameters_path = results_path + '/parameters'
     SAVE_RESULTS = results_path
+    layer_type = 'conv'
     num_fold = 0
     num_exp = 0
     num_run = 0
