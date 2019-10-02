@@ -471,7 +471,7 @@ def main():
 
     #compute results on the best saved model BOTH BVL AND BVA
 
-    for curr_metric in range(1):
+    for curr_metric in range(2):
         print ('CULO: ' + str(curr_metric))
         if curr_metric == 0:
             MODEL_PATH = BVL_model_path
