@@ -37,13 +37,12 @@ except IndexError:
     generator = True
     dataset = 'ravdess_stft'
     architecture = 'CNN_1conv'
-    parameters = ['niente = 0']
+    parameters = ['layer_type="conv"']
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
     parameters_path = results_path + '/parameters'
     SAVE_RESULTS = results_path
-    layer_type = 'conv'
     num_fold = 0
     num_exp = 0
     num_run = 0
