@@ -75,8 +75,9 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         os.makedirs(output_config_path)
 
 
-    #initialize results dict
-    folds = {}
+    folds_BVL = {}
+    folds_BVA = {}
+
 
     #iterate folds
     for i in range(num_folds):
@@ -115,17 +116,25 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         training.wait()
 
         #wait for file to be created
-        flag = 'ERROR'
-        while flag == 'ERROR':
+        flag1 = 'ERROR'
+        flag2 = 'ERROR'
+        while flag1 == 'ERROR' or flag2 == 'ERROR':
             time.sleep(0.2)
-            flag = np.load(results_name, allow_pickle=True)
+            flag1 = np.load(results_name + '_BVL.npy', allow_pickle=True)
+            flag2 = np.load(results_name + '_BVA.npy', allow_pickle=True)
 
         #update results dict
-        temp_results = np.load(results_name, allow_pickle=True)
-        temp_results = temp_results.item()
-        folds[i] = temp_results
+        temp_results_BVL = np.load(results_name + '_BVL.npy', allow_pickle=True)
+        temp_results_BVL = temp_results_BVL.item()
+        temp_results_BVA = np.load(results_name + '_BVA.npy', allow_pickle=True)
+        temp_results_BVA = temp_results_BVA.item()
+
+        folds_BVL[i] = temp_results_BVL
+        folds_BVA[i] = temp_results_BVA
         #stop fold iter
 
+
+    '''
     #compute summary
     #compute mean loss and loss std
     tr_loss = []
@@ -311,6 +320,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
     #save current code
     save_code(output_code_path)
+    '''
 
 
 if __name__ == '__main__':
