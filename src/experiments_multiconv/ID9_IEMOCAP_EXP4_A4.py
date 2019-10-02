@@ -308,7 +308,7 @@ experiment[32] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.5, 1.),(0.7, 
 #-------------------------------------------------------------------------------#
 #outer arguments
 try:
-    begin = int(sys.argv[1])
+    begin = eval(sys.argv[1])
     end = int(sys.argv[2])
     gpu_ID = int(sys.argv[3])
 
@@ -380,8 +380,12 @@ description_path = output_path + '/experiment_' + str(num_experiment) + '_descri
 with open(description_path, "w") as text_file:
     text_file.write(short_description)
 
+if isinstance(begin,list):
+    iterable_experiments = begin
+else:
+    iterable_experiments = range(begin,end+1)
 
-for num_run in range(begin,end+1):
+for num_run in iterable_experiments:
     results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     temp_params = '/'.join(experiment[num_run])
 

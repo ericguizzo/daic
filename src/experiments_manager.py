@@ -25,6 +25,16 @@ try:
 except:
     pass
 
+try:
+    begin = eval(sys.argv[3])
+except:
+    pass
+
+try:
+    end = sys.argv[4]
+except:
+    pass
+
 contents = os.listdir(experiments_to_run_folder)
 contents = [os.path.join(experiments_to_run_folder, x) for x in contents]
 
