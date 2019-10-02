@@ -40,7 +40,7 @@ class MultiscaleConv2d(nn.Module):
                 i += 1
 
 
-    def forward(self, x, training_state=self.training):
+    def forward(self, x, training_state=True):
         #index 0 is always the original layer
         #trainable conv layer (only for computing weights and biases)
         #f_map0 = locals()
