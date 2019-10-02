@@ -37,7 +37,7 @@ except IndexError:
     generator = True
     dataset = 'ravdess_stft'
     architecture = 'CNN_1conv'
-    parameters = ['layer_type="conv"', 'fc_insize=123687', 'epochs=1']
+    parameters = ['layer_type="conv"', 'fc_insize=123687', 'num_epochs=1']
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
@@ -472,6 +472,7 @@ def main():
     #compute results on the best saved model BOTH BVL AND BVA
 
     for curr_metric in range(1):
+        print ('CULO: ' + str(curr_metric))
         if curr_metric == 0:
             MODEL_PATH = BVL_model_path
             results_path_final = results_path + '_BVL.npy'
