@@ -36,7 +36,7 @@ except IndexError:
     #nogenerator
     generator = True
     dataset = 'ravdess_stft'
-    architecture = 'simple_CNN'
+    architecture = 'CNN_1conv'
     parameters = ['niente = 0']
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
