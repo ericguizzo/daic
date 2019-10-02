@@ -454,6 +454,7 @@ def ResNet18(time_dim, features_dim, user_parameters=['niente = 0']):
 
         def forward(self, x):
             x = F.interpolate(x, size=[224,224], mode='bilinear')
+            x = torch.cat((x,x,x), axis=1)
             x = self.conv1(x)
             x = self.bn1(x)
             x = self.relu(x)
