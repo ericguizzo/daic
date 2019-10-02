@@ -37,7 +37,7 @@ except IndexError:
     generator = True
     dataset = 'ravdess_stft'
     architecture = 'CNN_1conv'
-    parameters = ['layer_type="conv"']
+    parameters = ['layer_type="conv"', 'fc_insize=123687', 'epochs=1']
     task_type = 'classification'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
