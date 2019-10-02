@@ -68,7 +68,7 @@ from torch import nn
 from torch import optim
 import torch.nn.functional as F
 import torch.utils.data as utils
-from torchsummary import summary
+from collections import OrderedDict
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, mean_squared_error, mean_absolute_error
 import numpy as np
@@ -122,8 +122,10 @@ else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
 
 #path for saving best val loss and best val acc models
-BVL_model_path = SAVE_MODEL
-
+BVL_model_path = SAVE_MODEL + '_BVL'
+BVA_model_path = SAVE_MODEL + '_BVA'
+saved_epoch_BVL = 0
+saved_epoch_BVA = 0
 
 #OVERWRITE DEFAULT PARAMETERS IF IN XVAL MODE
 try:
@@ -415,28 +417,29 @@ def main():
 
         #save best model (metrics = validation loss)
         if epoch == 0:
-            torch.save(model.state_dict(), BVL_model_path)
-            print ('\nModel saved')
-            saved_epoch = epoch + 1
+            best_model_dict_BVL = {k:v.to('cpu') for k, v in model.state_dict().items()}
+            best_model_dict_BVL = OrderedDict(best_model_dict_BVL)
+            print ('\nModel saved: BVL')
+            best_model_dict_BVA = {k:v.to('cpu') for k, v in model.state_dict().items()}
+            best_model_dict_BVA = OrderedDict(best_model_dict_BVA)
+            print ('\nModel saved: BVA')
         else:
-            if save_model_metric == 'loss':
-                best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
-                curr_loss = val_loss_hist[-1]
-                if curr_loss < best_loss:
-                    torch.save(model.state_dict(), BVL_model_path)
-                    print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
-                    saved_epoch = epoch + 1
+            best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
+            curr_loss = val_loss_hist[-1]
+            if curr_loss < best_loss:
+                best_model_dict_BVL = {k:v.to('cpu') for k, v in model.state_dict().items()}
+                best_model_dict_BVL = OrderedDict(best_model_dict_BVL)
+                print ('\nModel saved: BVL')
+                saved_epoch_BVL = epoch + 1
 
-            elif save_model_metric == 'acc':
-                best_acc = max(val_acc_hist[:-1])  #not looking at curr_loss
-                curr_acc = val_acc_hist[-1]
-                if curr_acc > best_acc:
-                    torch.save(model.state_dict(), BVL_model_path)
-                    print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
-                    saved_epoch = epoch + 1
+            best_acc = max(val_acc_hist[:-1])  #not looking at curr_loss
+            curr_acc = val_acc_hist[-1]
+            if curr_acc > best_acc:
+                best_model_dict_BVA = {k:v.to('cpu') for k, v in model.state_dict().items()}
+                best_model_dict_BVA = OrderedDict(best_model_dict_BVA)
+                print ('\nModel saved: BVA')
+                saved_epoch_BVA = epoch + 1
 
-            else:
-                raise ValueError('Wrong metric selected')
 
 
 
@@ -462,238 +465,251 @@ def main():
 
         #END OF EPOCH LOOP
 
-    #compute results on the best saved model
-    torch.cuda.empty_cache()  #free GPU
-    #load best saved model
-    model.load_state_dict(torch.load(BVL_model_path), strict=False)
+    #SAVE MODELS TRANSFERED TO GPU
+    torch.save(best_model_dict_BVL, BVL_model_path)
+    torch.save(best_model_dict_BVA, BVA_model_path)
 
-    train_batch_losses = []
-    val_batch_lesses = []
-    test_batch_losses = []
+    #compute results on the best saved model BOTH BVL AND BVA
 
-    #if there is any multiscale layer
-    there_is_multiconv = False
-    for layer in model.modules():
-        if isinstance(layer, MultiscaleConv2d):
-            there_is_multiconv = True
+    for i in range(1):
+        if i == 0:
+            MODEL_PATH = BVL_model_path
+            results_path = results_path + '_BVL.npy'
+        if i == 1:
+            MODEL_PATH = BVA_model_path
+            results_path = results_path + '_BVA.npy'
 
-    if there_is_multiconv:
-        train_batch_stretch_percs = []
-        val_batch_stretch_percs= []
-        test_batch_stretch_percs = []
+        torch.cuda.empty_cache()  #free GPU
+        #load best saved model
+        model.load_state_dict(torch.load(MODEL_PATH), strict=False)
 
+        train_batch_losses = []
+        val_batch_lesses = []
+        test_batch_losses = []
 
-    if task_type == 'classification':
-        train_batch_accs = []
-        val_batch_accs = []
-        test_batch_accs = []
+        #if there is any multiscale layer
+        there_is_multiconv = False
+        for layer in model.modules():
+            if isinstance(layer, MultiscaleConv2d):
+                there_is_multiconv = True
 
-        train_batch_f1 = []
-        val_batch_f1 = []
-        test_batch_f1 = []
-
-        train_batch_precision = []
-        val_batch_precision = []
-        test_batch_precision = []
-
-        train_batch_recall = []
-        val_batch_recall = []
-        test_batch_recall = []
-
-    elif task_type == 'regression':
-        train_batch_rmse = []
-        val_batch_rmse = []
-        test_batch_rmse = []
-
-        train_batch_mae = []
-        val_batch_mae = []
-        test_batch_mae = []
-
-    model.eval()
-    with torch.no_grad():
-
-        #TRAINING DATA
-        for i, (sounds, truth) in enumerate(tr_data):
-            optimizer.zero_grad()
-            sounds = sounds.to(device)
-            truth = truth.to(device)
-            outputs = model(sounds)
-
-            temp_loss = loss_function(outputs, truth)
-            train_batch_losses.append(temp_loss.item())
-
-            if task_type == 'classification':
-                temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                train_batch_accs.append(temp_acc)
-                temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                train_batch_f1.append(temp_f1)
-                temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                train_batch_precision.append(temp_precision)
-                temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                train_batch_recall.append(temp_recall)
-
-            elif task_type == 'regression':
-                temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                train_batch_rmse.append(temp_rmse)
-                temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                train_batch_mae.append(temp_mae)
-
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    temp_stretch_percs = layer.get_stretch_percs()
-                    train_batch_stretch_percs.append(temp_stretch_percs)
+        if there_is_multiconv:
+            train_batch_stretch_percs = []
+            val_batch_stretch_percs= []
+            test_batch_stretch_percs = []
 
 
-        #VALIDATION DATA
-        for i, (sounds, truth) in enumerate(val_data):
-            optimizer.zero_grad()
-            sounds = sounds.to(device)
-            truth = truth.to(device)
-            outputs = model(sounds)
+        if task_type == 'classification':
+            train_batch_accs = []
+            val_batch_accs = []
+            test_batch_accs = []
 
-            temp_loss = loss_function(outputs, truth)
-            val_batch_losses.append(temp_loss.item())
+            train_batch_f1 = []
+            val_batch_f1 = []
+            test_batch_f1 = []
 
-            if task_type == 'classification':
-                temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                val_batch_accs.append(temp_acc)
-                temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                val_batch_f1.append(temp_f1)
-                temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                val_batch_precision.append(temp_precision)
-                temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                val_batch_recall.append(temp_recall)
+            train_batch_precision = []
+            val_batch_precision = []
+            test_batch_precision = []
 
-            elif task_type == 'regression':
-                temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                val_batch_rmse.append(temp_rmse)
-                temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                val_batch_mae.append(temp_mae)
+            train_batch_recall = []
+            val_batch_recall = []
+            test_batch_recall = []
 
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    temp_stretch_percs = layer.get_stretch_percs()
-                    val_batch_stretch_percs.append(temp_stretch_percs)
+        elif task_type == 'regression':
+            train_batch_rmse = []
+            val_batch_rmse = []
+            test_batch_rmse = []
 
-        #TEST DATA
-        for i, (sounds, truth) in enumerate(test_data):
-            optimizer.zero_grad()
-            sounds = sounds.to(device)
-            truth = truth.to(device)
-            outputs = model(sounds)
+            train_batch_mae = []
+            val_batch_mae = []
+            test_batch_mae = []
 
-            temp_loss = loss_function(outputs, truth)
-            test_batch_losses.append(temp_loss.item())
+        model.eval()
+        with torch.no_grad():
 
-            if task_type == 'classification':
-                temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                test_batch_accs.append(temp_acc)
-                temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                test_batch_f1.append(temp_f1)
-                temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                test_batch_precision.append(temp_precision)
-                temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-                test_batch_recall.append(temp_recall)
+            #TRAINING DATA
+            for i, (sounds, truth) in enumerate(tr_data):
+                optimizer.zero_grad()
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+                outputs = model(sounds)
 
-            elif task_type == 'regression':
-                temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                test_batch_rmse.append(temp_rmse)
-                temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-                test_batch_mae.append(temp_mae)
+                temp_loss = loss_function(outputs, truth)
+                train_batch_losses.append(temp_loss.item())
 
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    temp_stretch_percs = layer.get_stretch_percs()
-                    test_batch_stretch_percs.append(temp_stretch_percs)
-                    print (temp_stretch_percs)
+                if task_type == 'classification':
+                    temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    train_batch_accs.append(temp_acc)
+                    temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    train_batch_f1.append(temp_f1)
+                    temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    train_batch_precision.append(temp_precision)
+                    temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    train_batch_recall.append(temp_recall)
+
+                elif task_type == 'regression':
+                    temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    train_batch_rmse.append(temp_rmse)
+                    temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    train_batch_mae.append(temp_mae)
+
+                for layer in model.modules():
+                    if isinstance(layer, MultiscaleConv2d):
+                        temp_stretch_percs = layer.get_stretch_percs()
+                        train_batch_stretch_percs.append(temp_stretch_percs)
 
 
-    #save results in temp dict file
-    temp_results = {}
+            #VALIDATION DATA
+            for i, (sounds, truth) in enumerate(val_data):
+                optimizer.zero_grad()
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+                outputs = model(sounds)
 
-    #save loss
-    temp_results['train_loss'] = np.mean(train_batch_losses)
-    temp_results['val_loss'] = np.mean(val_batch_losses)
-    temp_results['test_loss'] = np.mean(test_batch_losses)
+                temp_loss = loss_function(outputs, truth)
+                val_batch_losses.append(temp_loss.item())
 
-    #save stretch percs if multiconv
-    if there_is_multiconv:
-        temp_results['train_stretch_percs'] = np.mean(train_batch_stretch_percs, axis=0)
-        temp_results['val_stretch_percs'] = np.mean(val_batch_stretch_percs, axis=0)
-        temp_results['test_stretch_percs'] = np.mean(test_batch_stretch_percs, axis=0)
+                if task_type == 'classification':
+                    temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    val_batch_accs.append(temp_acc)
+                    temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    val_batch_f1.append(temp_f1)
+                    temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    val_batch_precision.append(temp_precision)
+                    temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    val_batch_recall.append(temp_recall)
 
-    #if classification compute also f1, precision, recall
-    if task_type == 'classification':
-        temp_results['train_acc'] = np.mean(train_batch_accs)
-        temp_results['val_acc'] = np.mean(val_batch_accs)
-        temp_results['test_acc'] = np.mean(test_batch_accs)
+                elif task_type == 'regression':
+                    temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    val_batch_rmse.append(temp_rmse)
+                    temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    val_batch_mae.append(temp_mae)
 
-        temp_results['train_f1'] = np.mean(train_batch_f1)
-        temp_results['val_f1'] = np.mean(val_batch_f1)
-        temp_results['test_f1'] = np.mean(test_batch_f1)
+                for layer in model.modules():
+                    if isinstance(layer, MultiscaleConv2d):
+                        temp_stretch_percs = layer.get_stretch_percs()
+                        val_batch_stretch_percs.append(temp_stretch_percs)
 
-        temp_results['train_precision'] = np.mean(train_batch_precision)
-        temp_results['val_precision'] = np.mean(val_batch_precision)
-        temp_results['test_precision'] = np.mean(test_batch_precision)
+            #TEST DATA
+            for i, (sounds, truth) in enumerate(test_data):
+                optimizer.zero_grad()
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+                outputs = model(sounds)
 
-        temp_results['train_recall'] = np.mean(train_batch_recall)
-        temp_results['val_recall'] = np.mean(val_batch_recall)
-        temp_results['test_recall'] = np.mean(test_batch_recall)
-    #save acc if classification append classification metrics
-    elif task_type == 'regression':
-        temp_results['train_MAE'] = np.mean(train_batch_mae)
-        temp_results['val_MAE'] = np.mean(val_batch_mae)
-        temp_results['test_MAE'] = np.mean(test_batch_mae)
+                temp_loss = loss_function(outputs, truth)
+                test_batch_losses.append(temp_loss.item())
 
-        temp_results['train_RMSE'] = np.mean(train_batch_rmse)
-        temp_results['val_RMSE'] = np.mean(val_batch_rmse)
-        temp_results['test_RMSE'] = np.mean(test_batch_rmse)
+                if task_type == 'classification':
+                    temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    test_batch_accs.append(temp_acc)
+                    temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    test_batch_f1.append(temp_f1)
+                    temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    test_batch_precision.append(temp_precision)
+                    temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
+                    test_batch_recall.append(temp_recall)
 
-    #save history
-    temp_results['train_loss_hist'] = train_loss_hist
-    temp_results['val_loss_hist'] = val_loss_hist
-    if task_type == 'classification':
-        temp_results['train_acc_hist'] = train_acc_hist
-        temp_results['val_acc_hist'] = val_acc_hist
+                elif task_type == 'regression':
+                    temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    test_batch_rmse.append(temp_rmse)
+                    temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
+                    test_batch_mae.append(temp_mae)
 
-    #save actors present in current fold
-    temp_results['training_actors'] = train_list
-    temp_results['validation_actors'] = val_list
-    temp_results['test_actors'] = test_list
+                for layer in model.modules():
+                    if isinstance(layer, MultiscaleConv2d):
+                        temp_stretch_percs = layer.get_stretch_percs()
+                        test_batch_stretch_percs.append(temp_stretch_percs)
+                        print (temp_stretch_percs)
 
-    #save parameters dict
-    for i in training_parameters.keys():
-        if i in locals()['model_parameters'].keys():
-            del locals()['model_parameters'][i]
 
-    with open(parameters_path, 'w') as f:
-        f.write('%s\n' % ('TRAINING PARAMETERS:'))
-        for key, value in training_parameters.items():
-            f.write('%s:%s\n' % (key, value))
-        f.write('%s\n' % (''))
-        f.write('%s\n' % ('MODEL PARAMETERS:'))
-        for key, value in locals()['model_parameters'].items():
-            f.write('%s:%s\n' % (key, value))
+        #save results in temp dict file
+        temp_results = {}
 
-    np.save(results_path, temp_results)
+        #save loss
+        temp_results['train_loss'] = np.mean(train_batch_losses)
+        temp_results['val_loss'] = np.mean(val_batch_losses)
+        temp_results['test_loss'] = np.mean(test_batch_losses)
 
-    #print train results
-    print ('')
-    print ('\n train results:')
-    for i in temp_results.keys():
-        if 'hist' not in i and 'actors' not in i:
-            if 'train' in i:
-                print (str(i) + ': ' + str(temp_results[i]))
-    print ('\n val results:')
-    for i in temp_results.keys():
-        if 'hist' not in i and 'actors' not in i:
-            if 'val' in i:
-                print (str(i) + ': ' + str(temp_results[i]))
-    print ('\n test results:')
-    for i in temp_results.keys():
-        if 'hist' not in i and 'actors' not in i:
-            if 'test' in i:
-                print (str(i) + ': ' + str(temp_results[i]))
+        #save stretch percs if multiconv
+        if there_is_multiconv:
+            temp_results['train_stretch_percs'] = np.mean(train_batch_stretch_percs, axis=0)
+            temp_results['val_stretch_percs'] = np.mean(val_batch_stretch_percs, axis=0)
+            temp_results['test_stretch_percs'] = np.mean(test_batch_stretch_percs, axis=0)
+
+        #if classification compute also f1, precision, recall
+        if task_type == 'classification':
+            temp_results['train_acc'] = np.mean(train_batch_accs)
+            temp_results['val_acc'] = np.mean(val_batch_accs)
+            temp_results['test_acc'] = np.mean(test_batch_accs)
+
+            temp_results['train_f1'] = np.mean(train_batch_f1)
+            temp_results['val_f1'] = np.mean(val_batch_f1)
+            temp_results['test_f1'] = np.mean(test_batch_f1)
+
+            temp_results['train_precision'] = np.mean(train_batch_precision)
+            temp_results['val_precision'] = np.mean(val_batch_precision)
+            temp_results['test_precision'] = np.mean(test_batch_precision)
+
+            temp_results['train_recall'] = np.mean(train_batch_recall)
+            temp_results['val_recall'] = np.mean(val_batch_recall)
+            temp_results['test_recall'] = np.mean(test_batch_recall)
+        #save acc if classification append classification metrics
+        elif task_type == 'regression':
+            temp_results['train_MAE'] = np.mean(train_batch_mae)
+            temp_results['val_MAE'] = np.mean(val_batch_mae)
+            temp_results['test_MAE'] = np.mean(test_batch_mae)
+
+            temp_results['train_RMSE'] = np.mean(train_batch_rmse)
+            temp_results['val_RMSE'] = np.mean(val_batch_rmse)
+            temp_results['test_RMSE'] = np.mean(test_batch_rmse)
+
+        #save history
+        temp_results['train_loss_hist'] = train_loss_hist
+        temp_results['val_loss_hist'] = val_loss_hist
+        if task_type == 'classification':
+            temp_results['train_acc_hist'] = train_acc_hist
+            temp_results['val_acc_hist'] = val_acc_hist
+
+        #save actors present in current fold
+        temp_results['training_actors'] = train_list
+        temp_results['validation_actors'] = val_list
+        temp_results['test_actors'] = test_list
+
+        #save parameters dict
+        for i in training_parameters.keys():
+            if i in locals()['model_parameters'].keys():
+                del locals()['model_parameters'][i]
+
+        with open(parameters_path, 'w') as f:
+            f.write('%s\n' % ('TRAINING PARAMETERS:'))
+            for key, value in training_parameters.items():
+                f.write('%s:%s\n' % (key, value))
+            f.write('%s\n' % (''))
+            f.write('%s\n' % ('MODEL PARAMETERS:'))
+            for key, value in locals()['model_parameters'].items():
+                f.write('%s:%s\n' % (key, value))
+
+        np.save(results_path, temp_results)
+
+        #print train results
+        print ('')
+        print ('\n train results:')
+        for i in temp_results.keys():
+            if 'hist' not in i and 'actors' not in i:
+                if 'train' in i:
+                    print (str(i) + ': ' + str(temp_results[i]))
+        print ('\n val results:')
+        for i in temp_results.keys():
+            if 'hist' not in i and 'actors' not in i:
+                if 'val' in i:
+                    print (str(i) + ': ' + str(temp_results[i]))
+        print ('\n test results:')
+        for i in temp_results.keys():
+            if 'hist' not in i and 'actors' not in i:
+                if 'test' in i:
+                    print (str(i) + ': ' + str(temp_results[i]))
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import sys, os
-import xval_instance as xval
+import xval_instance_2metrics as xval
 
 #EXPERIMENT PARAMETERS:
 gpu_ID = 1
