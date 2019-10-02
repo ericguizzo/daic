@@ -329,7 +329,6 @@ def main():
                                weight_decay=regularization_lambda)
 
 
-    results_path = 'culo'
     #run training
     if not os.path.exists(results_path):
         os.makedirs(results_path)
@@ -471,13 +470,13 @@ def main():
 
     #compute results on the best saved model BOTH BVL AND BVA
 
-    for i in range(1):
-        if i == 0:
+    for curr_metric in range(1):
+        if curr_metric == 0:
             MODEL_PATH = BVL_model_path
-            results_path = results_path + '_BVL.npy'
-        if i == 1:
+            results_path_final = results_path + '_BVL.npy'
+        if curr_metric == 1:
             MODEL_PATH = BVA_model_path
-            results_path = results_path + '_BVA.npy'
+            results_path_final = results_path + '_BVA.npy'
 
         torch.cuda.empty_cache()  #free GPU
         #load best saved model
@@ -691,10 +690,14 @@ def main():
             for key, value in locals()['model_parameters'].items():
                 f.write('%s:%s\n' % (key, value))
 
-        np.save(results_path, temp_results)
+        np.save(results_path_final, temp_results)
 
         #print train results
         print ('')
+        if curr_metric == 0:
+            print('\nBVL MODEL:')
+        if curr_metric == 1:
+            print('\nBVA MODEL:')
         print ('\n train results:')
         for i in temp_results.keys():
             if 'hist' not in i and 'actors' not in i:
