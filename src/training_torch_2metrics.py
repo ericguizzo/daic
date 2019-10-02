@@ -472,13 +472,12 @@ def main():
     #compute results on the best saved model BOTH BVL AND BVA
 
     for curr_metric in range(2):
-        print ('CULO: ' + str(curr_metric))
         if curr_metric == 0:
             MODEL_PATH = BVL_model_path
             results_path_final = results_path + '_BVL.npy'
         if curr_metric == 1:
             MODEL_PATH = BVA_model_path
-            results_path_final = results_path + '_BVA.npy'
+            results_path_final = results_path + '_BVL.npy'
 
         torch.cuda.empty_cache()  #free GPU
         #load best saved model
