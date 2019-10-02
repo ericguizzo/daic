@@ -50,6 +50,14 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     if not os.path.exists(output_results_path):
         os.makedirs(output_results_path)
 
+    output_results_path_BVL = output_results_path + '/BVL'
+    if not os.path.exists(output_results_path_BVL):
+        os.makedirs(output_results_path_BVL)
+
+    output_results_path_BVA = output_results_path + '/BVA'
+    if not os.path.exists(output_results_path_BVA):
+        os.makedirs(output_results_path_BVA)
+
     output_parameters_path = output_results_path + '/parameters'
     if not os.path.exists(output_parameters_path):
         os.makedirs(output_parameters_path)
@@ -134,194 +142,210 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds_BVA[i] = temp_results_BVA
         #stop fold iter
 
+    for curr_metric in range(2):
+        if curr_metric == 0:
+            folds = folds_BVL
+        if curr_metric == 1:
+            folds = folds_BVA
 
-    '''
-    #compute summary
-    #compute mean loss and loss std
-    tr_loss = []
-    val_loss = []
-    test_loss = []
-    for i in range(num_folds):
-        tr_loss.append(folds[i]['train_loss'])
-
-        val_loss.append(folds[i]['val_loss'])
-        test_loss.append(folds[i]['test_loss'])
-    tr_mean = np.mean(tr_loss)
-    val_mean = np.mean(val_loss)
-    test_mean = np.mean(test_loss)
-    tr_std = np.std(tr_loss)
-    val_std = np.std(val_loss)
-    test_std = np.std(test_loss)
-    folds['summary'] = {'training':{'mean_loss': tr_mean,
-                                    'loss_std': tr_std},
-                        'validation':{'mean_loss': val_mean,
-                                    'loss_std': val_std},
-                        'test':{'mean_loss': test_mean,
-                                    'loss_std': test_std}}
-
-    #compute perc stretch factors if multiconv was used
-    if  'train_stretch_percs' in folds[0].keys():
-        dummy = folds[0]['train_stretch_percs']
-        tr_stretches = []
-        val_stretches = []
-        test_stretches = []
+        #compute summary
+        #compute mean loss and loss std
+        tr_loss = []
+        val_loss = []
+        test_loss = []
         for i in range(num_folds):
-            tr_stretches.append(folds[i]['train_stretch_percs'])
-            val_stretches.append(folds[i]['val_stretch_percs'])
-            test_stretches.append(folds[i]['test_stretch_percs'])
-        tr_mean_str = np.mean(tr_stretches, axis=0)
-        val_mean_str = np.mean(val_stretches, axis=0)
-        test_mean_str = np.mean(test_stretches, axis=0)
-        tr_std_str = np.std(tr_stretches, axis=0)
-        val_std_str = np.std(val_stretches, axis=0)
-        test_std_str = np.std(test_stretches, axis=0)
-        folds['summary']['training']['mean_stretch_percs'] =  tr_mean_str
-        folds['summary']['training']['stretch_percs_std'] = tr_std_str
-        folds['summary']['validation']['mean_stretch_percs'] =  val_mean_str
-        folds['summary']['validation']['stretch_percs_std'] = val_std_str
-        folds['summary']['test']['mean_stretch_percs'] =  test_mean_str
-        folds['summary']['test']['stretch_percs_std'] = test_std_str
+            tr_loss.append(folds[i]['train_loss'])
 
-    #compute mean acc and acc std if task_type is classification
-    if locals()['task_type'] == 'regression':
-        tr_RMSE = []
-        val_RMSE = []
-        test_RMSE = []
-        tr_MAE = []
-        val_MAE = []
-        test_MAE = []
-        for i in range(num_folds):
-            tr_RMSE.append(folds[i]['train_RMSE'])
-            val_RMSE.append(folds[i]['val_RMSE'])
-            test_RMSE.append(folds[i]['test_RMSE'])
-            tr_MAE.append(folds[i]['train_MAE'])
-            val_MAE.append(folds[i]['val_MAE'])
-            test_MAE.append(folds[i]['test_MAE'])
-        tr_mean_RMSE = np.mean(tr_RMSE)
-        val_mean_RMSE = np.mean(val_RMSE)
-        test_mean_RMSE = np.mean(test_RMSE)
-        tr_std_RMSE = np.std(tr_RMSE)
-        val_std_RMSE = np.std(val_RMSE)
-        test_std_RMSE = np.std(test_RMSE)
-        tr_mean_MAE = np.mean(tr_MAE)
-        val_mean_MAE = np.mean(val_MAE)
-        test_mean_MAE = np.mean(test_MAE)
-        tr_std_MAE = np.std(tr_MAE)
-        val_std_MAE = np.std(val_MAE)
-        test_std_MAE = np.std(test_MAE)
-        folds['summary']['training']['mean_RMSE'] =  tr_mean_RMSE
-        folds['summary']['training']['RMSE_std'] = tr_std_RMSE
-        folds['summary']['validation']['mean_RMSE'] =  val_mean_RMSE
-        folds['summary']['validation']['RMSE_std'] = val_std_RMSE
-        folds['summary']['test']['mean_RMSE'] =  test_mean_RMSE
-        folds['summary']['test']['RMSE_std'] = test_std_RMSE
-        folds['summary']['training']['mean_MAE'] =  tr_mean_MAE
-        folds['summary']['training']['MAE_std'] = tr_std_MAE
-        folds['summary']['validation']['mean_MAE'] =  val_mean_MAE
-        folds['summary']['validation']['MAE_std'] = val_std_MAE
-        folds['summary']['test']['mean_MAE'] =  test_mean_MAE
-        folds['summary']['test']['MAE_std'] = test_std_MAE
-    else:
-        tr_acc = []
-        val_acc = []
-        test_acc = []
-        tr_f1 = []
-        val_f1 = []
-        test_f1 = []
-        tr_precision = []
-        val_precision = []
-        test_precision = []
-        tr_recall = []
-        val_recall = []
-        test_recall = []
-        for i in range(num_folds):
-            tr_acc.append(folds[i]['train_acc'])
-            val_acc.append(folds[i]['val_acc'])
-            test_acc.append(folds[i]['test_acc'])
-            tr_f1.append(folds[i]['train_f1'])
-            val_f1.append(folds[i]['val_f1'])
-            test_f1.append(folds[i]['test_f1'])
-            tr_precision.append(folds[i]['train_precision'])
-            val_precision.append(folds[i]['val_precision'])
-            test_precision.append(folds[i]['test_precision'])
-            tr_recall.append(folds[i]['train_recall'])
-            val_recall.append(folds[i]['val_recall'])
-            test_recall.append(folds[i]['test_recall'])
-        tr_mean_acc = np.mean(tr_acc)
-        val_mean_acc = np.mean(val_acc)
-        test_mean_acc = np.mean(test_acc)
-        tr_std_acc = np.std(tr_acc)
-        val_std_acc = np.std(val_acc)
-        test_std_acc = np.std(test_acc)
-        tr_mean_f1 = np.mean(tr_f1)
-        val_mean_f1 = np.mean(val_f1)
-        test_mean_f1 = np.mean(test_f1)
-        tr_std_f1 = np.std(tr_f1)
-        val_std_f1 = np.std(val_f1)
-        test_std_f1 = np.std(test_f1)
-        tr_mean_precision = np.mean(tr_precision)
-        val_mean_precision = np.mean(val_precision)
-        test_mean_precision = np.mean(test_precision)
-        tr_std_precision = np.std(tr_precision)
-        val_std_precision = np.std(val_precision)
-        test_std_precision = np.std(test_precision)
-        tr_mean_recall = np.mean(tr_recall)
-        val_mean_recall = np.mean(val_recall)
-        test_mean_recall = np.mean(test_recall)
-        tr_std_recall = np.std(tr_recall)
-        val_std_recall = np.std(val_recall)
-        test_std_recall = np.std(test_recall)
-        folds['summary']['training']['mean_acc'] =  tr_mean_acc
-        folds['summary']['training']['acc_std'] = tr_std_acc
-        folds['summary']['training']['mean_f1'] =  tr_mean_f1
-        folds['summary']['training']['f1_std'] = tr_std_f1
-        folds['summary']['training']['mean_precision'] =  tr_mean_precision
-        folds['summary']['training']['precision_std'] = tr_std_precision
-        folds['summary']['training']['mean_recall'] =  tr_mean_recall
-        folds['summary']['training']['recall_std'] = tr_std_recall
-        folds['summary']['validation']['mean_acc'] =  val_mean_acc
-        folds['summary']['validation']['acc_std'] = val_std_acc
-        folds['summary']['validation']['mean_f1'] =  val_mean_f1
-        folds['summary']['validation']['f1_std'] = val_std_f1
-        folds['summary']['validation']['mean_precision'] =  val_mean_precision
-        folds['summary']['validation']['precision_std'] = val_std_precision
-        folds['summary']['validation']['mean_recall'] =  val_mean_recall
-        folds['summary']['validation']['recall_std'] = val_std_recall
-        folds['summary']['test']['mean_acc'] =  test_mean_acc
-        folds['summary']['test']['acc_std'] = test_std_acc
-        folds['summary']['test']['mean_f1'] =  test_mean_f1
-        folds['summary']['test']['f1_std'] = test_std_f1
-        folds['summary']['test']['mean_precision'] =  test_mean_precision
-        folds['summary']['test']['precision_std'] = test_std_precision
-        folds['summary']['test']['mean_recall'] =  test_mean_recall
-        folds['summary']['test']['recall_std'] = test_std_recall
+            val_loss.append(folds[i]['val_loss'])
+            test_loss.append(folds[i]['test_loss'])
+        tr_mean = np.mean(tr_loss)
+        val_mean = np.mean(val_loss)
+        test_mean = np.mean(test_loss)
+        tr_std = np.std(tr_loss)
+        val_std = np.std(val_loss)
+        test_std = np.std(test_loss)
+        folds['summary'] = {'training':{'mean_loss': tr_mean,
+                                        'loss_std': tr_std},
+                            'validation':{'mean_loss': val_mean,
+                                        'loss_std': val_std},
+                            'test':{'mean_loss': test_mean,
+                                        'loss_std': test_std}}
+
+        #compute perc stretch factors if multiconv was used
+        if  'train_stretch_percs' in folds[0].keys():
+            dummy = folds[0]['train_stretch_percs']
+            tr_stretches = []
+            val_stretches = []
+            test_stretches = []
+            for i in range(num_folds):
+                tr_stretches.append(folds[i]['train_stretch_percs'])
+                val_stretches.append(folds[i]['val_stretch_percs'])
+                test_stretches.append(folds[i]['test_stretch_percs'])
+            tr_mean_str = np.mean(tr_stretches, axis=0)
+            val_mean_str = np.mean(val_stretches, axis=0)
+            test_mean_str = np.mean(test_stretches, axis=0)
+            tr_std_str = np.std(tr_stretches, axis=0)
+            val_std_str = np.std(val_stretches, axis=0)
+            test_std_str = np.std(test_stretches, axis=0)
+            folds['summary']['training']['mean_stretch_percs'] =  tr_mean_str
+            folds['summary']['training']['stretch_percs_std'] = tr_std_str
+            folds['summary']['validation']['mean_stretch_percs'] =  val_mean_str
+            folds['summary']['validation']['stretch_percs_std'] = val_std_str
+            folds['summary']['test']['mean_stretch_percs'] =  test_mean_str
+            folds['summary']['test']['stretch_percs_std'] = test_std_str
+
+        #compute mean acc and acc std if task_type is classification
+        if locals()['task_type'] == 'regression':
+            tr_RMSE = []
+            val_RMSE = []
+            test_RMSE = []
+            tr_MAE = []
+            val_MAE = []
+            test_MAE = []
+            for i in range(num_folds):
+                tr_RMSE.append(folds[i]['train_RMSE'])
+                val_RMSE.append(folds[i]['val_RMSE'])
+                test_RMSE.append(folds[i]['test_RMSE'])
+                tr_MAE.append(folds[i]['train_MAE'])
+                val_MAE.append(folds[i]['val_MAE'])
+                test_MAE.append(folds[i]['test_MAE'])
+            tr_mean_RMSE = np.mean(tr_RMSE)
+            val_mean_RMSE = np.mean(val_RMSE)
+            test_mean_RMSE = np.mean(test_RMSE)
+            tr_std_RMSE = np.std(tr_RMSE)
+            val_std_RMSE = np.std(val_RMSE)
+            test_std_RMSE = np.std(test_RMSE)
+            tr_mean_MAE = np.mean(tr_MAE)
+            val_mean_MAE = np.mean(val_MAE)
+            test_mean_MAE = np.mean(test_MAE)
+            tr_std_MAE = np.std(tr_MAE)
+            val_std_MAE = np.std(val_MAE)
+            test_std_MAE = np.std(test_MAE)
+            folds['summary']['training']['mean_RMSE'] =  tr_mean_RMSE
+            folds['summary']['training']['RMSE_std'] = tr_std_RMSE
+            folds['summary']['validation']['mean_RMSE'] =  val_mean_RMSE
+            folds['summary']['validation']['RMSE_std'] = val_std_RMSE
+            folds['summary']['test']['mean_RMSE'] =  test_mean_RMSE
+            folds['summary']['test']['RMSE_std'] = test_std_RMSE
+            folds['summary']['training']['mean_MAE'] =  tr_mean_MAE
+            folds['summary']['training']['MAE_std'] = tr_std_MAE
+            folds['summary']['validation']['mean_MAE'] =  val_mean_MAE
+            folds['summary']['validation']['MAE_std'] = val_std_MAE
+            folds['summary']['test']['mean_MAE'] =  test_mean_MAE
+            folds['summary']['test']['MAE_std'] = test_std_MAE
+        else:
+            tr_acc = []
+            val_acc = []
+            test_acc = []
+            tr_f1 = []
+            val_f1 = []
+            test_f1 = []
+            tr_precision = []
+            val_precision = []
+            test_precision = []
+            tr_recall = []
+            val_recall = []
+            test_recall = []
+            for i in range(num_folds):
+                tr_acc.append(folds[i]['train_acc'])
+                val_acc.append(folds[i]['val_acc'])
+                test_acc.append(folds[i]['test_acc'])
+                tr_f1.append(folds[i]['train_f1'])
+                val_f1.append(folds[i]['val_f1'])
+                test_f1.append(folds[i]['test_f1'])
+                tr_precision.append(folds[i]['train_precision'])
+                val_precision.append(folds[i]['val_precision'])
+                test_precision.append(folds[i]['test_precision'])
+                tr_recall.append(folds[i]['train_recall'])
+                val_recall.append(folds[i]['val_recall'])
+                test_recall.append(folds[i]['test_recall'])
+            tr_mean_acc = np.mean(tr_acc)
+            val_mean_acc = np.mean(val_acc)
+            test_mean_acc = np.mean(test_acc)
+            tr_std_acc = np.std(tr_acc)
+            val_std_acc = np.std(val_acc)
+            test_std_acc = np.std(test_acc)
+            tr_mean_f1 = np.mean(tr_f1)
+            val_mean_f1 = np.mean(val_f1)
+            test_mean_f1 = np.mean(test_f1)
+            tr_std_f1 = np.std(tr_f1)
+            val_std_f1 = np.std(val_f1)
+            test_std_f1 = np.std(test_f1)
+            tr_mean_precision = np.mean(tr_precision)
+            val_mean_precision = np.mean(val_precision)
+            test_mean_precision = np.mean(test_precision)
+            tr_std_precision = np.std(tr_precision)
+            val_std_precision = np.std(val_precision)
+            test_std_precision = np.std(test_precision)
+            tr_mean_recall = np.mean(tr_recall)
+            val_mean_recall = np.mean(val_recall)
+            test_mean_recall = np.mean(test_recall)
+            tr_std_recall = np.std(tr_recall)
+            val_std_recall = np.std(val_recall)
+            test_std_recall = np.std(test_recall)
+            folds['summary']['training']['mean_acc'] =  tr_mean_acc
+            folds['summary']['training']['acc_std'] = tr_std_acc
+            folds['summary']['training']['mean_f1'] =  tr_mean_f1
+            folds['summary']['training']['f1_std'] = tr_std_f1
+            folds['summary']['training']['mean_precision'] =  tr_mean_precision
+            folds['summary']['training']['precision_std'] = tr_std_precision
+            folds['summary']['training']['mean_recall'] =  tr_mean_recall
+            folds['summary']['training']['recall_std'] = tr_std_recall
+            folds['summary']['validation']['mean_acc'] =  val_mean_acc
+            folds['summary']['validation']['acc_std'] = val_std_acc
+            folds['summary']['validation']['mean_f1'] =  val_mean_f1
+            folds['summary']['validation']['f1_std'] = val_std_f1
+            folds['summary']['validation']['mean_precision'] =  val_mean_precision
+            folds['summary']['validation']['precision_std'] = val_std_precision
+            folds['summary']['validation']['mean_recall'] =  val_mean_recall
+            folds['summary']['validation']['recall_std'] = val_std_recall
+            folds['summary']['test']['mean_acc'] =  test_mean_acc
+            folds['summary']['test']['acc_std'] = test_std_acc
+            folds['summary']['test']['mean_f1'] =  test_mean_f1
+            folds['summary']['test']['f1_std'] = test_std_f1
+            folds['summary']['test']['mean_precision'] =  test_mean_precision
+            folds['summary']['test']['precision_std'] = test_std_precision
+            folds['summary']['test']['mean_recall'] =  test_mean_recall
+            folds['summary']['test']['recall_std'] = test_std_recall
 
 
-    folds['summary']['parameters'] = parameters
-    print ('\n Results summary:')
-    print (folds['summary'])
-    print ('')
-    print ('')
-    print ('\n CROSSVALIDATION COMPLETED')
-    print ('')
-    print ('')
+        folds['summary']['parameters'] = parameters
+        print ('\n Results summary:')
+        print (folds['summary'])
+        print ('')
+        print ('')
+        print ('\n CROSSVALIDATION COMPLETED')
+        print ('')
+        print ('')
 
 
-    #save results dict
-    dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
-    final_dict_path = output_results_path + '/' + dict_name
-    np.save(final_dict_path, folds)
+        #save results dict
+        if curr_metric == 0:
+            dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_BVL.npy'
+            final_dict_path = output_results_path_BVL + '/' + dict_name
+            np.save(final_dict_path, folds)
 
-    #run training
-    spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet.xls'
-    gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
-                                        output_results_path, spreadsheet_name])
-    gen_spreadsheet.communicate()
-    gen_spreadsheet.wait()
+            #run training
+            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet_BVL.xls'
+            gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
+            output_results_path_BVL, spreadsheet_name])
+            gen_spreadsheet.communicate()
+            gen_spreadsheet.wait()
 
-    #save current code
-    save_code(output_code_path)
-    '''
+        if curr_metric == 1:
+            dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_BVA.npy'
+            final_dict_path = output_results_path_BVA + '/' + dict_name
+            np.save(final_dict_path, folds)
+
+            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet_BVA.xls'
+            gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
+            output_results_path_BVA, spreadsheet_name])
+            gen_spreadsheet.communicate()
+            gen_spreadsheet.wait()
+
+
+        #save current code
+        save_code(output_code_path)
 
 
 if __name__ == '__main__':
