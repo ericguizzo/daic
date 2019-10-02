@@ -321,7 +321,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
 
         #save results dict
         if curr_metric == 0:
-            dict_name = 'results_BVL' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+            dict_name = 'resultsBVL' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
             final_dict_path = output_results_path_BVL + '/' + dict_name
             np.save(final_dict_path, folds)
 
@@ -333,7 +333,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
             gen_spreadsheet.wait()
 
         if curr_metric == 1:
-            dict_name = 'results_BVA' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+            dict_name = 'resultsBVA' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
             final_dict_path = output_results_path_BVA + '/' + dict_name
             np.save(final_dict_path, folds)
 
