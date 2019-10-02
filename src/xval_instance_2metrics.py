@@ -333,11 +333,11 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
             gen_spreadsheet.wait()
 
         if curr_metric == 1:
-            dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '_BVA.npy'
+            dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + 'BVA.npy'
             final_dict_path = output_results_path_BVA + '/' + dict_name
             np.save(final_dict_path, folds)
 
-            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet_BVA.xls'
+            spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheetBVA.xls'
             gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
             output_results_path_BVA, spreadsheet_name])
             gen_spreadsheet.communicate()
