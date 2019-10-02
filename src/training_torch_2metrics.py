@@ -329,7 +329,7 @@ def main():
                                weight_decay=regularization_lambda)
 
 
-
+    results_path = 'culo'
     #run training
     if not os.path.exists(results_path):
         os.makedirs(results_path)
