@@ -95,7 +95,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         parameters_name = output_parameters_path + '/parameters_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) +  '.txt'
 
         #init results as ERROR
-        np.save(results_name, np.array(['ERROR']))
+        np.save(results_name + 'BVL.npy', np.array(['ERROR']))
+        np.save(results_name + 'BVA.npy', np.array(['ERROR']))
 
         #run training
         if BACKEND == 'keras':

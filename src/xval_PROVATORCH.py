@@ -30,7 +30,7 @@ experiment[1] = ['architecture="CNN_1conv"', 'reshaping_type="cnn"',
                  'training_mode="train_and_eval"', 'channels=1',
                  'comment_1="prova"', 'comment_2="torch"',
                  'learning_rate=0.001', 'num_classes=8',
-                 'layer_type="multi"', 'fc_insize=1236870',
+                 'layer_type="multi"', 'fc_insize=123687',
                  'regularization_lambda=0.0001',
                  'stretch_factors=[(0.7, 1.),(1.428,1.)]']
 
