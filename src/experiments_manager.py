@@ -5,7 +5,7 @@ import subprocess
 #DEFINE PARAMETERS
 num_experiments_to_run = []
 
-global_parameters = ['num_epochs=500', 'learning_rate=0.0001', 'early_stopping=True',
+global_parameters = ['num_epochs=500', 'learning_rate=0.001', 'early_stopping=True',
                     'patience=10', 'choose_optimizer="sgd"']
 
 experiments_to_run_folder = 'experiments_multiconv_2metrics'
