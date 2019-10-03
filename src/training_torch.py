@@ -105,7 +105,8 @@ batch_size = cfg.getint('training_defaults', 'batch_size')
 num_epochs = cfg.getint('training_defaults', 'num_epochs')
 learning_rate = cfg.getfloat('training_defaults', 'learning_rate')
 reshaping_type = cfg.get('training_defaults', 'reshaping_type')
-optimizer = cfg.get('training_defaults', 'optimizer')
+choose_optimizer = cfg.get('training_defaults', 'choose_optimizer')
+
 recompute_matrices = eval(cfg.get('training_defaults', 'recompute_matrices'))
 regularization_lambda = cfg.getfloat('training_defaults', 'regularization_lambda')
 
