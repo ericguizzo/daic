@@ -329,7 +329,7 @@ def main():
     if choose_optimizer == 'adam':
         optimizer = optim.Adam(model.parameters(), lr=learning_rate,
                                    weight_decay=regularization_lambda)
-    elif choose_optimizer == 'sgd'
+    elif choose_optimizer == 'sgd':
         optimizer = optim.SGD(model.parameters(), lr=learning_rate,
                                    weight_decay=regularization_lambda)
     else:
