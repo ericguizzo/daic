@@ -6,11 +6,11 @@ import subprocess
 num_experiments_to_run = []
 
 global_parameters = ['num_epochs=500', 'learning_rate=0.0001', 'early_stopping=True',
-                    'patience=10', 'choose_optimizer="adam"']
+                    'patience=10', 'choose_optimizer="sgd"']
 
 experiments_to_run_folder = 'experiments_multiconv_2metrics'
 
-xval_script_parameters = ['experiment_folder="../../experiments_FINAL_testLR00001"',
+xval_script_parameters = ['experiment_folder="../../experiments_FINAL_testLR00001SGD"',
                           'debug_mode=False',
                           'overwrite_results=False',
                           'num_folds=1']
