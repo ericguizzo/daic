@@ -5,9 +5,10 @@ import subprocess
 #DEFINE PARAMETERS
 num_experiments_to_run = []
 
-global_parameters = ['num_epochs=100']
+global_parameters = ['num_epochs=300', 'learning_rate=0.001', 'early_stopping=True',
+                    'choose_optimizer="adam"']
 
-experiments_to_run_folder = 'experiments_multiconv'
+experiments_to_run_folder = 'experiments_multiconv_2metrics'
 
 xval_script_parameters = ['experiment_folder="../../experiments_FINAL"',
                           'debug_mode=False',
@@ -15,7 +16,7 @@ xval_script_parameters = ['experiment_folder="../../experiments_FINAL"',
                           'num_folds=4']
 begin = 1
 
-end = 32
+end = 16
 
 gpu_ID = 0
 

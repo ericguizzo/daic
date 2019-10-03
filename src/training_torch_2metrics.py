@@ -326,8 +326,14 @@ def main():
     print ('Total paramters: ' + str(model_params))
 
     #define optimizer
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate,
-                               weight_decay=regularization_lambda)
+    if choose_optimizer == 'adam':
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate,
+                                   weight_decay=regularization_lambda)
+    elif choose_optimizer == 'sgd'
+        optimizer = optim.SGD(model.parameters(), lr=learning_rate,
+                                   weight_decay=regularization_lambda)
+    else:
+        raise ValueError('Bad optimizer chosen')
 
 
     #run training
