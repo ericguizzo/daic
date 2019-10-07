@@ -52,6 +52,7 @@ def get_label_TESS(input_soundfile, num_classes=num_classes_tess):
     label = input_soundfile.split('/')[-1].split('.')[0].split('-')[-1]
     int_label = assoc_labels(label)
     one_hot_label = (uf.onehot(int(int_label)-1, num_classes_tess))
+    print (label, int_label)
 
     return one_hot_label
 
@@ -59,6 +60,8 @@ def get_label_TESS(input_soundfile, num_classes=num_classes_tess):
 contents = os.listdir(INPUT_TESS_FOLDER)
 contents = list(filter(lambda x: '.wav' in x, contents))
 contents = [os.path.join(INPUT_TESS_FOLDER, x) for x in contents]
+for i in contents:
+    get_label_TESS(i)
 print (contents)
 sys.exit(0)
 
