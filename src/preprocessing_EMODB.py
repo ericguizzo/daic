@@ -15,7 +15,7 @@ FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
 SR = cfg.getint('sampling', 'sr_target')
 SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 #in
-INPUT_EMODB_FOLDER =  cfg.get('preprocessing', 'input_emodb_folder_ravdess')
+INPUT_EMODB_FOLDER =  cfg.get('preprocessing', 'input_emodb_folder')
 #out
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 if not os.path.exists(OUTPUT_FOLDER):
