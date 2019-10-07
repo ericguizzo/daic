@@ -50,7 +50,7 @@ def get_label_TESS(input_soundfile, num_classes=num_classes_tess):
     compute label starting from soundfile
     '''
     label = input_soundfile.split('/')[-1].split('.')[0].split('-')[-1]
-    int_label = assoc_labels(label)
+    int_label = assoc_labels[label]
     one_hot_label = (uf.onehot(int(int_label)-1, num_classes_tess))
     print (label, int_label)
 
