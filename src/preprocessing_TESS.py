@@ -115,7 +115,7 @@ def main():
         curr_list = filter_data_TESS(contents, i)
 
 
-        fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
+        fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_actors)
         print (fold_string)
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
