@@ -94,6 +94,7 @@ def main():
     contents = os.listdir(INPUT_TESS_FOLDER)  #get list of filepaths
     contents = list(filter(lambda x: '.wav' in x, contents))  #keep only wav files
     contents = [os.path.join(INPUT_TESS_FOLDER, x) for x in contents]
+    random.shuffle(contents)
 
     #actors_list = actors_list[:2]
     num_actors = len(actors_list)
@@ -111,17 +112,15 @@ def main():
         #uf.print_bar(index, num_files)
         #get only soundpaths of current actor
         curr_list = filter_data_TESS(contents, i)
-        print ('\nCULO')
-        print (len(curr_list), curr_list[1])
-        '''
+
+
         fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
         print (fold_string)
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
-        curr_list = [os.path.join(INPUT_RAVDESS_FOLDER, x) for x in curr_list]
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_RAVDESS, True)
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_TESS, True)
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
