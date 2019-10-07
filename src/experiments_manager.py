@@ -5,16 +5,16 @@ import subprocess
 #DEFINE PARAMETERS
 num_experiments_to_run = []
 
-global_parameters = ['num_epochs=800', 'learning_rate=0.0000001', 'early_stopping=True',
+global_parameters = ['num_epochs=500', 'learning_rate=0.0001', 'early_stopping=True',
                     'patience=10', 'choose_optimizer="adam"']
 
-experiments_to_run_folder = 'experiments_multiconv_2metrics'
+experiments_to_run_folder = 'experiments_multiconv_SER'
 
-xval_script_parameters = ['experiment_folder="../../experiments_FINAL_testLR00000001adam"',
+xval_script_parameters = ['experiment_folder="../../provaaaaa"',
                           'debug_mode=False',
                           'overwrite_results=False',
                           'num_folds=1']
-begin = [2,8,9,10]
+begin = 1
 
 end = 16
 
