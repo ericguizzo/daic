@@ -124,7 +124,7 @@ def main():
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
-        '''
+        
         index +=1
     #save dicts
     #save dicts
