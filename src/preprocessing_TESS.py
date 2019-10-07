@@ -64,8 +64,8 @@ def filter_data_TESS(contents, item_to_filter):
     oaf = list(filter(lambda x: 'OAF' in x, contents))
     yaf = list(filter(lambda x: 'YAF' in x, contents))
 
-    oaf_split = len(oaf) / 2
-    yaf_split = len(yaf) / 2
+    oaf_split = int(len(oaf) / 2)
+    yaf_split = int(len(yaf) / 2)
 
     actors = {
     0: oaf[:oaf_split],
