@@ -1,4 +1,3 @@
-from __future__ import print_function
 import numpy as np
 import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
