@@ -11,7 +11,7 @@ global_parameters = ['num_epochs=500', 'learning_rate=0.0001', 'early_stopping=T
 experiments_to_run_folder = 'experiments_multiconv_SER'
 
 xval_script_parameters = ['experiment_folder="../../provaaaaa"',
-                          'debug_mode=False',
+                          'debug_mode=True',
                           'overwrite_results=False',
                           'num_folds=1']
 begin = 1
