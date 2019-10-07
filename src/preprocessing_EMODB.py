@@ -63,7 +63,7 @@ def filter_data_EMODB(contents, item_to_filter):
     outputs list of soundfiles of the only actor number "item_to_filter"
     '''
 
-    criterion = lambda x: item_to_filter == int(x[:2])
+    criterion = lambda x: item_to_filter == int(x.split('/')[-1][:2])
     filtered = list(filter(criterion, contents))
 
     return filtered
