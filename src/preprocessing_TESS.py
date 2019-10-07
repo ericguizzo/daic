@@ -1,6 +1,7 @@
 from __future__ import print_function
 import loadconfig
 import configparser
+import random
 import utility_functions as uf
 import preprocessing_utils as pre
 import numpy as np
@@ -124,7 +125,7 @@ def main():
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
-        
+
         index +=1
     #save dicts
     #save dicts
