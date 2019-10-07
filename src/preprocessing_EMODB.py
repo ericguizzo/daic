@@ -79,8 +79,7 @@ def main():
     #compute max file length of current dataet
     #for the zeropadding
     max_file_length = get_max_length_EMODB()
-    print ('culo')
-    print (max_file_length)
+
     #define the list of foldable items. In the case of RAVDESS
     #actors are simply numbered from 0 to 24
 
@@ -108,6 +107,7 @@ def main():
 
         fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
         print (fold_string)
+        print (curr_list[:3])
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
         #preprocess all sounds of the current actor
