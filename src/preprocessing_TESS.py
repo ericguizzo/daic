@@ -112,7 +112,7 @@ def main():
         #get only soundpaths of current actor
         curr_list = filter_data_TESS(contents, i)
         print ('\nCULO')
-        print (curr_list)
+        print (curr_list[1])
         '''
         fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
         print (fold_string)
