@@ -86,8 +86,6 @@ def main():
     contents = os.listdir(INPUT_EMODB_FOLDER)  #get list of filepaths
     contents = list(filter(lambda x: '.wav' in x, contents))  #keep only wav files
     contents = [os.path.join(INPUT_EMODB_FOLDER, x) for x in contents]
-    print (contents)
-    sys.exit(0)
     #actors_list = actors_list[:2]
     num_files = len(actors_list)
     #init predictors and target dicts
@@ -95,15 +93,19 @@ def main():
     target = {}
     #create output paths for the npy matrices
     appendix = '_' + FEATURES_TYPE
-    predictors_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess' + appendix + '_predictors.npy')
-    target_save_path = os.path.join(OUTPUT_FOLDER, 'ravdess' + appendix + '_target.npy')
+    predictors_save_path = os.path.join(OUTPUT_FOLDER, 'emodb' + appendix + '_predictors.npy')
+    target_save_path = os.path.join(OUTPUT_FOLDER, 'emodb' + appendix + '_target.npy')
     #iterate the list of actors
     index = 1  #index for progress bar
     for i in actors_list:
         #print progress bar
         #uf.print_bar(index, num_files)
         #get only soundpaths of current actor
-        curr_list = filter_data_RAVDESS(contents, 'actor', [i+1])
+        curr_list = filter_data_EMODB(contents, i)
+        print ('')
+        print ('culo')
+        print (curr_list[:3])
+        '''
         fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
         print (fold_string)
         #make sure that each item list is a FULL path to a sound file
@@ -115,6 +117,7 @@ def main():
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
+        '''
         index +=1
     #save dicts
     #save dicts
