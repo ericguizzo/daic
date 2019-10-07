@@ -258,8 +258,8 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function, p
                             #print ('Foldable item progress:')
         except Exception as e:
             #print ('\r corrupted file found: not added to dataset')
-            #print (e)
-            pass
+            raise ValueError(e)
+            #pass
 
         index_ += 1
         if print_item_progress:
