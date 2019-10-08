@@ -169,140 +169,6 @@ experiment[16] = ['comment_1="multi,reg:0.01"', 'comment_2="(0.5, 1.),(0.7, 1.),
 
 
 
-#BEST VALIDATION ACCURACY
-
-experiment[17] = ['comment_1="conv, reg:0.0"', 'comment_2="none"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.0',
-                 'layer_type="conv"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'save_model_metric="acc"'
-                 ]
-experiment[18] = ['comment_1="conv, reg:0.001"', 'comment_2="none"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.001',
-                 'layer_type="conv"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'save_model_metric="acc"'
-                 ]
-experiment[19] = ['comment_1="conv, reg:0.003"', 'comment_2="none"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.003',
-                 'layer_type="conv"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'save_model_metric="acc"'
-                 ]
-experiment[20] = ['comment_1="conv, reg:0.01"', 'comment_2="none"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.01',
-                 'layer_type="conv"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'save_model_metric="acc"'
-                 ]
-
-#multi reg 0
-experiment[21] = ['comment_1="multi,reg:0.0,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.0',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[22] = ['comment_1="multi,reg:0.0,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.0',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[23] = ['comment_1="multi,reg:0.0,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.0',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
-                 'save_model_metric="acc"'
-                 ]
-
-#multi reg 0.001
-experiment[24] = ['comment_1="multi,reg:0.001,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.001',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[25] = ['comment_1="multi,reg:0.001,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.001',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[26] = ['comment_1="multi,reg:0.001,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.001',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
-                 'save_model_metric="acc"'
-                 ]
-#multi reg 0.003
-experiment[27] = ['comment_1="multi,reg:0.003,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.003',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[28] = ['comment_1="multi,reg:0.003,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.003',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[29] = ['comment_1="multi,reg:0.003,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.003',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
-                 'save_model_metric="acc"'
-                 ]
-#multi reg 0.01
-experiment[30] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.7, 1.),(1.428,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.01',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.7, 1.),(1.428,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[31] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.5, 1.),(2.,1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.01',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(2.,1.)]',
-                 'save_model_metric="acc"'
-                 ]
-experiment[32] = ['comment_1="multi,reg:0.01,BVA"', 'comment_2="(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)"',
-                 'architecture="DenseNet"', 'reshaping_type="cnn"',
-                 'regularization_lambda=0.01',
-                 'layer_type="multi"',
-                 'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
-                 'stretch_factors=[(0.5, 1.),(0.7, 1.),(1.428, 1.),(2., 1.)]',
-                 'save_model_metric="acc"'
-                 ]
-
-
 #DON'T TOUCH WHAT IS WRITTEN BELOW THIS LINE
 #-------------------------------------------------------------------------------#
 #outer arguments
@@ -386,6 +252,8 @@ else:
 
 for num_run in iterable_experiments:
     results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+    results_name_BVL = output_path + '/results/BVL/results_BVL_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+
     temp_params = '/'.join(experiment[num_run])
 
     if overwrite_results:
@@ -398,7 +266,7 @@ for num_run in iterable_experiments:
             xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID, task_type, generator)
 
     else:  #if not overwrite results
-        if not os.path.exists(results_name):  #not overwrite experiments
+        if not os.path.exists(results_name_BVL):  #not overwrite experiments
             if debug_mode == False:
                 try:
                     xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID, task_type, generator)

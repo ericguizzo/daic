@@ -253,6 +253,8 @@ else:
 
 for num_run in iterable_experiments:
     results_name = output_path + '/results/results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+    results_name_BVL = output_path + '/results/BVL/results_BVL_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
+
     temp_params = '/'.join(experiment[num_run])
 
     if overwrite_results:
@@ -265,7 +267,7 @@ for num_run in iterable_experiments:
             xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID, task_type, generator)
 
     else:  #if not overwrite results
-        if not os.path.exists(results_name):  #not overwrite experiments
+        if not os.path.exists(results_name_BVL):  #not overwrite experiments
             if debug_mode == False:
                 try:
                     xval.run_experiment(num_experiment,num_run,num_folds,dataset,experiment_folder,temp_params, gpu_ID, task_type, generator)
