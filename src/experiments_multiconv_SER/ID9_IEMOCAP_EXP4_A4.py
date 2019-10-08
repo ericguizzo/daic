@@ -54,7 +54,7 @@ experiment[2] = ['comment_1="conv,reg:0.001"', 'comment_2="none"',
 experiment[3] = ['comment_1="conv,reg:0.003"', 'comment_2="none"',
                  'architecture="ResNet"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.003',
-                 'layer_type="conv"'
+                 'layer_type="conv"',
                  'learning_rate=0.001', 'output_classes=8', 'num_epochs=100',
                  'save_model_metric="loss"'
                  ]
