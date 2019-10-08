@@ -20,7 +20,7 @@ num_folds = 4  #number of k-folds for cross-validation
 experiment_folder = '../../new_results'  #where to save results
 
 global_parameters = ['fc_insize=172500', 'channels=10', 'architecture="CNN_2conv"',
-                    'output_classes=8', 'batch_size=200']
+                    'output_classes=8', 'batch_size=100']
 
 
 #DEFINE HERE EVERY INSTANCE OF THE EXPERIMENT
