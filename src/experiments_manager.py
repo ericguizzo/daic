@@ -13,7 +13,7 @@ experiments_to_run_folder = 'experiments_multiconv_SER'
 xval_script_parameters = ['experiment_folder="../../results_final_SER_exp4_lr00001"',
                           'debug_mode=False',
                           'overwrite_results=False',
-                          'num_folds=2']
+                          'num_folds=1']
 begin = 1
 
 end = 16
