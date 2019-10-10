@@ -6,7 +6,7 @@ import subprocess
 num_experiments_to_run = []
 
 global_parameters = ['num_epochs=500', 'learning_rate=0.00005', 'early_stopping=True',
-                    'patience=10', 'choose_optimizer="adam"', 'batch_size=50']
+                    'patience=10', 'choose_optimizer="adam"', 'batch_size=80']
 
 experiments_to_run_folder = 'experiments_multiconv_SER'
 
