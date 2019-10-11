@@ -108,7 +108,7 @@ def main():
 
         #fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
         #print (fold_string)
-        print('\Preprocessing items')
+        #print('\Preprocessing items')
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
         #preprocess all sounds of the current actor

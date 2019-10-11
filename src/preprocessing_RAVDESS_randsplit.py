@@ -102,7 +102,7 @@ def main():
         curr_list = [i]
         #fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_files)
         #print (fold_string)
-        print ('\nPreprocessing items')
+        #print ('\nPreprocessing items')
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
         curr_list = [os.path.join(INPUT_RAVDESS_FOLDER, x) for x in curr_list]
