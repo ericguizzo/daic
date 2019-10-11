@@ -4,6 +4,7 @@ import configparser
 import utility_functions as uf
 import preprocessing_utils as pre
 import numpy as np
+import random
 import os, sys
 
 config = loadconfig.load()
