@@ -169,6 +169,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'fc_insize':100,
     'output_classes':8,
+    'multiplier': 1
     }
 
     p = parse_parameters(p, user_parameters)
@@ -180,35 +181,35 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
             super(AlexNet_class, self).__init__()
             if p['layer_type'] == 'conv':
                 self.features = nn.Sequential(
-                    nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2),
+                    nn.Conv2d(1, int(64*p['multiplier']), kernel_size=11, stride=4, padding=2),
                     nn.ReLU(inplace=True),
                     nn.MaxPool2d(kernel_size=3, stride=2),
-                    nn.Conv2d(64, 192, kernel_size=5, padding=2),
+                    nn.Conv2d(int(64*p['multiplier']), int(192*p['multiplier']), kernel_size=5, padding=2),
                     nn.ReLU(inplace=True),
                     nn.MaxPool2d(kernel_size=3, stride=2),
-                    nn.Conv2d(192, 384, kernel_size=3, padding=1),
+                    nn.Conv2d(int(192*p['multiplier']), int(384*p['multiplier']), kernel_size=3, padding=1),
                     nn.ReLU(inplace=True),
-                    nn.Conv2d(384, 256, kernel_size=3, padding=1),
+                    nn.Conv2d(int(384*p['multiplier']), int(256*p['multiplier']), kernel_size=3, padding=1),
                     nn.ReLU(inplace=True),
-                    nn.Conv2d(256, 256, kernel_size=3, padding=1),
+                    nn.Conv2d(int(256*p['multiplier']), int(256*p['multiplier']), kernel_size=3, padding=1),
                     nn.ReLU(inplace=True),
                     nn.MaxPool2d(kernel_size=3, stride=2),
                 )
             if p['layer_type'] == 'multi':
                 self.features = nn.Sequential(
-                    MultiscaleConv2d(1, 64, kernel_size=[11,11], scale_factors=p['stretch_factors'], padding=2,
+                    MultiscaleConv2d(1, int(64*p['multiplier']), kernel_size=[11,11], scale_factors=p['stretch_factors'], padding=2,
                                     output_type=p['output_type'], stretch_penality_lambda= p['stretch_penality_lambda']),
                     nn.ReLU(inplace=True),
                     nn.MaxPool2d(kernel_size=3, stride=2),
-                                        MultiscaleConv2d(64,192, kernel_size=[5,5], scale_factors=p['stretch_factors'], padding=2,
+                                        MultiscaleConv2d(int(64*p['multiplier']),int(192*p['multiplier']), kernel_size=[5,5], scale_factors=p['stretch_factors'], padding=2,
                                                         output_type=p['output_type'], stretch_penality_lambda= p['stretch_penality_lambda']),
                     nn.ReLU(inplace=True),
                     nn.MaxPool2d(kernel_size=3, stride=2),
-                    nn.Conv2d(192, 384, kernel_size=3, padding=1),
+                    nn.Conv2d(int(192*p['multiplier']), int(384*p['multiplier']), kernel_size=3, padding=1),
                     nn.ReLU(inplace=True),
-                    nn.Conv2d(384, 256, kernel_size=3, padding=1),
+                    nn.Conv2d(int(384*p['multiplier']), int(256*p['multiplier']), kernel_size=3, padding=1),
                     nn.ReLU(inplace=True),
-                    nn.Conv2d(256, 256, kernel_size=3, padding=1),
+                    nn.Conv2d(int(256*p['multiplier']), int(256*p['multiplier']), kernel_size=3, padding=1),
                     nn.ReLU(inplace=True),
                     nn.MaxPool2d(kernel_size=3, stride=2),
                 )
