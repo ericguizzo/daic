@@ -169,7 +169,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'fc_insize':100,
     'output_classes':8,
-    'multiplier': 0.5
+    'multiplier': 1
     }
 
     p = parse_parameters(p, user_parameters)
