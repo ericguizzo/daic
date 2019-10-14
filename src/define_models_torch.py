@@ -230,6 +230,9 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
             x = torch.flatten(x, 1)
             x = self.classifier(x)
             return x
+
+    out = AlexNet_class()
+
     return out, p
 
 
