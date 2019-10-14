@@ -8,7 +8,7 @@ num_experiments_to_run = []
 global_parameters = ['num_epochs=500', 'learning_rate=0.00005', 'early_stopping=True',
                     'patience=10', 'choose_optimizer="adam"', 'batch_size=20']
 
-experiments_to_run_folder = 'experiments_multiconv_SER_randsplit'
+experiments_to_run_folder = 'experiments_multiconv_SER'
 
 xval_script_parameters = ['experiment_folder="../../results_final_SER_LR000005_alexnet"',
                           'debug_mode=False',
