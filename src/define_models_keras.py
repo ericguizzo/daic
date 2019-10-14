@@ -182,7 +182,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     p = {
     'regularization_lambda': 0.1,
     'kernel_size_1': [11,11],
-    'kernel_size_2': [11,11],
+    'kernel_size_2': [5,5],
     'kernel_size_3': [3,3],
     'kernel_size_4': [3,3],
     'kernel_size_5': [3,3],
