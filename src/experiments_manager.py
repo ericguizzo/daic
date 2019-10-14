@@ -13,7 +13,7 @@ experiments_to_run_folder = 'experiments_multiconv_SER_randsplit'
 xval_script_parameters = ['experiment_folder="../../results_final_SER_LR000005_alexnet"',
                           'debug_mode=False',
                           'overwrite_results=False',
-                          'num_folds=4']
+                          'num_folds=3']
 begin = 1
 
 end = 16
