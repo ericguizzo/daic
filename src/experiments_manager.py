@@ -11,7 +11,7 @@ global_parameters = ['num_epochs=500', 'learning_rate=0.00005', 'early_stopping=
 experiments_to_run_folder = 'experiments_multiconv_SER_randsplit'
 
 xval_script_parameters = ['experiment_folder="../../results_final_SER_LR000005_alexnet"',
-                          'debug_mode=True',
+                          'debug_mode=False',
                           'overwrite_results=False',
                           'num_folds=4']
 begin = 1
