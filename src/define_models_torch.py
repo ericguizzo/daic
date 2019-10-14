@@ -169,7 +169,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
     'stretch_factors': [],
     'fc_insize':100,
     'output_classes':8,
-    'multiplier': 1
+    'multiplier': 0.5
     }
 
     p = parse_parameters(p, user_parameters)
@@ -217,7 +217,7 @@ def AlexNet(time_dim, features_dim, user_parameters=['niente = 0']):
             self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
             self.classifier = nn.Sequential(
                 nn.Dropout(),
-                nn.Linear(256 * 6 * 6, 4096),
+                nn.Linear(int(256 * 6 * 6*p['multiplier']), 4096),
                 nn.ReLU(inplace=True),
                 nn.Dropout(),
                 nn.Linear(4096, 4096),
