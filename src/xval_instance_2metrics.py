@@ -6,6 +6,7 @@ import time
 import shutil
 import loadconfig
 import configparser
+import time
 
 config = loadconfig.load()
 cfg = configparser.ConfigParser()
@@ -107,6 +108,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         np.save(results_name + 'BVA.npy', np.array(['ERROR']))
 
         #run training
+        start_time = time.clock()
         if BACKEND == 'keras':
             training = subprocess.Popen(['python3', 'training_keras.py',
                                          'crossvalidation', str(num_experiment), str(num_run),
@@ -123,6 +125,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                           task_type, str(generator)])
         training.communicate()
         training.wait()
+        training_time = (time.clock() - start_time)
+        print ('TRAINING TIME: ' + str(training_time))
 
         #wait for file to be created
         flag1 = 'ERROR'
