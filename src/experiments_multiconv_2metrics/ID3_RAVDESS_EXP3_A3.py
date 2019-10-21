@@ -79,7 +79,7 @@ experiment[5] = ['comment_1="multi,reg:0.0"', 'comment_2="(0.7, 1.),(1.428,1.)"'
                  'stretch_factors=[(0.7, 1.),(1.428,1.)]', 'fc_insize=1236870',
                  'save_model_metric="loss"'
                  ]
-experiment[6] = ['comment_1="multi,reg:0.0"', 'comment_2="(0.5, 1.)"',
+experiment[6] = ['comment_1="multi,reg:0.0"', 'comment_2="(0.5, 1.),(2.,1.)"',
                  'architecture="CNN_2conv"', 'reshaping_type="cnn"',
                  'regularization_lambda=0.0',
                  'layer_type="multi"', 'kernel_size_1=[10,5]', 'channels=10',
