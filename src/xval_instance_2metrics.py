@@ -125,8 +125,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                           task_type, str(generator)])
         training.communicate()
         training.wait()
-        training_time = (time.clock() - start_time)
-        print ('TRAINING TIME: ' + str(training_time))
+
 
         #wait for file to be created
         flag1 = 'ERROR'
@@ -135,6 +134,8 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
             time.sleep(0.2)
             flag1 = np.load(results_name + '_BVL.npy', allow_pickle=True)
             flag2 = np.load(results_name + '_BVA.npy', allow_pickle=True)
+        training_time = (time.clock() - start_time)
+        print ('TRAINING TIME: ' + str(training_time))
 
         #update results dict
         temp_results_BVL = np.load(results_name + '_BVL.npy', allow_pickle=True)
