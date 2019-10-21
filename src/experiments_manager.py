@@ -12,11 +12,17 @@ global_parameters = ['num_epochs=20', 'learning_rate=0.00005', 'early_stopping=F
                     'patience=10', 'choose_optimizer="adam"', 'batch_size=10']
 
 experiments_to_run_folder = 'experiments_multiconv_SER'
-
+'''
 xval_script_parameters = ['experiment_folder="../../results_final_SER_LR000005_alexnet"',
                           'debug_mode=False',
                           'overwrite_results=False',
                           'num_folds=3']
+'''
+
+xval_script_parameters = ['experiment_folder="../../proooova"',
+                          'debug_mode=True',
+                          'overwrite_results=False',
+                          'num_folds=1']
 begin = 1
 
 end = 16
