@@ -21,7 +21,7 @@ xval_script_parameters = ['experiment_folder="../../results_final_SER_LR000005_a
 
 xval_script_parameters = ['experiment_folder="../../proooova"',
                           'debug_mode=True',
-                          'overwrite_results=False',
+                          'overwrite_results=True',
                           'num_folds=1']
 begin = 1
 
