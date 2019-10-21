@@ -108,7 +108,6 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         np.save(results_name + 'BVA.npy', np.array(['ERROR']))
 
         #run training
-        start_time = time.clock()
         if BACKEND == 'keras':
             training = subprocess.Popen(['python3', 'training_keras.py',
                                          'crossvalidation', str(num_experiment), str(num_run),
@@ -134,8 +133,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
             time.sleep(0.2)
             flag1 = np.load(results_name + '_BVL.npy', allow_pickle=True)
             flag2 = np.load(results_name + '_BVA.npy', allow_pickle=True)
-        training_time = (time.clock() - start_time)
-        print ('TRAINING TIME: ' + str(training_time))
+
 
         #update results dict
         temp_results_BVL = np.load(results_name + '_BVL.npy', allow_pickle=True)

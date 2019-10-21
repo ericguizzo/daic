@@ -76,6 +76,7 @@ import numpy as np
 from multiscale_convlayer2 import MultiscaleConv2d
 import utility_functions as uf
 import define_models_torch as choose_model
+import time
 #import preprocessing_DAIC as pre
 
 #np.random.seed(0)
@@ -349,7 +350,9 @@ def main():
         train_acc_hist = []
         val_acc_hist = []
 
+
     #finally, TRAINING LOOP
+    start_time = time.clock()
     for epoch in range(num_epochs):
         model.train()
         print ('\n')
@@ -470,6 +473,8 @@ def main():
                 break
 
         #END OF EPOCH LOOP
+    training_time = (time.clock() - start_time)
+    print ('TRAINING TIME: ' + str(training_time))
 
     #SAVE MODELS TRANSFERED TO GPU
     torch.save(best_model_dict_BVL, BVL_model_path)
