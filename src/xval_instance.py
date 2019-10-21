@@ -97,6 +97,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         np.save(results_name, np.array(['ERROR']))
 
         #run training
+        time_start = time.clock()
         if BACKEND == 'keras':
             training = subprocess.Popen(['python3', 'training_keras.py',
                                          'crossvalidation', str(num_experiment), str(num_run),
@@ -113,6 +114,9 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                                           task_type, str(generator)])
         training.communicate()
         training.wait()
+
+        training_time = (time.clock() - time_start)
+        print ('training time: ' + str(training time))
 
         #wait for file to be created
         flag = 'ERROR'
